@@ -27,6 +27,9 @@
     }
   </script>
   <style>
+    html,body{overflow-x:hidden}
+    /* Tous les paragraphes justifiés, avec césure automatique (français) */
+    p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
     .slide{opacity:0;transition:opacity 1.4s ease}
     .slide.active{opacity:1}
     .reveal{opacity:0;transform:translateY(24px);transition:all .7s ease}
@@ -86,7 +89,7 @@
   <main>
 
     <!-- HERO (diaporama) -->
-    <section class="relative h-[calc(100vh-80px)] min-h-[560px] max-h-[820px] bg-brand-dark text-white overflow-hidden">
+    <section class="relative min-h-[calc(100svh-80px)] lg:min-h-[640px] flex items-center bg-brand-dark text-white overflow-hidden">
       <div id="slides" class="absolute inset-0">
         <img class="slide active absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1575230167650-dce335edc7f4?auto=format&fit=crop&w=1920&q=70" alt="Grues à tour sur un grand chantier de construction">
         <img class="slide absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=1920&q=70" alt="Pelle mécanique en terrassement">
@@ -94,25 +97,25 @@
       </div>
       <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/70 to-brand-dark/20"></div>
 
-      <div class="relative h-full max-w-7xl mx-auto px-6 flex items-center">
+      <div class="relative w-full max-w-7xl mx-auto px-5 sm:px-6 pt-14 pb-40 sm:pb-36">
         <div class="max-w-2xl">
           <p class="inline-flex items-center gap-3 font-display font-bold uppercase tracking-widest text-xs text-leaf">
             <span class="w-10 h-0.5 bg-leaf"></span> Bâtiment &amp; Travaux Publics
           </p>
-          <h1 class="mt-6 font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.1]">
+          <h1 class="mt-5 sm:mt-6 font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.15] sm:leading-[1.1]">
             Bâtir aujourd'hui les infrastructures du <span class="text-leaf">Congo de demain</span>
           </h1>
-          <p class="mt-6 text-lg text-slate-200 max-w-xl">
+          <p class="mt-5 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-xl">
             Études techniques, conception et réalisation : BTP Congo accompagne les professionnels, les collectivités et les particuliers de la première étude à la livraison.
           </p>
-          <div class="mt-10 flex flex-wrap gap-4">
-            <a href="contact.html" class="bg-leaf hover:bg-leaf-dark px-8 py-4 rounded-md font-display font-bold transition">Démarrer votre projet</a>
-            <a href="realisations.html" class="border-2 border-white/60 hover:bg-white hover:text-brand-dark px-8 py-4 rounded-md font-display font-bold transition">Nos réalisations</a>
+          <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href="contact.html" class="text-center bg-leaf hover:bg-leaf-dark px-8 py-4 rounded-md font-display font-bold transition">Démarrer votre projet</a>
+            <a href="realisations.html" class="text-center border-2 border-white/60 hover:bg-white hover:text-brand-dark px-8 py-4 rounded-md font-display font-bold transition">Nos réalisations</a>
           </div>
         </div>
       </div>
 
-      <div id="dots" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+      <div id="dots" class="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 flex gap-3">
         <button class="dot w-10 h-1.5 rounded-full bg-leaf" aria-label="Image 1"></button>
         <button class="dot w-10 h-1.5 rounded-full bg-white/40" aria-label="Image 2"></button>
         <button class="dot w-10 h-1.5 rounded-full bg-white/40" aria-label="Image 3"></button>
@@ -122,23 +125,23 @@
     <!-- BANDEAU DES ENGAGEMENTS -->
     <section class="bg-white">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="-mt-12 relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 bg-brand text-white rounded-xl shadow-xl overflow-hidden">
-          <div class="p-8 border-b sm:border-r border-white/15">
+        <div class="-mt-10 sm:-mt-12 relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 bg-brand text-white rounded-xl shadow-xl overflow-hidden">
+          <div class="p-6 sm:p-8 border-b sm:border-r border-white/15">
             <p class="font-display font-extrabold text-leaf text-sm">01</p>
             <p class="mt-1 font-display font-bold text-lg">Études techniques</p>
             <p class="mt-1 text-sm text-slate-200">Analyse rigoureuse avant tout chantier.</p>
           </div>
-          <div class="p-8 border-b lg:border-r border-white/15">
+          <div class="p-6 sm:p-8 border-b lg:border-r border-white/15">
             <p class="font-display font-extrabold text-leaf text-sm">02</p>
             <p class="mt-1 font-display font-bold text-lg">Conception</p>
             <p class="mt-1 text-sm text-slate-200">Des solutions adaptées à vos besoins.</p>
           </div>
-          <div class="p-8 border-b sm:border-r border-white/15">
+          <div class="p-6 sm:p-8 border-b sm:border-r border-white/15">
             <p class="font-display font-extrabold text-leaf text-sm">03</p>
             <p class="mt-1 font-display font-bold text-lg">Réalisation</p>
             <p class="mt-1 text-sm text-slate-200">Exécution maîtrisée, qualité et sécurité.</p>
           </div>
-          <div class="p-8">
+          <div class="p-6 sm:p-8">
             <p class="font-display font-extrabold text-leaf text-sm">04</p>
             <p class="mt-1 font-display font-bold text-lg">Suivi &amp; livraison</p>
             <p class="mt-1 text-sm text-slate-200">Des délais tenus, un client satisfait.</p>
@@ -148,13 +151,13 @@
     </section>
 
     <!-- PRÉSENTATION -->
-    <section class="lazy-section py-24">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <section class="lazy-section py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <div class="reveal relative">
           <div class="zoom overflow-hidden rounded-xl">
             <img data-src="https://images.unsplash.com/photo-1694521787162-5373b598945c?auto=format&fit=crop&w=1200&q=70" alt="Équipe sur un chantier de construction" class="lazy-img w-full aspect-[4/3] object-cover">
           </div>
-          <div class="hidden md:block absolute -bottom-8 -right-8 w-56 rounded-xl overflow-hidden border-8 border-white shadow-xl">
+          <div class="hidden md:block absolute -bottom-8 right-2 lg:-right-8 w-44 lg:w-56 rounded-xl overflow-hidden border-8 border-white shadow-xl">
             <img data-src="https://images.unsplash.com/photo-1646324554833-f0b6a479fa5d?auto=format&fit=crop&w=600&q=70" alt="Ouvrier équipé sur un chantier" class="lazy-img w-full aspect-square object-cover">
           </div>
         </div>
@@ -177,7 +180,7 @@
     </section>
 
     <!-- EXPERTISES -->
-    <section class="lazy-section py-24 bg-brand-light">
+    <section class="lazy-section py-16 sm:py-24 bg-brand-light">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-wrap items-end justify-between gap-6 reveal">
           <div class="max-w-2xl">
@@ -221,7 +224,7 @@
     </section>
 
     <!-- RÉALISATIONS -->
-    <section class="lazy-section py-24">
+    <section class="lazy-section py-16 sm:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-wrap items-end justify-between gap-6 reveal">
           <div class="max-w-2xl">
@@ -261,7 +264,7 @@
     </section>
 
     <!-- POURQUOI NOUS CHOISIR -->
-    <section class="lazy-section relative py-24 text-white overflow-hidden bg-brand-dark">
+    <section class="lazy-section relative py-16 sm:py-24 text-white overflow-hidden bg-brand-dark">
       <img data-src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?auto=format&fit=crop&w=1920&q=70" alt="" class="lazy-img absolute inset-0 w-full h-full object-cover">
       <div class="absolute inset-0 bg-brand-dark/90"></div>
       <div class="relative max-w-7xl mx-auto px-6">
@@ -296,7 +299,7 @@
     </section>
 
     <!-- ACTUALITÉS -->
-    <section class="lazy-section py-24">
+    <section class="lazy-section py-16 sm:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-wrap items-end justify-between gap-6 reveal">
           <div>
@@ -328,7 +331,7 @@
     </section>
 
     <!-- APPEL À L'ACTION -->
-    <section class="lazy-section relative py-20 text-white overflow-hidden bg-brand-dark">
+    <section class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
       <img data-src="https://images.unsplash.com/photo-1529792083865-d23889753466?auto=format&fit=crop&w=1920&q=70" alt="" class="lazy-img absolute inset-0 w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/90"></div>
       <div class="relative max-w-5xl mx-auto px-6 text-center reveal">
