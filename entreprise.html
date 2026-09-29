@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L'entreprise | BTP Congo – Construction, Bâtiment & Travaux Publics</title>
+  <meta name="description" content="Découvrez BTP Congo : mission, vision, valeurs, organisation, moyens et engagements qualité-sécurité d'une entreprise de construction, bâtiment et génie civil au Congo.">
+  <meta name="theme-color" content="#0C2747">
+  <link rel="icon" href="https://www.btp-congo.com/images/logo-btp-congo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="L'entreprise | BTP Congo">
+  <meta property="og:description" content="Mission, vision, valeurs, organisation et moyens de BTP Congo.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1527335988388-b40ee248d80c?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:locale" content="fr_FR">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    // Charte graphique BTP Congo : bleu (brand) + vert (leaf)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#1D5BA5', dark: '#0C2747', light: '#EAF1FA' },
+            leaf:  { DEFAULT: '#3AA845', dark: '#2B8434', light: '#EAF6EB' }
+          },
+          fontFamily: { display: ['Montserrat', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    section[id] { scroll-margin-top: 80px; }
+    p { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+    :focus-visible { outline: 3px solid #3AA845; outline-offset: 2px; }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.show { opacity: 1; transform: none; }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal-left.show, .reveal-right.show { opacity: 1; transform: none; }
+    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+    .lazy-section.in { opacity: 1; transform: none; }
+    img.lazy-img { opacity: 0; transition: opacity .9s ease; }
+    img.lazy-img.ready { opacity: 1; }
+    .zoom img { transition: transform .9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .zoom:hover img { transform: scale(1.07); }
+    .underline-hover { position: relative; }
+    .underline-hover::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #3AA845; transition: width .3s ease; }
+    .underline-hover:hover::after { width: 100%; }
+
+    /* Onglets mission / vision / valeurs */
+    .tab-btn.active { background: #1D5BA5; color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp .6s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    /* Frise des étapes */
+    .step-line { background: linear-gradient(to bottom, #3AA845, #1D5BA5); }
+
+    #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobileMenu.open { max-height: 560px; }
+
+    * { border-radius: 0 !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal, .reveal-left, .reveal-right, .lazy-section { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-slate-700 antialiased bg-white">
+
+  <div id="progress" class="fixed top-0 left-0 h-1 bg-leaf z-[60] w-0"></div>
+
+  <!-- Barre supérieure -->
+  <div class="hidden lg:block bg-brand-dark text-slate-200 text-xs border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <!-- TODO : remplacer par le vrai numéro et la vraie adresse e-mail -->
+        <a href="tel:+242061234567" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +242 06 123 45 67
+        </a>
+        <a href="mailto:contact@btp-congo.com" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+          contact@btp-congo.com
+        </a>
+      </div>
+      <a href="contact.html" class="font-semibold text-leaf hover:text-white transition">Devis gratuit sous 48h →</a>
+    </div>
+  </div>
+
+  <!-- En-tête -->
+  <header id="header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <a href="index.html" aria-label="BTP Congo - Accueil">
+        <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-12 w-auto">
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8 font-display font-semibold text-sm text-brand-dark" aria-label="Navigation principale">
+        <a href="index.html" class="underline-hover hover:text-brand transition">Accueil</a>
+        <a href="entreprise.html" class="text-brand border-b-2 border-leaf py-1" aria-current="page">L'entreprise</a>
+        <a href="expertises.html" class="underline-hover hover:text-brand transition">Expertises</a>
+        <a href="portfolio.html" class="underline-hover hover:text-brand transition">Portfolio</a>
+        <a href="actualites.html" class="underline-hover hover:text-brand transition">Actualités</a>
+        <a href="contact.html" class="underline-hover hover:text-brand transition">Contact</a>
+        <a href="carriere.html" class="underline-hover hover:text-brand transition">Carrière</a>
+        <a href="contact.html" class="ml-2 bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 transition text-sm font-bold">Devis</a>
+      </nav>
+
+      <button id="burger" class="lg:hidden p-2 -mr-2" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="w-7 h-7 text-brand-dark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="lg:hidden border-t border-slate-100 bg-white">
+      <nav class="px-6 py-3 flex flex-col font-display font-semibold text-brand-dark divide-y divide-slate-100" aria-label="Navigation mobile">
+        <a href="index.html" class="py-3">Accueil</a>
+        <a href="entreprise.html" class="py-3 text-brand">L'entreprise</a>
+        <a href="expertises.html" class="py-3">Expertises</a>
+        <a href="portfolio.html" class="py-3">Portfolio</a>
+        <a href="actualites.html" class="py-3">Actualités</a>
+        <a href="contact.html" class="py-3">Contact</a>
+        <a href="carriere.html" class="py-3">Carrière</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- BANNIÈRE DE PAGE -->
+    <section class="relative bg-brand-dark text-white overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1527335988388-b40ee248d80c?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/85 to-brand-dark/50"></div>
+      <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-28">
+        <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-300 flex items-center gap-2">
+          <a href="index.html" class="hover:text-leaf transition">Accueil</a>
+          <span class="text-leaf">/</span>
+          <span class="text-white">L'entreprise</span>
+        </nav>
+        <h1 class="mt-5 font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.1]">
+          L'entreprise <span class="text-leaf">BTP Congo</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-base sm:text-lg text-slate-200">
+          Une entreprise de construction, bâtiment et génie civil qui place l'écoute du maître d'ouvrage, la rigueur technique et la qualité d'exécution au cœur de chaque projet.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
+          <a href="#mission" class="bg-white/10 hover:bg-leaf border border-white/25 hover:border-leaf px-5 py-2.5 transition">Mission &amp; valeurs</a>
+          <a href="#organisation" class="bg-white/10 hover:bg-leaf border border-white/25 hover:border-leaf px-5 py-2.5 transition">Organisation</a>
+          <a href="#moyens" class="bg-white/10 hover:bg-leaf border border-white/25 hover:border-leaf px-5 py-2.5 transition">Nos moyens</a>
+          <a href="#qualite" class="bg-white/10 hover:bg-leaf border border-white/25 hover:border-leaf px-5 py-2.5 transition">Qualité &amp; sécurité</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUI SOMMES-NOUS -->
+    <section id="presentation" class="lazy-section py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal-left relative">
+          <div class="zoom overflow-hidden">
+            <img data-src="https://images.unsplash.com/photo-1694521787162-5373b598945c?auto=format&fit=crop&w=1200&q=80" alt="Équipe BTP Congo sur un chantier" class="lazy-img w-full aspect-[4/3] object-cover">
+          </div>
+          <div class="hidden md:block absolute -bottom-10 right-2 lg:-right-10 w-48 lg:w-60 overflow-hidden border-8 border-white shadow-2xl">
+            <img data-src="https://images.unsplash.com/photo-1646324554833-f0b6a479fa5d?auto=format&fit=crop&w=600&q=80" alt="Ouvrier équipé sur un chantier" class="lazy-img w-full aspect-square object-cover">
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Qui sommes-nous</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Le partenaire privilégié des professionnels, des collectivités et des particuliers</h2>
+          <p class="mt-5 leading-relaxed">
+            BTP Congo est une entreprise de construction, bâtiment et génie civil spécialisée dans la conception, les études techniques et la réalisation de tout projet de génie civil. Gros œuvre, entreprise générale, travaux services et maîtrise d'œuvre : nous accompagnons nos clients sur l'ensemble du cycle de vie de leur ouvrage.
+          </p>
+          <p class="mt-4 leading-relaxed">
+            Nous travaillons en étroite collaboration avec le maître d'ouvrage pour que la moindre de ses demandes soit prise en compte. Notre organisation stratégique des équipes, selon les compétences et les expertises de chacun, nous permet de concilier satisfaction des clients, performance de l'entreprise, création et maintien des emplois.
+          </p>
+          <div class="mt-8 grid grid-cols-2 gap-4">
+            <div class="border-l-4 border-leaf bg-leaf-light/60 p-4"><p class="font-display font-bold text-brand-dark" style="text-align:left">Construction &amp; bâtiment</p></div>
+            <div class="border-l-4 border-brand bg-brand-light p-4"><p class="font-display font-bold text-brand-dark" style="text-align:left">Génie civil &amp; TP</p></div>
+            <div class="border-l-4 border-brand bg-brand-light p-4"><p class="font-display font-bold text-brand-dark" style="text-align:left">Études techniques</p></div>
+            <div class="border-l-4 border-leaf bg-leaf-light/60 p-4"><p class="font-display font-bold text-brand-dark" style="text-align:left">Entreprise générale</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION / VISION / VALEURS (onglets) -->
+    <!-- TODO : formulations à valider avec la direction de BTP Congo -->
+    <section id="mission" class="lazy-section py-16 sm:py-24 bg-brand-light">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Notre identité</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Mission, vision et valeurs</h2>
+        </div>
+
+        <div class="mt-10 flex flex-wrap justify-center gap-2 font-display font-bold text-sm reveal" role="tablist" aria-label="Identité de l'entreprise">
+          <button class="tab-btn active px-7 py-3 bg-white text-brand-dark hover:bg-brand hover:text-white transition" role="tab" data-tab="mission-panel" aria-selected="true">Mission</button>
+          <button class="tab-btn px-7 py-3 bg-white text-brand-dark hover:bg-brand hover:text-white transition" role="tab" data-tab="vision-panel" aria-selected="false">Vision</button>
+          <button class="tab-btn px-7 py-3 bg-white text-brand-dark hover:bg-brand hover:text-white transition" role="tab" data-tab="valeurs-panel" aria-selected="false">Valeurs</button>
+        </div>
+
+        <div class="mt-10 grid lg:grid-cols-5 gap-0 bg-white shadow-xl overflow-hidden reveal">
+          <div class="lg:col-span-3 p-8 sm:p-12">
+            <div id="mission-panel" class="tab-panel active" role="tabpanel">
+              <h3 class="font-display font-extrabold text-2xl text-brand-dark">Satisfaire et surpasser les attentes de nos clients</h3>
+              <p class="mt-4 leading-relaxed">Notre mission est de répondre aux besoins de nos clients, et de les dépasser. Nous travaillons main dans la main avec le maître d'ouvrage, du premier échange jusqu'à la réception des travaux, pour garantir que chaque exigence est comprise, traduite techniquement et respectée sur le chantier.</p>
+              <p class="mt-4 leading-relaxed">Cette exigence repose sur une organisation rigoureuse : des équipes formées aux normes en vigueur, un contrôle qualité à chaque étape et une communication transparente sur l'avancement des travaux.</p>
+            </div>
+            <div id="vision-panel" class="tab-panel" role="tabpanel">
+              <h3 class="font-display font-extrabold text-2xl text-brand-dark">Construire durablement, avec éthique et excellence</h3>
+              <p class="mt-4 leading-relaxed">Notre ambition est de contribuer au développement des infrastructures et de l'habitat au Congo, en réalisant des ouvrages fiables, durables et adaptés au contexte local.</p>
+              <p class="mt-4 leading-relaxed">Nous voulons être reconnus comme une entreprise de référence par la qualité de ses réalisations, la compétence de ses équipes et la confiance qu'elle inspire à ses clients et à ses partenaires.</p>
+            </div>
+            <div id="valeurs-panel" class="tab-panel" role="tabpanel">
+              <h3 class="font-display font-extrabold text-2xl text-brand-dark">Quatre valeurs qui guident chacune de nos décisions</h3>
+              <ul class="mt-6 grid sm:grid-cols-2 gap-5">
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Intégrité</strong><br><span class="text-sm">Des engagements tenus et des relations honnêtes.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Transparence</strong><br><span class="text-sm">Une information claire sur les coûts, les délais et l'avancement.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Professionnalisme</strong><br><span class="text-sm">Le respect des règles de l'art et des normes.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Esprit d'équipe</strong><br><span class="text-sm">Des compétences réunies au service du projet.</span></span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="lg:col-span-2 relative min-h-[260px] bg-brand-dark">
+            <img data-src="https://images.unsplash.com/photo-1632862378103-8248dccb7e3d?auto=format&fit=crop&w=900&q=80" alt="Équipe de chantier au travail" class="lazy-img absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-brand/30"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOT DU DIRECTEUR -->
+    <!-- TODO : ajouter le nom et la photo du Directeur, et valider le texte avec lui -->
+    <section id="directeur" class="lazy-section py-16 sm:py-24">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="reveal relative bg-brand-dark text-white p-8 sm:p-14 overflow-hidden">
+          <span class="absolute -top-6 left-6 font-display font-black text-[9rem] leading-none text-leaf/20 select-none" aria-hidden="true">“</span>
+          <p class="relative text-leaf font-display font-bold uppercase tracking-widest text-xs" style="text-align:left">Le mot du Directeur</p>
+          <div class="relative mt-6 space-y-4 text-base sm:text-lg text-slate-100 leading-relaxed">
+            <p>Chez BTP Congo, nous considérons chaque personne, qu'elle soit cliente, collaboratrice ou visiteuse, comme une partenaire essentielle de notre parcours.</p>
+            <p>Aux clients, j'exprime ma gratitude pour leur confiance : leurs projets sont le moteur de notre engagement à fournir des résultats exceptionnels. Aux collaborateurs, je tiens à saluer leur dévouement : leur expertise, leur travail et leur esprit d'équipe sont le fondement de notre succès.</p>
+            <p>Ensemble, nous repoussons les limites et façonnons un avenir prometteur.</p>
+          </div>
+          <div class="relative mt-8 flex items-center gap-4">
+            <span class="w-12 h-0.5 bg-leaf"></span>
+            <p class="font-display font-bold" style="text-align:left">La Direction Générale <span class="block text-sm font-normal text-slate-300">BTP Congo</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORGANISATION -->
+    <!-- TODO : adapter les pôles à l'organigramme réel -->
+    <section id="organisation" class="lazy-section py-16 sm:py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-2xl reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Organisation &amp; équipe</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Des équipes organisées selon leurs compétences</h2>
+          <p class="mt-4 text-slate-600">Chaque projet mobilise les expertises adaptées, avec des responsabilités clairement définies, du bureau d'études au chantier.</p>
+        </div>
+
+        <div class="mt-12 reveal">
+          <div class="mx-auto max-w-md bg-brand text-white p-5 text-center border-b-4 border-leaf">
+            <p class="font-display font-bold text-lg" style="text-align:center">Direction Générale</p>
+          </div>
+          <div class="mx-auto w-px h-8 bg-slate-300"></div>
+          <div class="hidden md:block mx-auto h-px bg-slate-300 w-[75%]"></div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:-mt-px">
+          <div class="reveal bg-white p-7 border-t-4 border-brand shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300">
+            <div class="w-12 h-12 bg-brand-light text-brand grid place-items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-lg text-brand-dark">Direction technique</h3>
+            <p class="mt-2 text-sm text-slate-600">Pilotage technique des projets et validation des choix de conception.</p>
+          </div>
+          <div class="reveal bg-white p-7 border-t-4 border-leaf shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300" style="transition-delay:.08s">
+            <div class="w-12 h-12 bg-leaf-light text-leaf grid place-items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-lg text-brand-dark">Études &amp; maîtrise d'œuvre</h3>
+            <p class="mt-2 text-sm text-slate-600">Conception, plans, métrés et suivi de l'exécution des ouvrages.</p>
+          </div>
+          <div class="reveal bg-white p-7 border-t-4 border-brand shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300" style="transition-delay:.16s">
+            <div class="w-12 h-12 bg-brand-light text-brand grid place-items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20 10 4h4l6 16M12 8v2m0 4v2"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-lg text-brand-dark">Conduite de travaux</h3>
+            <p class="mt-2 text-sm text-slate-600">Encadrement des chantiers, coordination des équipes et respect des délais.</p>
+          </div>
+          <div class="reveal bg-white p-7 border-t-4 border-leaf shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300" style="transition-delay:.24s">
+            <div class="w-12 h-12 bg-leaf-light text-leaf grid place-items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6l8-3z"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-lg text-brand-dark">Qualité, sécurité &amp; support</h3>
+            <p class="mt-2 text-sm text-slate-600">Contrôle qualité, prévention des risques, logistique et administration.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOYENS -->
+    <!-- TODO : détailler avec la liste réelle du matériel et des effectifs -->
+    <section id="moyens" class="lazy-section py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal-left order-2 lg:order-1">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Nos moyens</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Un matériel moderne et des équipes qualifiées</h2>
+          <p class="mt-5 leading-relaxed">
+            Notre vision d'entreprise, nos valeurs et notre équipe dynamique, associées à un matériel moderne et de qualité, font de BTP Congo un choix solide pour vous accompagner dans vos projets, quelle que soit leur envergure.
+          </p>
+          <div class="mt-8 space-y-5">
+            <div class="flex gap-4">
+              <div class="w-12 h-12 bg-leaf text-white grid place-items-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M14 7h7v7"/></svg>
+              </div>
+              <div><h3 class="font-display font-bold text-brand-dark">Matériel &amp; engins</h3><p class="mt-1 text-sm text-slate-600">Engins de terrassement, matériel de transport et équipements de chantier entretenus et adaptés à chaque intervention.</p></div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-12 h-12 bg-brand text-white grid place-items-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.900M9 20H2v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2h-7zM12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
+              </div>
+              <div><h3 class="font-display font-bold text-brand-dark">Ressources humaines</h3><p class="mt-1 text-sm text-slate-600">Ingénieurs, techniciens, conducteurs de travaux et ouvriers qualifiés, réunis autour d'un même objectif.</p></div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-12 h-12 bg-leaf text-white grid place-items-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4"/></svg>
+              </div>
+              <div><h3 class="font-display font-bold text-brand-dark">Compétences techniques</h3><p class="mt-1 text-sm text-slate-600">Un bureau d'études intégré pour concevoir, chiffrer et suivre vos projets de bout en bout.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-right order-1 lg:order-2 grid grid-cols-2 gap-4">
+          <div class="zoom overflow-hidden col-span-2"><img data-src="https://images.unsplash.com/photo-1575281923032-f40d94ef6160?auto=format&fit=crop&w=1200&q=80" alt="Pelle mécanique chargeant un camion" class="lazy-img w-full aspect-[16/9] object-cover"></div>
+          <div class="zoom overflow-hidden"><img data-src="https://images.unsplash.com/photo-1603814929877-d5d927322656?auto=format&fit=crop&w=600&q=80" alt="Pelle mécanique sur chantier" class="lazy-img w-full aspect-square object-cover"></div>
+          <div class="zoom overflow-hidden"><img data-src="https://images.unsplash.com/photo-1593436878048-92622a77d315?auto=format&fit=crop&w=600&q=80" alt="Conducteur de travaux devant un engin" class="lazy-img w-full aspect-square object-cover"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUALITÉ, SÉCURITÉ, ENVIRONNEMENT -->
+    <section id="qualite" class="lazy-section relative py-16 sm:py-24 text-white overflow-hidden bg-brand-dark">
+      <img data-src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?auto=format&fit=crop&w=1920&q=80" alt="" class="lazy-img absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-dark" style="opacity:0.92;"></div>
+      <div class="relative max-w-7xl mx-auto px-6">
+        <div class="max-w-2xl reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Nos engagements</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl leading-tight">Qualité, sécurité et responsabilité sur chaque chantier</h2>
+        </div>
+        <div class="mt-12 grid md:grid-cols-3 gap-6">
+          <div class="reveal group bg-white/5 border border-white/15 p-8 hover:bg-white/10 hover:-translate-y-2 transition duration-300">
+            <div class="w-12 h-12 bg-leaf grid place-items-center group-hover:scale-110 transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6l8-3z"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-xl">Qualité</h3>
+            <ul class="mt-3 space-y-2 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Contrôles à chaque phase des travaux</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Respect des normes et des règles de l'art</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Réception et levée des réserves suivies</li>
+            </ul>
+          </div>
+          <div class="reveal group bg-white/5 border border-white/15 p-8 hover:bg-white/10 hover:-translate-y-2 transition duration-300" style="transition-delay:.1s">
+            <div class="w-12 h-12 bg-leaf grid place-items-center group-hover:scale-110 transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.300 3.900 1.800 18a2 2 0 0 0 1.700 3h17a2 2 0 0 0 1.700-3L13.700 3.900a2 2 0 0 0-3.400 0z"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-xl">Sécurité</h3>
+            <ul class="mt-3 space-y-2 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Équipements de protection obligatoires</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Sensibilisation régulière des équipes</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Chantiers balisés et organisés</li>
+            </ul>
+          </div>
+          <div class="reveal group bg-white/5 border border-white/15 p-8 hover:bg-white/10 hover:-translate-y-2 transition duration-300" style="transition-delay:.2s">
+            <div class="w-12 h-12 bg-leaf grid place-items-center group-hover:scale-110 transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22c4-4 7-7.500 7-12a7 7 0 0 0-14 0c0 4.500 3 8 7 12zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+            </div>
+            <h3 class="mt-5 font-display font-bold text-xl">Environnement &amp; emploi local</h3>
+            <ul class="mt-3 space-y-2 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Gestion raisonnée des chantiers</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Création et maintien d'emplois</li>
+              <li class="flex gap-2"><span class="text-leaf">▸</span>Respect des riverains et du site</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTHODE DE TRAVAIL -->
+    <section id="methode" class="lazy-section py-16 sm:py-24">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Notre méthode</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Comment nous menons vos projets</h2>
+        </div>
+
+        <ol class="mt-14 relative space-y-10 pl-16 sm:pl-20">
+          <span class="step-line absolute left-[22px] sm:left-[30px] top-2 bottom-2 w-0.5" aria-hidden="true"></span>
+          <li class="reveal relative">
+            <span class="absolute -left-16 sm:-left-20 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-brand text-white grid place-items-center font-display font-extrabold shadow-lg">01</span>
+            <h3 class="font-display font-bold text-xl text-brand-dark">Écoute &amp; études techniques</h3>
+            <p class="mt-2 text-slate-600">Nous analysons votre besoin, le terrain et les contraintes du projet pour définir une solution technique et budgétaire réaliste.</p>
+          </li>
+          <li class="reveal relative">
+            <span class="absolute -left-16 sm:-left-20 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-leaf text-white grid place-items-center font-display font-extrabold shadow-lg">02</span>
+            <h3 class="font-display font-bold text-xl text-brand-dark">Conception &amp; planification</h3>
+            <p class="mt-2 text-slate-600">Plans, choix des matériaux, planning détaillé et organisation des équipes : tout est validé avec vous avant le démarrage.</p>
+          </li>
+          <li class="reveal relative">
+            <span class="absolute -left-16 sm:-left-20 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-brand text-white grid place-items-center font-display font-extrabold shadow-lg">03</span>
+            <h3 class="font-display font-bold text-xl text-brand-dark">Réalisation encadrée</h3>
+            <p class="mt-2 text-slate-600">Exécution des travaux sous la conduite de responsables dédiés, avec des points d'avancement réguliers et un contrôle qualité continu.</p>
+          </li>
+          <li class="reveal relative">
+            <span class="absolute -left-16 sm:-left-20 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-leaf text-white grid place-items-center font-display font-extrabold shadow-lg">04</span>
+            <h3 class="font-display font-bold text-xl text-brand-dark">Réception &amp; suivi</h3>
+            <p class="mt-2 text-slate-600">Livraison de l'ouvrage, levée des réserves et accompagnement après la réception pour assurer votre pleine satisfaction.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- APPEL À L'ACTION -->
+    <section id="contact" class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
+      <img data-src="https://images.unsplash.com/photo-1529792083865-d23889753466?auto=format&fit=crop&w=1920&q=80" alt="" class="lazy-img absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/95"></div>
+      <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
+        <h2 class="font-display font-extrabold text-3xl md:text-4xl leading-tight">Travaillons ensemble sur votre prochain projet</h2>
+        <p class="mt-4 text-slate-200 max-w-2xl mx-auto text-lg">Parlez-nous de votre projet : nos équipes techniques étudient votre demande et reviennent vers vous rapidement.</p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="contact.html" class="inline-block bg-leaf hover:bg-leaf-dark hover:scale-105 px-10 py-4 font-display font-bold transition">Demander un devis gratuit</a>
+          <a href="portfolio.html" class="inline-block border-2 border-white/50 hover:bg-white hover:text-brand-dark px-10 py-4 font-display font-bold transition">Voir nos réalisations</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+      <div class="sm:col-span-2">
+        <span class="inline-block py-3">
+          <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto bg-white p-2">
+        </span>
+        <p class="mt-5 max-w-sm leading-relaxed text-slate-400">
+          Entreprise de construction, bâtiment et génie civil, spécialisée dans la conception, les études techniques et la réalisation de projets au Congo.
+        </p>
+        <div class="mt-6 flex gap-4">
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Navigation</p>
+        <ul class="space-y-2.5">
+          <li><a href="entreprise.html" class="hover:text-leaf transition">L'entreprise</a></li>
+          <li><a href="expertises.html" class="hover:text-leaf transition">Expertises</a></li>
+          <li><a href="portfolio.html" class="hover:text-leaf transition">Portfolio</a></li>
+          <li><a href="actualites.html" class="hover:text-leaf transition">Actualités</a></li>
+          <li><a href="contact.html" class="hover:text-leaf transition">Contact</a></li>
+          <li><a href="carriere.html" class="hover:text-leaf transition">Carrière</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Nos expertises</p>
+        <ul class="space-y-2.5">
+          <li><a href="expertises.html#batiment" class="hover:text-leaf transition">Bâtiment &amp; gros œuvre</a></li>
+          <li><a href="expertises.html#genie-civil" class="hover:text-leaf transition">Génie civil &amp; TP</a></li>
+          <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Entreprise générale</a></li>
+          <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Maîtrise d'œuvre &amp; études</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-xs text-slate-400">
+      © <span id="year"></span> BTP Congo. Tous droits réservés. · Site conçu par <a href="#" class="hover:text-leaf transition">WEDE</a>
+    </div>
+  </footer>
+
+  <button id="toTop" aria-label="Retour en haut" class="fixed bottom-5 right-5 z-40 w-12 h-12 bg-leaf hover:bg-leaf-dark text-white shadow-xl grid place-items-center translate-y-20 opacity-0 transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+
+  <script>
+    /* ---------- Menu mobile ---------- */
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menu.classList.remove('open'); burger.setAttribute('aria-expanded', 'false');
+    }));
+
+    /* ---------- Onglets mission / vision / valeurs ---------- */
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => btn.addEventListener('click', () => {
+      tabBtns.forEach(b => { b.classList.toggle('active', b === btn); b.setAttribute('aria-selected', b === btn); });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === btn.dataset.tab));
+    }));
+
+    /* ---------- Chargement différé des sections et apparition ---------- */
+    function loadImages(scope) {
+      scope.querySelectorAll('img[data-src]').forEach(img => {
+        img.onload = () => img.classList.add('ready');
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          loadImages(e.target);
+          e.target.classList.add('in');
+          sectionObserver.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px 300px 0px', threshold: 0.02 });
+      document.querySelectorAll('.lazy-section').forEach(s => sectionObserver.observe(s));
+
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+      }, { threshold: .1 });
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.lazy-section').forEach(s => { loadImages(s); s.classList.add('in'); });
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => el.classList.add('show'));
+    }
+
+    /* ---------- En-tête, progression, retour en haut ---------- */
+    const header = document.getElementById('header');
+    const progress = document.getElementById('progress');
+    const toTop = document.getElementById('toTop');
+    function onScroll() {
+      const y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+      header.classList.toggle('shadow-md', y > 40);
+      const visible = y > 700;
+      toTop.classList.toggle('opacity-0', !visible);
+      toTop.classList.toggle('translate-y-20', !visible);
+    }
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* ---------- Défilement fluide vers les ancres ---------- */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (!href || href.length < 2) { e.preventDefault(); return; }
+        const target = document.querySelector(href);
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
