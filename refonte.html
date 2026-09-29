@@ -7,23 +7,21 @@
   <meta name="description" content="BTP Congo : construction, bâtiment, génie civil et travaux publics. Études techniques, conception, réalisation et suivi de chantiers au Congo. Demandez votre devis.">
   <link rel="icon" href="https://www.btp-congo.com/images/logo-btp-congo.png">
 
-  <!-- Tailwind via CDN (pour démonstration, en prod préférer une version buildée) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script>
+    // Charte graphique BTP Congo : bleu (brand) + vert (leaf)
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            brand: { DEFAULT: '#0A3D62', dark: '#072B45', light: '#E9F0F6' },
-            leaf:  { DEFAULT: '#2E8B57', dark: '#1F6B40', light: '#E7F3EC' },
-            accent: { DEFAULT: '#F5A623', dark: '#D48A0F' }
+            brand: { DEFAULT: '#1D5BA5', dark: '#0C2747', light: '#EAF1FA' },
+            leaf:  { DEFAULT: '#3AA845', dark: '#2B8434', light: '#EAF6EB' }
           },
-          fontFamily: { display: ['Montserrat', 'sans-serif'], sans: ['Inter', 'sans-serif'] },
-          boxShadow: { 'soft': '0 10px 40px -10px rgba(0,0,0,0.08)', 'card': '0 4px 20px -4px rgba(0,0,0,0.1)' }
+          fontFamily: { display: ['Montserrat', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
         }
       }
     }
@@ -43,10 +41,17 @@
     img.lazy-img { opacity: 0; transition: opacity .9s ease; }
     img.lazy-img.ready { opacity: 1; }
     .stat-number { font-variant-numeric: tabular-nums; }
-    .timeline-dot::before { content: ''; position: absolute; left: -6px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: #2E8B57; border: 3px solid white; box-shadow: 0 0 0 3px #2E8B57; }
     .underline-hover { position: relative; }
-    .underline-hover::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #2E8B57; transition: width .3s ease; }
+    .underline-hover::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #3AA845; transition: width .3s ease; }
     .underline-hover:hover::after { width: 100%; }
+
+    /* Slider témoignages */
+    .testimonial-page { display: none; }
+    .testimonial-page.active { display: grid; }
+
+    /* Suppression globale des border-radius */
+    * { border-radius: 0 !important; }
+
     @media (max-width: 640px) { .hero-text { font-size: 2rem; line-height: 1.2; } }
   </style>
 </head>
@@ -66,25 +71,26 @@
           contact@btp-congo.com
         </span>
       </div>
-      <a href="#contact" class="font-semibold text-accent hover:text-white transition">Devis gratuit sous 48h →</a>
+      <a href="#contact" class="font-semibold text-leaf hover:text-white transition">Devis gratuit sous 48h →</a>
     </div>
   </div>
 
   <!-- En-tête -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-      <a href="index.html" aria-label="BTP Congo - Accueil" class="flex items-center gap-3">
-        <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-11 w-auto">
-        <span class="hidden sm:block font-display font-extrabold text-xl text-brand-dark tracking-tight">BTP<span class="text-leaf">CONGO</span></span>
+      <a href="index.html" aria-label="BTP Congo - Accueil">
+        <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-12 w-auto">
       </a>
 
       <nav class="hidden lg:flex items-center gap-8 font-display font-semibold text-sm text-brand-dark">
         <a href="index.html" class="text-brand border-b-2 border-leaf py-1">Accueil</a>
         <a href="entreprise.html" class="underline-hover hover:text-brand transition">L'entreprise</a>
         <a href="expertises.html" class="underline-hover hover:text-brand transition">Expertises</a>
-        <a href="realisations.html" class="underline-hover hover:text-brand transition">Réalisations</a>
+        <a href="portfolio.html" class="underline-hover hover:text-brand transition">Portfolio</a>
         <a href="actualites.html" class="underline-hover hover:text-brand transition">Actualités</a>
-        <a href="#contact" class="ml-2 bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 rounded-md transition text-sm font-bold">Contact</a>
+        <a href="contact.html" class="underline-hover hover:text-brand transition">Contact</a>
+        <a href="carriere.html" class="underline-hover hover:text-brand transition">Carrière</a>
+        <a href="#contact" class="ml-2 bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 transition text-sm font-bold">Devis</a>
       </nav>
 
       <button id="burger" class="lg:hidden p-2 -mr-2" aria-label="Ouvrir le menu">
@@ -96,15 +102,16 @@
       <a href="index.html" class="block text-brand">Accueil</a>
       <a href="entreprise.html" class="block">L'entreprise</a>
       <a href="expertises.html" class="block">Expertises</a>
-      <a href="realisations.html" class="block">Réalisations</a>
+      <a href="portfolio.html" class="block">Portfolio</a>
       <a href="actualites.html" class="block">Actualités</a>
-      <a href="#contact" class="block text-leaf">Contact</a>
+      <a href="contact.html" class="block">Contact</a>
+      <a href="carriere.html" class="block">Carrière</a>
     </div>
   </header>
 
   <main>
 
-    <!-- HERO avec diaporama et indicateurs -->
+    <!-- HERO -->
     <section class="relative min-h-[calc(100svh-80px)] lg:min-h-[680px] flex items-center bg-brand-dark text-white overflow-hidden">
       <div id="slides" class="absolute inset-0">
         <img class="slide active absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1575230167650-dce335edc7f4?auto=format&fit=crop&w=1920&q=80" alt="Grues sur un chantier de construction">
@@ -115,18 +122,18 @@
 
       <div class="relative w-full max-w-7xl mx-auto px-5 sm:px-6 pt-16 pb-44 sm:pb-40">
         <div class="max-w-2xl">
-          <p class="inline-flex items-center gap-3 font-display font-bold uppercase tracking-widest text-xs text-accent">
-            <span class="w-10 h-0.5 bg-accent"></span> Bâtiment &amp; Travaux Publics
+          <p class="inline-flex items-center gap-3 font-display font-bold uppercase tracking-widest text-xs text-leaf">
+            <span class="w-10 h-0.5 bg-leaf"></span> Bâtiment &amp; Travaux Publics
           </p>
           <h1 class="mt-6 font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.1] hero-text">
-            Bâtir aujourd'hui les infrastructures du <span class="text-accent">Congo de demain</span>
+            Bâtir aujourd'hui les infrastructures du <span class="text-leaf">Congo de demain</span>
           </h1>
           <p class="mt-6 text-base sm:text-lg text-slate-200 max-w-xl">
             Études techniques, conception et réalisation : BTP Congo accompagne les professionnels, les collectivités et les particuliers de la première étude à la livraison.
           </p>
           <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a href="#contact" class="text-center bg-accent hover:bg-accent-dark text-brand-dark px-8 py-4 rounded-md font-display font-bold transition shadow-lg shadow-accent/30">Démarrer votre projet</a>
-            <a href="#realisations" class="text-center border-2 border-white/50 hover:bg-white hover:text-brand-dark px-8 py-4 rounded-md font-display font-bold transition">Voir nos réalisations</a>
+            <a href="#contact" class="text-center bg-leaf hover:bg-leaf-dark px-8 py-4 font-display font-bold transition">Démarrer votre projet</a>
+            <a href="#portfolio" class="text-center border-2 border-white/50 hover:bg-white hover:text-brand-dark px-8 py-4 font-display font-bold transition">Voir notre portfolio</a>
           </div>
           <div class="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-slate-300">
             <span class="flex items-center gap-2"><svg class="w-4 h-4 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Études techniques intégrées</span>
@@ -137,33 +144,33 @@
       </div>
 
       <div id="dots" class="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 flex gap-3">
-        <button class="dot w-12 h-1.5 rounded-full bg-accent transition-all" aria-label="Image 1"></button>
-        <button class="dot w-12 h-1.5 rounded-full bg-white/40 transition-all" aria-label="Image 2"></button>
-        <button class="dot w-12 h-1.5 rounded-full bg-white/40 transition-all" aria-label="Image 3"></button>
+        <button class="dot w-12 h-1.5 bg-leaf transition-all" aria-label="Image 1"></button>
+        <button class="dot w-12 h-1.5 bg-white/40 transition-all" aria-label="Image 2"></button>
+        <button class="dot w-12 h-1.5 bg-white/40 transition-all" aria-label="Image 3"></button>
       </div>
     </section>
 
-    <!-- BANDEAU DES ENGAGEMENTS / PROCESSUS -->
+    <!-- BANDEAU DES ENGAGEMENTS -->
     <section class="bg-white">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="-mt-12 sm:-mt-14 relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 bg-brand text-white rounded-xl shadow-2xl overflow-hidden border border-white/10">
+        <div class="-mt-12 sm:-mt-14 relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 bg-brand text-white shadow-2xl overflow-hidden border border-white/10">
           <div class="p-6 sm:p-8 border-b sm:border-r border-white/15 hover:bg-white/5 transition">
-            <p class="font-display font-extrabold text-accent text-sm">01</p>
+            <p class="font-display font-extrabold text-leaf text-sm">01</p>
             <p class="mt-1 font-display font-bold text-lg">Études techniques</p>
             <p class="mt-1 text-sm text-slate-300">Analyse rigoureuse avant tout chantier.</p>
           </div>
           <div class="p-6 sm:p-8 border-b lg:border-r border-white/15 hover:bg-white/5 transition">
-            <p class="font-display font-extrabold text-accent text-sm">02</p>
+            <p class="font-display font-extrabold text-leaf text-sm">02</p>
             <p class="mt-1 font-display font-bold text-lg">Conception</p>
             <p class="mt-1 text-sm text-slate-300">Des solutions adaptées à vos besoins.</p>
           </div>
           <div class="p-6 sm:p-8 border-b sm:border-r border-white/15 hover:bg-white/5 transition">
-            <p class="font-display font-extrabold text-accent text-sm">03</p>
+            <p class="font-display font-extrabold text-leaf text-sm">03</p>
             <p class="mt-1 font-display font-bold text-lg">Réalisation</p>
             <p class="mt-1 text-sm text-slate-300">Exécution maîtrisée, qualité et sécurité.</p>
           </div>
           <div class="p-6 sm:p-8 hover:bg-white/5 transition">
-            <p class="font-display font-extrabold text-accent text-sm">04</p>
+            <p class="font-display font-extrabold text-leaf text-sm">04</p>
             <p class="mt-1 font-display font-bold text-lg">Suivi &amp; livraison</p>
             <p class="mt-1 text-sm text-slate-300">Des délais tenus, un client satisfait.</p>
           </div>
@@ -195,17 +202,17 @@
       </div>
     </section>
 
-    <!-- PRÉSENTATION -->
+    <!-- PRÉSENTATION ENTREPRISE -->
     <section class="lazy-section py-16 sm:py-24">
       <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div class="reveal relative">
-          <div class="zoom overflow-hidden rounded-2xl shadow-xl">
+          <div class="zoom overflow-hidden">
             <img data-src="https://images.unsplash.com/photo-1694521787162-5373b598945c?auto=format&fit=crop&w=1200&q=80" alt="Équipe BTP Congo sur chantier" class="lazy-img w-full aspect-[4/3] object-cover">
           </div>
-          <div class="hidden md:block absolute -bottom-10 right-2 lg:-right-10 w-48 lg:w-60 rounded-2xl overflow-hidden border-8 border-white shadow-2xl">
+          <div class="hidden md:block absolute -bottom-10 right-2 lg:-right-10 w-48 lg:w-60 overflow-hidden border-8 border-white shadow-2xl">
             <img data-src="https://images.unsplash.com/photo-1646324554833-f0b6a479fa5d?auto=format&fit=crop&w=600&q=80" alt="Ouvrier BTP équipé" class="lazy-img w-full aspect-square object-cover">
           </div>
-          <div class="absolute -top-4 -left-4 bg-leaf text-white rounded-xl px-5 py-3 shadow-lg hidden sm:block">
+          <div class="absolute -top-4 -left-4 bg-leaf text-white px-5 py-3 shadow-lg hidden sm:block">
             <p class="font-display font-extrabold text-2xl">15+</p>
             <p class="text-xs font-semibold uppercase tracking-wider">ans d'expertise</p>
           </div>
@@ -226,15 +233,15 @@
             <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-leaf-light text-leaf grid place-items-center text-xs font-bold">✓</span>Maîtrise d'œuvre &amp; études</li>
             <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-leaf-light text-leaf grid place-items-center text-xs font-bold">✓</span>Travaux publics &amp; VRD</li>
           </ul>
-          <div class="mt-9 flex flex-wrap gap-4">
-            <a href="entreprise.html" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-7 py-3.5 rounded-md font-display font-bold text-sm transition">Découvrir l'entreprise →</a>
-            <a href="#contact" class="inline-flex items-center gap-2 text-brand hover:text-leaf font-display font-bold text-sm transition">Nous contacter</a>
+          <div class="mt-9 flex flex-wrap gap-4 items-center">
+            <a href="entreprise.html" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-7 py-3.5 font-display font-bold text-sm transition">Découvrir l'entreprise →</a>
+            <a href="#contact" class="inline-flex items-center gap-2 bg-leaf hover:bg-leaf-dark text-white px-7 py-3.5 font-display font-bold text-sm transition">Nous contacter</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- EXPERTISES -->
+    <!-- EXPERTISES (3 cartes) -->
     <section class="lazy-section py-16 sm:py-24 bg-brand-light">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-wrap items-end justify-between gap-6 reveal">
@@ -246,8 +253,8 @@
           <a href="expertises.html" class="font-display font-bold text-sm text-brand hover:text-leaf transition">Toutes nos expertises →</a>
         </div>
 
-        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <a href="expertises.html#batiment" class="reveal zoom group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300 block">
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <a href="expertises.html#batiment" class="reveal zoom group bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 block">
             <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1644221150167-fb4fafa7f411?auto=format&fit=crop&w=800&q=80" alt="Bâtiment en construction" class="lazy-img w-full aspect-[4/3] object-cover"></div>
             <div class="p-6 border-b-4 border-transparent group-hover:border-leaf transition">
               <h3 class="font-display font-bold text-lg text-brand-dark">Bâtiment &amp; gros œuvre</h3>
@@ -255,27 +262,19 @@
               <span class="inline-block mt-4 text-xs font-bold text-leaf uppercase tracking-wider">En savoir plus →</span>
             </div>
           </a>
-          <a href="expertises.html#genie-civil" class="reveal zoom group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300 block">
+          <a href="expertises.html#genie-civil" class="reveal zoom group bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 block">
             <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1575281923032-f40d94ef6160?auto=format&fit=crop&w=800&q=80" alt="Pelle mécanique sur chantier" class="lazy-img w-full aspect-[4/3] object-cover"></div>
             <div class="p-6 border-b-4 border-transparent group-hover:border-leaf transition">
-              <h3 class="font-display font-bold text-lg text-brand-dark">Génie civil &amp; TP</h3>
+              <h3 class="font-display font-bold text-lg text-brand-dark">Génie civil &amp; travaux publics</h3>
               <p class="mt-2 text-sm text-slate-600">Terrassements, voiries, réseaux divers et aménagements d'infrastructures.</p>
               <span class="inline-block mt-4 text-xs font-bold text-leaf uppercase tracking-wider">En savoir plus →</span>
             </div>
           </a>
-          <a href="expertises.html#entreprise-generale" class="reveal zoom group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300 block">
+          <a href="expertises.html#entreprise-generale" class="reveal zoom group bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 block">
             <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1713593930871-e21d7f9ef4a1?auto=format&fit=crop&w=800&q=80" alt="Ouvriers sur échafaudage" class="lazy-img w-full aspect-[4/3] object-cover"></div>
             <div class="p-6 border-b-4 border-transparent group-hover:border-leaf transition">
-              <h3 class="font-display font-bold text-lg text-brand-dark">Entreprise générale</h3>
-              <p class="mt-2 text-sm text-slate-600">Pilotage global de vos chantiers, coordination tous corps d'état.</p>
-              <span class="inline-block mt-4 text-xs font-bold text-leaf uppercase tracking-wider">En savoir plus →</span>
-            </div>
-          </a>
-          <a href="expertises.html#maitrise-oeuvre" class="reveal zoom group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300 block">
-            <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1632862378103-8248dccb7e3d?auto=format&fit=crop&w=800&q=80" alt="Réunion technique sur chantier" class="lazy-img w-full aspect-[4/3] object-cover"></div>
-            <div class="p-6 border-b-4 border-transparent group-hover:border-leaf transition">
-              <h3 class="font-display font-bold text-lg text-brand-dark">Maîtrise d'œuvre</h3>
-              <p class="mt-2 text-sm text-slate-600">Conception, études techniques, suivi et contrôle de l'exécution.</p>
+              <h3 class="font-display font-bold text-lg text-brand-dark">Entreprise générale &amp; maîtrise d'œuvre</h3>
+              <p class="mt-2 text-sm text-slate-600">Pilotage global, coordination tous corps d'état, études techniques et suivi d'exécution.</p>
               <span class="inline-block mt-4 text-xs font-bold text-leaf uppercase tracking-wider">En savoir plus →</span>
             </div>
           </a>
@@ -283,75 +282,75 @@
       </div>
     </section>
 
-    <!-- RÉALISATIONS -->
-    <section id="realisations" class="lazy-section py-16 sm:py-24">
+    <!-- PORTFOLIO -->
+    <section id="portfolio" class="lazy-section py-16 sm:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-wrap items-end justify-between gap-6 reveal">
           <div class="max-w-2xl">
-            <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Réalisations</p>
+            <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Portfolio</p>
             <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark">Des chantiers menés avec rigueur</h2>
             <p class="mt-4 text-slate-600">Découvrez une sélection de projets représentatifs de notre savoir-faire.</p>
           </div>
-          <a href="realisations.html" class="font-display font-bold text-sm text-brand hover:text-leaf transition">Voir toutes les réalisations →</a>
+          <a href="portfolio.html" class="font-display font-bold text-sm text-brand hover:text-leaf transition">Voir tout le portfolio →</a>
         </div>
 
         <div class="mt-12 grid md:grid-cols-3 md:grid-rows-2 gap-5 md:h-[640px]">
-          <a href="realisations.html" class="reveal zoom relative rounded-xl overflow-hidden md:col-span-2 md:row-span-2 min-h-[320px] block group">
+          <a href="portfolio.html" class="reveal zoom relative overflow-hidden md:col-span-2 md:row-span-2 min-h-[320px] block group">
             <img data-src="https://images.unsplash.com/photo-1621511075938-f03482369feb?auto=format&fit=crop&w=1400&q=80" alt="Immeuble en construction" class="lazy-img absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/95 via-brand-dark/20 to-transparent"></div>
             <div class="absolute bottom-0 p-8 text-white">
-              <span class="text-xs font-bold uppercase tracking-widest text-accent">Bâtiment</span>
-              <h3 class="mt-1 font-display font-bold text-2xl group-hover:text-accent transition">Construction d'immeubles et d'ouvrages</h3>
+              <span class="text-xs font-bold uppercase tracking-widest text-leaf">Bâtiment</span>
+              <h3 class="mt-1 font-display font-bold text-2xl group-hover:text-leaf transition">Construction d'immeubles et d'ouvrages</h3>
               <p class="mt-2 text-sm text-slate-300 max-w-lg">Ensemble immobilier de 45 logements – Brazzaville</p>
             </div>
           </a>
-          <a href="realisations.html" class="reveal zoom relative rounded-xl overflow-hidden min-h-[240px] block group">
+          <a href="portfolio.html" class="reveal zoom relative overflow-hidden min-h-[240px] block group">
             <img data-src="https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?auto=format&fit=crop&w=900&q=80" alt="Terrassement vu du ciel" class="lazy-img absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/95 via-brand-dark/20 to-transparent"></div>
             <div class="absolute bottom-0 p-6 text-white">
-              <span class="text-xs font-bold uppercase tracking-widest text-accent">Travaux publics</span>
-              <h3 class="mt-1 font-display font-bold text-lg group-hover:text-accent transition">Terrassements &amp; aménagements</h3>
+              <span class="text-xs font-bold uppercase tracking-widest text-leaf">Travaux publics</span>
+              <h3 class="mt-1 font-display font-bold text-lg group-hover:text-leaf transition">Terrassements &amp; aménagements</h3>
             </div>
           </a>
-          <a href="realisations.html" class="reveal zoom relative rounded-xl overflow-hidden min-h-[240px] block group">
+          <a href="portfolio.html" class="reveal zoom relative overflow-hidden min-h-[240px] block group">
             <img data-src="https://images.unsplash.com/photo-1507415710579-79b32edf8a78?auto=format&fit=crop&w=900&q=80" alt="Vue aérienne d'une route" class="lazy-img absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/95 via-brand-dark/20 to-transparent"></div>
             <div class="absolute bottom-0 p-6 text-white">
-              <span class="text-xs font-bold uppercase tracking-widest text-accent">Génie civil</span>
-              <h3 class="mt-1 font-display font-bold text-lg group-hover:text-accent transition">Voiries &amp; infrastructures</h3>
+              <span class="text-xs font-bold uppercase tracking-widest text-leaf">Génie civil</span>
+              <h3 class="mt-1 font-display font-bold text-lg group-hover:text-leaf transition">Voiries &amp; infrastructures</h3>
             </div>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- POURQUOI NOUS CHOISIR -->
+    <!-- POURQUOI BTP CONGO (overlay bleu 90%) -->
     <section class="lazy-section relative py-16 sm:py-24 text-white overflow-hidden bg-brand-dark">
       <img data-src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?auto=format&fit=crop&w=1920&q=80" alt="" class="lazy-img absolute inset-0 w-full h-full object-cover">
-      <div class="absolute inset-0 bg-brand-dark/92"></div>
+      <div class="absolute inset-0 bg-brand-dark" style="opacity:0.90;"></div>
       <div class="relative max-w-7xl mx-auto px-6">
         <div class="max-w-2xl reveal">
-          <p class="text-accent font-display font-bold uppercase tracking-widest text-xs">Pourquoi BTP Congo</p>
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Pourquoi BTP Congo</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl">Des valeurs qui se voient sur chaque chantier</h2>
           <p class="mt-4 text-slate-300">Notre engagement repose sur des principes simples : qualité, sécurité, transparence et respect des délais.</p>
         </div>
         <div class="mt-12 grid md:grid-cols-3 gap-6">
-          <div class="reveal bg-white/5 border border-white/15 rounded-xl p-8 hover:bg-white/10 transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-leaf grid place-items-center">
+          <div class="reveal bg-white/5 border border-white/15 p-8 hover:bg-white/10 transition duration-300">
+            <div class="w-12 h-12 bg-leaf grid place-items-center">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6l8-3z"/></svg>
             </div>
             <h3 class="mt-5 font-display font-bold text-xl">Qualité &amp; sécurité</h3>
             <p class="mt-2 text-sm text-slate-300">Des procédures de contrôle strictes et le respect des normes à chaque étape du chantier.</p>
           </div>
-          <div class="reveal bg-white/5 border border-white/15 rounded-xl p-8 hover:bg-white/10 transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-leaf grid place-items-center">
+          <div class="reveal bg-white/5 border border-white/15 p-8 hover:bg-white/10 transition duration-300">
+            <div class="w-12 h-12 bg-leaf grid place-items-center">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.900M9 20H2v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2h-7zM12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
             </div>
             <h3 class="mt-5 font-display font-bold text-xl">Équipe compétente</h3>
             <p class="mt-2 text-sm text-slate-300">Des équipes organisées selon leurs compétences et leur expertise, au service de votre projet.</p>
           </div>
-          <div class="reveal bg-white/5 border border-white/15 rounded-xl p-8 hover:bg-white/10 transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-leaf grid place-items-center">
+          <div class="reveal bg-white/5 border border-white/15 p-8 hover:bg-white/10 transition duration-300">
+            <div class="w-12 h-12 bg-leaf grid place-items-center">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M14 7h7v7"/></svg>
             </div>
             <h3 class="mt-5 font-display font-bold text-xl">Matériel moderne</h3>
@@ -361,46 +360,139 @@
       </div>
     </section>
 
-    <!-- TÉMOIGNAGES -->
+    <!-- TÉMOIGNAGES (slider 9 commentaires / 3 pages) -->
     <section class="lazy-section py-16 sm:py-24 bg-slate-50">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center reveal">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Témoignages</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark">Ils nous font confiance</h2>
         </div>
-        <div class="mt-12 grid md:grid-cols-3 gap-6">
-          <div class="reveal bg-white rounded-xl p-8 shadow-card">
-            <div class="flex gap-1 text-accent mb-4">★★★★★</div>
-            <p class="text-slate-600 italic">« BTP Congo a livré notre siège social dans les délais impartis. Une équipe à l'écoute, réactive et d'un professionnalisme remarquable. »</p>
-            <div class="mt-6 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">PD</div>
-              <div>
-                <p class="font-semibold text-sm text-brand-dark">Patrick D.</p>
-                <p class="text-xs text-slate-500">Directeur général, Groupe immobilier</p>
+
+        <div class="mt-12 relative">
+          <!-- Page 1 -->
+          <div class="testimonial-page active grid md:grid-cols-3 gap-6" data-page="0">
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« BTP Congo a livré notre siège social dans les délais impartis. Une équipe à l'écoute, réactive et d'un professionnalisme remarquable. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">PD</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Patrick D.</p>
+                  <p class="text-xs text-slate-500">Directeur général, Groupe immobilier</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Nous avons confié à BTP Congo la réhabilitation de nos voiries. Le résultat est impeccable et le suivi de chantier irréprochable. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">MC</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Marie-Claire N.</p>
+                  <p class="text-xs text-slate-500">Responsable technique, Collectivité</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Un partenaire fiable qui comprend les enjeux du terrain. Leur expertise en études techniques nous a fait gagner un temps précieux. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">JB</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Jean-Baptiste M.</p>
+                  <p class="text-xs text-slate-500">Architecte, Cabinet d'études</p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="reveal bg-white rounded-xl p-8 shadow-card">
-            <div class="flex gap-1 text-accent mb-4">★★★★★</div>
-            <p class="text-slate-600 italic">« Nous avons confié à BTP Congo la réhabilitation de nos voiries. Le résultat est impeccable et le suivi de chantier irréprochable. »</p>
-            <div class="mt-6 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">MC</div>
-              <div>
-                <p class="font-semibold text-sm text-brand-dark">Marie-Claire N.</p>
-                <p class="text-xs text-slate-500">Responsable technique, Collectivité</p>
+
+          <!-- Page 2 -->
+          <div class="testimonial-page grid md:grid-cols-3 gap-6" data-page="1">
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Une entreprise sérieuse qui respecte ses engagements. La qualité des finitions est au rendez-vous, nous recommandons vivement. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">AL</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Antoine L.</p>
+                  <p class="text-xs text-slate-500">Promoteur immobilier</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Leur maîtrise du génie civil et leur capacité à travailler en milieu contraint ont été décisives pour notre projet. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">SK</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Sophie K.</p>
+                  <p class="text-xs text-slate-500">Ingénieure, Bureau d'études</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« De la conception à la livraison, BTP Congo a su nous accompagner avec transparence et réactivité. Un vrai partenaire. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">RM</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Rachel M.</p>
+                  <p class="text-xs text-slate-500">Directrice de projet, ONG</p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="reveal bg-white rounded-xl p-8 shadow-card">
-            <div class="flex gap-1 text-accent mb-4">★★★★★</div>
-            <p class="text-slate-600 italic">« Un partenaire fiable qui comprend les enjeux du terrain. Leur expertise en études techniques nous a fait gagner un temps précieux. »</p>
-            <div class="mt-6 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">JB</div>
-              <div>
-                <p class="font-semibold text-sm text-brand-dark">Jean-Baptiste M.</p>
-                <p class="text-xs text-slate-500">Architecte, Cabinet d'études</p>
+
+          <!-- Page 3 -->
+          <div class="testimonial-page grid md:grid-cols-3 gap-6" data-page="2">
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Nous avons été impressionnés par la qualité de l'organisation sur le chantier. Les délais ont été respectés à la lettre. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">FT</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">François T.</p>
+                  <p class="text-xs text-slate-500">Chef d'entreprise</p>
+                </div>
               </div>
             </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« Une équipe à l'écoute qui propose des solutions concrètes et adaptées à notre budget. Nous les remercions pour leur engagement. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">CN</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Carine N.</p>
+                  <p class="text-xs text-slate-500">Responsable achats, Industrie</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 shadow-sm">
+              <div class="flex gap-1 text-leaf mb-4">★★★★★</div>
+              <p class="text-slate-600 italic">« BTP Congo fait preuve d'un professionnalisme rare. La sécurité sur le chantier était une priorité constante. »</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-light grid place-items-center font-display font-bold text-brand text-sm">GB</div>
+                <div>
+                  <p class="font-semibold text-sm text-brand-dark">Gérard B.</p>
+                  <p class="text-xs text-slate-500">Consultant, BTP</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation témoignages -->
+          <div class="mt-10 flex justify-center items-center gap-3">
+            <button id="testiPrev" class="w-10 h-10 bg-white shadow-sm hover:bg-brand hover:text-white transition grid place-items-center text-brand-dark" aria-label="Précédent">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <div id="testiDots" class="flex gap-2">
+              <button class="w-3 h-3 bg-leaf" data-index="0" aria-label="Page 1"></button>
+              <button class="w-3 h-3 bg-slate-300" data-index="1" aria-label="Page 2"></button>
+              <button class="w-3 h-3 bg-slate-300" data-index="2" aria-label="Page 3"></button>
+            </div>
+            <button id="testiNext" class="w-10 h-10 bg-white shadow-sm hover:bg-brand hover:text-white transition grid place-items-center text-brand-dark" aria-label="Suivant">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
           </div>
         </div>
       </div>
@@ -419,19 +511,19 @@
 
         <div class="mt-12 grid md:grid-cols-3 gap-8">
           <a href="actualites.html" class="reveal zoom group block">
-            <div class="overflow-hidden rounded-xl"><img data-src="https://images.unsplash.com/photo-1664662568348-24b1482b6354?auto=format&fit=crop&w=800&q=80" alt="Visite de chantier" class="lazy-img w-full aspect-[16/10] object-cover"></div>
+            <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1664662568348-24b1482b6354?auto=format&fit=crop&w=800&q=80" alt="Visite de chantier" class="lazy-img w-full aspect-[16/10] object-cover"></div>
             <p class="mt-4 text-xs font-bold uppercase text-leaf tracking-wider">Chantier</p>
             <h3 class="mt-1 font-display font-bold text-lg text-brand-dark group-hover:text-brand transition">Visites de chantier et suivi de l'avancement</h3>
             <p class="mt-2 text-sm text-slate-600">Retour en images sur l'avancement de nos projets en cours.</p>
           </a>
           <a href="actualites.html" class="reveal zoom group block">
-            <div class="overflow-hidden rounded-xl"><img data-src="https://images.unsplash.com/photo-1593436878048-92622a77d315?auto=format&fit=crop&w=800&q=80" alt="Équipe et engins" class="lazy-img w-full aspect-[16/10] object-cover"></div>
+            <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1593436878048-92622a77d315?auto=format&fit=crop&w=800&q=80" alt="Équipe et engins" class="lazy-img w-full aspect-[16/10] object-cover"></div>
             <p class="mt-4 text-xs font-bold uppercase text-leaf tracking-wider">Entreprise</p>
             <h3 class="mt-1 font-display font-bold text-lg text-brand-dark group-hover:text-brand transition">Nos équipes et nos moyens au service des projets</h3>
             <p class="mt-2 text-sm text-slate-600">Découvrez les femmes et les hommes qui font BTP Congo.</p>
           </a>
           <a href="actualites.html" class="reveal zoom group block">
-            <div class="overflow-hidden rounded-xl"><img data-src="https://images.unsplash.com/photo-1534097575056-ddba81f714c8?auto=format&fit=crop&w=800&q=80" alt="Engins de chantier" class="lazy-img w-full aspect-[16/10] object-cover"></div>
+            <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1534097575056-ddba81f714c8?auto=format&fit=crop&w=800&q=80" alt="Engins de chantier" class="lazy-img w-full aspect-[16/10] object-cover"></div>
             <p class="mt-4 text-xs font-bold uppercase text-leaf tracking-wider">Travaux publics</p>
             <h3 class="mt-1 font-display font-bold text-lg text-brand-dark group-hover:text-brand transition">Nouveaux chantiers et projets en cours</h3>
             <p class="mt-2 text-sm text-slate-600">Nos dernières actualités sur les chantiers de travaux publics.</p>
@@ -448,8 +540,8 @@
         <h2 class="font-display font-extrabold text-3xl md:text-4xl">Un projet de construction ? Parlons-en.</h2>
         <p class="mt-4 text-slate-200 max-w-2xl mx-auto text-lg">Décrivez-nous votre besoin : nos équipes techniques étudient votre demande et reviennent vers vous sous 48h.</p>
         <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="mailto:contact@btp-congo.com" class="inline-block bg-accent hover:bg-accent-dark text-brand-dark px-10 py-4 rounded-md font-display font-bold transition shadow-lg shadow-accent/30">Demander un devis gratuit</a>
-          <a href="tel:+242061234567" class="inline-block border-2 border-white/50 hover:bg-white hover:text-brand-dark px-10 py-4 rounded-md font-display font-bold transition">+242 06 123 45 67</a>
+          <a href="mailto:contact@btp-congo.com" class="inline-block bg-leaf hover:bg-leaf-dark px-10 py-4 font-display font-bold transition">Demander un devis gratuit</a>
+          <a href="tel:+242061234567" class="inline-block border-2 border-white/50 hover:bg-white hover:text-brand-dark px-10 py-4 font-display font-bold transition">+242 06 123 45 67</a>
         </div>
         <p class="mt-6 text-sm text-slate-400">Réponse garantie sous 48h ouvrées · Étude confidentielle</p>
       </div>
@@ -460,20 +552,20 @@
   <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
     <div class="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10 text-sm">
       <div class="md:col-span-2">
-        <span class="inline-block bg-white rounded-lg px-4 py-3">
+        <span class="inline-block px-4 py-3">
           <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto">
         </span>
         <p class="mt-5 max-w-sm leading-relaxed text-slate-400">
           Entreprise de construction, bâtiment et génie civil, spécialisée dans la conception, les études techniques et la réalisation de projets au Congo.
         </p>
         <div class="mt-6 flex gap-4">
-          <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-leaf transition">
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
           </a>
-          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-leaf transition">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
           </a>
-          <a href="#" aria-label="YouTube" class="w-9 h-9 rounded-full bg-white/10 grid place-items-center hover:bg-leaf transition">
+          <a href="#" aria-label="YouTube" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
           </a>
         </div>
@@ -483,9 +575,10 @@
         <ul class="space-y-2.5">
           <li><a href="entreprise.html" class="hover:text-leaf transition">L'entreprise</a></li>
           <li><a href="expertises.html" class="hover:text-leaf transition">Expertises</a></li>
-          <li><a href="realisations.html" class="hover:text-leaf transition">Réalisations</a></li>
+          <li><a href="portfolio.html" class="hover:text-leaf transition">Portfolio</a></li>
           <li><a href="actualites.html" class="hover:text-leaf transition">Actualités</a></li>
-          <li><a href="#contact" class="hover:text-leaf transition">Contact</a></li>
+          <li><a href="contact.html" class="hover:text-leaf transition">Contact</a></li>
+          <li><a href="carriere.html" class="hover:text-leaf transition">Carrière</a></li>
         </ul>
       </div>
       <div>
@@ -494,7 +587,6 @@
           <li><a href="expertises.html#batiment" class="hover:text-leaf transition">Bâtiment &amp; gros œuvre</a></li>
           <li><a href="expertises.html#genie-civil" class="hover:text-leaf transition">Génie civil &amp; TP</a></li>
           <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Entreprise générale</a></li>
-          <li><a href="expertises.html#maitrise-oeuvre" class="hover:text-leaf transition">Maîtrise d'œuvre</a></li>
         </ul>
       </div>
     </div>
@@ -516,7 +608,7 @@
       current = (i + slides.length) % slides.length;
       slides.forEach((s, k) => s.classList.toggle('active', k === current));
       dots.forEach((d, k) => {
-        d.classList.toggle('bg-accent', k === current);
+        d.classList.toggle('bg-leaf', k === current);
         d.classList.toggle('bg-white/40', k !== current);
       });
     }
@@ -527,7 +619,23 @@
     dots.forEach((d, k) => d.addEventListener('click', () => { show(k); start(); }));
     start();
 
-    // Chargement différé des images et sections
+    // Slider témoignages (3 pages de 3)
+    const testiPages = document.querySelectorAll('.testimonial-page');
+    const testiDots = document.querySelectorAll('#testiDots button');
+    let testiIndex = 0;
+    function showTesti(i) {
+      testiIndex = (i + testiPages.length) % testiPages.length;
+      testiPages.forEach((p, k) => p.classList.toggle('active', k === testiIndex));
+      testiDots.forEach((d, k) => {
+        d.classList.toggle('bg-leaf', k === testiIndex);
+        d.classList.toggle('bg-slate-300', k !== testiIndex);
+      });
+    }
+    document.getElementById('testiPrev').addEventListener('click', () => showTesti(testiIndex - 1));
+    document.getElementById('testiNext').addEventListener('click', () => showTesti(testiIndex + 1));
+    testiDots.forEach((d, k) => d.addEventListener('click', () => showTesti(k)));
+
+    // Chargement différé
     function loadImages(scope) {
       scope.querySelectorAll('img[data-src]').forEach(img => {
         img.onload = () => img.classList.add('ready');
@@ -555,10 +663,9 @@
       document.querySelectorAll('.reveal').forEach(el => el.classList.add('show'));
     }
 
-    // Mise à jour de l'année
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Défilement fluide pour les ancres internes
+    // Défilement fluide
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         const target = document.querySelector(this.getAttribute('href'));
