@@ -42,10 +42,16 @@
 
     .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
     .reveal.show { opacity: 1; transform: none; }
-    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .9s ease, transform .9s ease; }
-    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .9s ease, transform .9s ease; }
+    /* Sur mobile/tablette : simple montée (un décalage horizontal hors écran crée un défilement horizontal).
+       Le glissement latéral n'est activé que sur grand écran. */
+    .reveal-left, .reveal-right { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s ease; }
+    @media (min-width: 1024px) {
+      .reveal-left { transform: translateX(-40px); }
+      .reveal-right { transform: translateX(40px); }
+    }
     .reveal-left.show, .reveal-right.show { opacity: 1; transform: none; }
-    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+    /* overflow-x: clip contient les décalages sans casser le position: sticky des colonnes d'images */
+    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; overflow-x: clip; }
     .lazy-section.in { opacity: 1; transform: none; }
     img.lazy-img { opacity: 0; transition: opacity .9s ease; }
     img.lazy-img.ready { opacity: 1; }
@@ -164,7 +170,7 @@
     <!-- SOUS-NAVIGATION COLLANTE -->
     <div class="sticky top-20 z-40 bg-white border-b border-slate-200 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div id="chips" class="flex gap-2 py-3 overflow-x-auto font-display font-semibold text-sm whitespace-nowrap" role="navigation" aria-label="Sections des expertises">
+        <div id="chips" class="relative flex gap-2 py-3 overflow-x-auto font-display font-semibold text-sm whitespace-nowrap" role="navigation" aria-label="Sections des expertises">
           <a href="#batiment" class="chip active px-5 py-2 border border-slate-300 text-brand-dark hover:border-leaf transition">Bâtiment &amp; gros œuvre</a>
           <a href="#genie-civil" class="chip px-5 py-2 border border-slate-300 text-brand-dark hover:border-leaf transition">Génie civil &amp; TP</a>
           <a href="#entreprise-generale" class="chip px-5 py-2 border border-slate-300 text-brand-dark hover:border-leaf transition">Entreprise générale</a>
@@ -187,8 +193,8 @@
     <!-- 01 BÂTIMENT & GROS ŒUVRE -->
     <!-- TODO : valider la liste des prestations avec BTP Congo -->
     <section id="batiment" class="lazy-section pb-16 sm:pb-24">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <div class="reveal-left lg:sticky lg:top-44">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div class="reveal-left min-w-0 lg:sticky lg:top-44">
           <div class="zoom overflow-hidden relative">
             <img data-src="https://images.unsplash.com/photo-1644221150167-fb4fafa7f411?auto=format&fit=crop&w=1200&q=80" alt="Bâtiment en construction avec grue" class="lazy-img w-full aspect-[4/3] object-cover">
             <span class="absolute top-0 left-0 bg-leaf text-white font-display font-extrabold text-2xl px-5 py-3">01</span>
@@ -199,7 +205,7 @@
           </div>
         </div>
 
-        <div class="reveal-right">
+        <div class="reveal-right min-w-0">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Expertise 01</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Bâtiment &amp; gros œuvre</h2>
           <p class="mt-5 leading-relaxed">
@@ -228,8 +234,8 @@
 
     <!-- 02 GÉNIE CIVIL & TP -->
     <section id="genie-civil" class="lazy-section py-16 sm:py-24 bg-brand-light">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <div class="reveal-left order-1 lg:order-2 lg:sticky lg:top-44">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div class="reveal-left min-w-0 order-1 lg:order-2 lg:sticky lg:top-44">
           <div class="zoom overflow-hidden relative">
             <img data-src="https://images.unsplash.com/photo-1575281923032-f40d94ef6160?auto=format&fit=crop&w=1200&q=80" alt="Pelle mécanique chargeant un camion" class="lazy-img w-full aspect-[4/3] object-cover">
             <span class="absolute top-0 left-0 bg-leaf text-white font-display font-extrabold text-2xl px-5 py-3">02</span>
@@ -240,7 +246,7 @@
           </div>
         </div>
 
-        <div class="reveal-right order-2 lg:order-1">
+        <div class="reveal-right min-w-0 order-2 lg:order-1">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Expertise 02</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Génie civil &amp; travaux publics</h2>
           <p class="mt-5 leading-relaxed">
@@ -273,8 +279,8 @@
 
     <!-- 03 ENTREPRISE GÉNÉRALE -->
     <section id="entreprise-generale" class="lazy-section py-16 sm:py-24">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <div class="reveal-left lg:sticky lg:top-44">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div class="reveal-left min-w-0 lg:sticky lg:top-44">
           <div class="zoom overflow-hidden relative">
             <img data-src="https://images.unsplash.com/photo-1713593930871-e21d7f9ef4a1?auto=format&fit=crop&w=1200&q=80" alt="Ouvriers sur un échafaudage" class="lazy-img w-full aspect-[4/3] object-cover">
             <span class="absolute top-0 left-0 bg-leaf text-white font-display font-extrabold text-2xl px-5 py-3">03</span>
@@ -285,14 +291,14 @@
           </div>
         </div>
 
-        <div class="reveal-right">
+        <div class="reveal-right min-w-0">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Expertise 03</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Entreprise générale</h2>
           <p class="mt-5 leading-relaxed">
             En prenant la responsabilité globale de votre projet, nous devenons votre interlocuteur unique. Nous coordonnons tous les corps d'état, planifions les interventions et veillons à ce que le budget, les délais et la qualité convenus soient respectés du début à la fin.
           </p>
 
-          <div class="mt-8 grid sm:grid-cols-2 gap-4">
+          <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="bg-brand-light p-6 border-t-4 border-brand hover:-translate-y-1 hover:shadow-lg transition duration-300">
               <div class="w-11 h-11 bg-brand text-white grid place-items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.900M9 20H2v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2h-7zM12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg></div>
               <h3 class="mt-4 font-display font-bold text-brand-dark">Un seul responsable</h3>
@@ -322,8 +328,8 @@
 
     <!-- 04 MAÎTRISE D'ŒUVRE & ÉTUDES -->
     <section id="maitrise-oeuvre" class="lazy-section py-16 sm:py-24 bg-brand-light">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <div class="reveal-left order-1 lg:order-2 lg:sticky lg:top-44">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div class="reveal-left min-w-0 order-1 lg:order-2 lg:sticky lg:top-44">
           <div class="zoom overflow-hidden relative">
             <img data-src="https://images.unsplash.com/photo-1632862378103-8248dccb7e3d?auto=format&fit=crop&w=1200&q=80" alt="Équipe technique en réunion de chantier" class="lazy-img w-full aspect-[4/3] object-cover">
             <span class="absolute top-0 left-0 bg-leaf text-white font-display font-extrabold text-2xl px-5 py-3">04</span>
@@ -334,7 +340,7 @@
           </div>
         </div>
 
-        <div class="reveal-right order-2 lg:order-1">
+        <div class="reveal-right min-w-0 order-2 lg:order-1">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Expertise 04</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Maîtrise d'œuvre &amp; études techniques</h2>
           <p class="mt-5 leading-relaxed">
@@ -372,7 +378,7 @@
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Nos clients</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Une réponse adaptée à chaque maître d'ouvrage</h2>
         </div>
-        <div class="mt-12 grid md:grid-cols-3 gap-6">
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="reveal zoom group bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 overflow-hidden">
             <div class="overflow-hidden"><img data-src="https://images.unsplash.com/photo-1593436878048-92622a77d315?auto=format&fit=crop&w=800&q=80" alt="Responsable de chantier professionnel" class="lazy-img w-full aspect-[16/10] object-cover"></div>
             <div class="p-7 border-b-4 border-transparent group-hover:border-leaf transition">
@@ -443,7 +449,7 @@
 
   <!-- PIED DE PAGE -->
   <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+    <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
       <div class="sm:col-span-2">
         <span class="inline-block py-3">
           <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto bg-white p-2">
@@ -536,13 +542,15 @@
     /* ---------- Sous-navigation : section active pendant le défilement ---------- */
     const chips = document.querySelectorAll('.chip');
     const spySections = ['batiment', 'genie-civil', 'entreprise-generale', 'maitrise-oeuvre'].map(id => document.getElementById(id));
+    let lastSpy = null;
     function updateSpy() {
       const line = 200;                                   // ligne de repère sous les barres collantes
       let currentId = null;
       spySections.forEach(s => { if (s.getBoundingClientRect().top <= line) currentId = s.id; });
       chips.forEach(c => c.classList.toggle('active', c.getAttribute('href') === '#' + currentId));
       const activeChip = document.querySelector('.chip.active');
-      if (activeChip) {                                   // fait défiler la barre horizontale mobile
+      if (activeChip && currentId !== lastSpy) {          // fait défiler la barre horizontale mobile, une seule fois par changement
+        lastSpy = currentId;
         const box = document.getElementById('chips');
         box.scrollTo({ left: activeChip.offsetLeft - 16, behavior: 'smooth' });
       }
