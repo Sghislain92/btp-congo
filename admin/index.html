@@ -73,7 +73,7 @@ textarea.champ{min-height:110px;resize:vertical}
    ===================================================================== */
 const U=id=>'https://images.unsplash.com/photo-'+id+'?auto=format&fit=crop&w=600&q=70';
 const IMG={a:'1503708928676-1cb796a0891e',b:'1504307651254-35680f356dfd',c:'1517089596392-fb9a9033e05b',d:'1527335988388-b40ee248d80c',e:'1527436446415-a2db1025f089',f:'1529792083865-d23889753466',g:'1534097575056-ddba81f714c8',h:'1575230167650-dce335edc7f4',i:'1542545610-eb10cb0e8591',j:'1548790630-2d0b42f5c956',k:'1560250097-0b93528c311a'};
-const src=v=>!v?'':/^(https?:|medias\/|\/)/.test(v)?v:U(v);
+const src=v=>!v?'':/^(https?:|medias\/|\/|data:image\/|blob:)/.test(v)?v:U(v);
 
 const ICONES={
 home:'<path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
@@ -204,7 +204,8 @@ try{const s=JSON.parse(localStorage.getItem('btp_admin')||'{}');if(s.role)S.role
 const sauve=()=>{try{localStorage.setItem('btp_admin',JSON.stringify(S))}catch(e){}};
 const niveau=()=>ROLES[S.role][2];
 const moi=()=>D.utilisateurs.find(u=>u.role===S.role&&u.actif)||D.utilisateurs[0];
-const peutEditer=()=>niveau()>=2;
+const peutEditer=()=>niveau()>=1;      // créer, modifier, publier : tous les rôles
+const peutSupprimer=()=>niveau()>=2;  // suppression définitive : admin et plus
 
 /* ---------- Utilitaires ---------- */
 const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
@@ -265,8 +266,8 @@ function coque(){
 /* ---------- Calques : fiche coulissante / dialogue ---------- */
 function ouvrirFeuille(titre,corps,pied=''){
  fermerFeuille();
- $('#calques').innerHTML=`<div id="fond" data-a="fermer" class="fixed inset-0 z-[60] bg-[#0C2747]/55 flex items-end md:items-center justify-center md:p-6" style="animation:ap .15s both">
- <div class="feuille bg-white w-full md:max-w-lg max-h-[92vh] flex flex-col" role="dialog" aria-modal="true" aria-label="${esc(titre)}" onclick="event.stopPropagation()">
+ $('#calques').innerHTML=`<div id="fond" class="fixed inset-0 z-[60] bg-[#0C2747]/55 flex items-end md:items-center justify-center md:p-6" style="animation:ap .15s both">
+ <div class="feuille bg-white w-full md:max-w-lg max-h-[92vh] flex flex-col" role="dialog" aria-modal="true" aria-label="${esc(titre)}">
   <div class="flex items-center justify-between px-5 h-14 border-b border-trait shrink-0"><h2 class="ft font-bold text-brand-dark">${esc(titre)}</h2><button data-a="fermer" class="w-10 h-10 -mr-2 flex items-center justify-center text-slate-500" aria-label="Fermer">${ic('x')}</button></div>
   <div class="overflow-y-auto p-5 flex-1">${corps}</div>${pied?`<div class="p-4 border-t border-trait shrink-0 bnav">${pied}</div>`:''}
  </div></div>`;document.body.style.overflow='hidden'}
@@ -296,7 +297,7 @@ function champ(f,v,ro){
  if(f.t==='textarea')c=`<textarea class="champ" id="${id}" name="${f.k}" ${d}${req} ${f.rows?`style="min-height:${f.rows*26}px"`:''}>${esc(val)}</textarea>`;
  else if(f.t==='select')c=`<select class="champ" id="${id}" name="${f.k}" ${d}>${f.opts.map(o=>{const[ov,ol]=Array.isArray(o)?o:[o,o];return `<option value="${esc(ov)}" ${ov==val?'selected':''}>${esc(ol)}</option>`}).join('')}</select>`;
  else if(f.t==='switch')return `<div class="flex items-center justify-between gap-4 py-2 ${f.span==2?'md:col-span-2':''}"><div><p class="text-sm font-semibold text-brand-dark">${f.l}</p>${f.aide?`<p class="text-xs text-slate-500">${f.aide}</p>`:''}</div>${interrupteur(f.k,val,ro)}</div>`;
- else if(f.t==='image')c=`<div class="flex gap-3 items-start"><div class="w-20 h-16 bg-brand-light border border-trait shrink-0 bg-cover bg-center" data-apercu="${id}" style="${val?`background-image:url('${esc(src(val))}')`:''}"></div><div class="flex-1 min-w-0"><input class="champ" id="${id}" name="${f.k}" value="${esc(val)}" placeholder="URL, identifiant Unsplash ou medias/…" ${d} data-img><p class="text-[11px] text-slate-500 mt-1">Photos client : dossier <code>medias/</code> ou téléversement (à venir).</p></div></div>`;
+ else if(f.t==='image')c=`<div class="flex flex-col min-[480px]:flex-row gap-3 items-start" data-upl="${id}"><div data-apercu="${id}" class="w-full max-w-[240px] min-[480px]:w-44 aspect-[4/3] shrink-0 border border-dashed border-[#9db4d3] bg-brand-light bg-cover bg-center flex items-center justify-center text-brand/60" style="${val?`background-image:url('${esc(src(val))}');border-style:solid`:''}">${val?'':ic('image','w-8 h-8')}</div><div class="min-w-0 flex-1 w-full"><input type="hidden" id="${id}" name="${f.k}" value="${esc(val)}"><input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-file="${id}">${d?'':`<div class="flex flex-wrap gap-2"><button type="button" data-a="choisir" data-id="${id}" class="btn btn-o !min-h-[42px]">${ic('upload','w-4 h-4')}<span data-lib="${id}">${val?'Remplacer l’image':'Choisir une image'}</span></button><button type="button" data-a="retirerImg" data-id="${id}" class="btn btn-d !min-h-[42px] ${val?'':'hidden'}" data-retirer="${id}">${ic('trash','w-4 h-4')}Retirer</button></div>`}<p class="text-[11px] text-slate-500 mt-2 leading-relaxed">JPG, PNG ou WebP · 8 Mo maximum. L’image est redimensionnée automatiquement (1 600 px).</p></div></div>`;
  else c=`<input class="champ" id="${id}" name="${f.k}" type="${f.t==='tel'?'tel':f.t||'text'}" value="${esc(val)}" ${d}${req} ${f.ph?`placeholder="${f.ph}"`:''} ${f.slug?'data-slug':''}>`;
  return `<div class="${f.span==2?'md:col-span-2':''}">${l}${c}${f.aide?`<p class="text-[11px] text-slate-500 mt-1">${f.aide}</p>`:''}</div>`}
 const grille=(fs,o,ro)=>`<div class="grid md:grid-cols-2 gap-x-5 gap-y-4">${fs.map(f=>champ(f,o[f.k],ro)).join('')}</div>`;
@@ -351,7 +352,7 @@ V.devisFiche=id=>{const d=D.devis.find(x=>x.id==id);if(!d)return introuvable();c
    <div class="grid grid-cols-3 gap-2 my-4"><a href="tel:${wa}" class="btn btn-p !px-2">${ic('tel','w-4 h-4')}Appeler</a><a href="https://wa.me/${wa}" target="_blank" class="btn btn-v !px-2">${ic('wa','w-4 h-4')}WhatsApp</a><a ${d.email?`href="mailto:${esc(d.email)}"`:'aria-disabled="true"'} class="btn btn-o !px-2 ${d.email?'':'opacity-40 pointer-events-none'}">${ic('mail','w-4 h-4')}E-mail</a></div>
    <div class="grid sm:grid-cols-2 divide-y sm:divide-y-0 divide-trait">${infoLigne('tel','Téléphone',d.telephone)}${infoLigne('mail','E-mail',d.email||'Non renseigné')}${infoLigne('layout','Type de projet',d.type_projet)}${infoLigne('lieu','Localisation',d.localisation)}${infoLigne('cal','Échéance souhaitée',d.echeance)}${infoLigne('devis','Plans',d.plans)}</div></section>
   <section class="carte p-5"><h3 class="ft font-bold text-brand-dark mb-2">Message</h3><p class="text-sm text-slate-700 leading-relaxed justif">${esc(d.message)}</p></section></div>
-  <div class="space-y-4 lg:space-y-5">${blocTraitement('devis',d,STAT.devis)}${peutEditer()?`<button data-a="supprimer" data-t="devis" data-id="${d.id}" class="btn btn-d w-full">${ic('trash','w-4 h-4')}Supprimer la demande</button>`:''}</div></div></div>`};
+  <div class="space-y-4 lg:space-y-5">${blocTraitement('devis',d,STAT.devis)}${peutSupprimer()?`<button data-a="supprimer" data-t="devis" data-id="${d.id}" class="btn btn-d w-full">${ic('trash','w-4 h-4')}Supprimer la demande</button>`:''}</div></div></div>`};
 
 /* ----- Candidatures ----- */
 V.cand=()=>{
@@ -369,7 +370,7 @@ V.candFiche=id=>{const c=D.candidatures.find(x=>x.id==id);if(!c)return introuvab
    <div class="grid sm:grid-cols-2">${infoLigne('tel','Téléphone',c.telephone)}${infoLigne('mail','E-mail',c.email||'Non renseigné')}${infoLigne('lieu','Ville',c.ville)}${infoLigne('horloge','Expérience',c.experience)}</div></section>
   <section class="carte p-5"><h3 class="ft font-bold text-brand-dark mb-2">Lettre de motivation</h3><p class="text-sm text-slate-700 leading-relaxed justif">${esc(c.message)}</p></section>
   <section class="carte p-4 flex items-center gap-3"><span class="w-11 h-11 bg-red-50 text-red-700 flex items-center justify-center text-[11px] font-extrabold">PDF</span><div class="min-w-0 flex-1"><p class="text-sm font-semibold text-brand-dark truncate">${esc(c.cv_nom_original)}</p><p class="text-xs text-slate-500">Curriculum vitae · stocké hors accès public</p></div><button data-a="cv" class="btn btn-o !px-3" aria-label="Télécharger le CV">${ic('down','w-4 h-4')}<span class="hidden sm:inline">Télécharger</span></button></section></div>
-  <div class="space-y-4 lg:space-y-5">${blocTraitement('cand',c,STAT.cand)}${peutEditer()?`<button data-a="supprimer" data-t="cand" data-id="${c.id}" class="btn btn-d w-full">${ic('trash','w-4 h-4')}Supprimer la candidature</button>`:''}</div></div></div>`};
+  <div class="space-y-4 lg:space-y-5">${blocTraitement('cand',c,STAT.cand)}${peutSupprimer()?`<button data-a="supprimer" data-t="cand" data-id="${c.id}" class="btn btn-d w-full">${ic('trash','w-4 h-4')}Supprimer la candidature</button>`:''}</div></div></div>`};
 
 /* ----- Portfolio ----- */
 V.portfolio=()=>{cur={vue:'portfolio'};
@@ -385,8 +386,9 @@ V.albumFiche=id=>{const neuf=id==='nouveau',a=neuf?{titre:'',slug:'',categorie:'
  return `<div class="vue">${retour('/portfolio','Portfolio')}${entete(neuf?'Nouvel album':esc(a.titre),neuf?'':'Modifier les informations et les photos du projet')}${roBanniere()}
  <form id="form" class="space-y-4 lg:space-y-5" novalidate><section class="carte p-5">${grille(F_ALBUM,a,cur.ro)}</section>
  <section class="carte p-5"><div class="flex items-center justify-between mb-1"><h3 class="ft font-bold text-brand-dark">Photos de l’album</h3><span id="nbPhotos" class="text-xs text-slate-500"></span></div><p class="text-xs text-slate-500 mb-4">La première photo sert de couverture. Format paysage recommandé, 1600 px minimum.</p><div id="photos" class="grid grid-cols-2 min-[520px]:grid-cols-3 lg:grid-cols-4 gap-3"></div>
- ${cur.ro?'':`<div class="flex gap-2 mt-4"><input id="nouvPhoto" class="champ" placeholder="URL, identifiant Unsplash ou medias/portfolio/…"><button type="button" data-a="ajoutPhoto" class="btn btn-o shrink-0">${ic('plus','w-4 h-4')}Ajouter</button></div><button type="button" data-a="televerser" class="btn btn-o w-full mt-2">${ic('upload','w-4 h-4')}Téléverser depuis l’appareil</button>`}</section>
- ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div class="flex gap-3">${neuf?'':`<button type="button" data-a="supprimerObjet" data-t="albums" class="btn btn-d flex-1 sm:flex-none">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’album</button></div>`}</form></div>`};
+ ${cur.ro?'':`<input type="file" id="fichiersAlbum" accept="image/jpeg,image/png,image/webp" multiple class="hidden">
+ <button type="button" id="zoneDrop" data-a="choisirAlbum" class="mt-4 w-full border-2 border-dashed border-[#9db4d3] bg-brand-light/50 hover:bg-brand-light transition px-4 py-6 flex flex-col items-center gap-1.5 text-brand"><span class="w-11 h-11 bg-white border border-trait flex items-center justify-center">${ic('upload','w-5 h-5')}</span><span class="text-sm font-semibold">Ajouter des photos</span><span class="text-xs text-slate-500">Touchez ici ou glissez-déposez · plusieurs fichiers possibles</span></button>`}</section>
+ ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div class="flex gap-3">${neuf||!peutSupprimer()?'':`<button type="button" data-a="supprimerObjet" data-t="albums" class="btn btn-d flex-1 sm:flex-none">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’album</button></div>`}</form></div>`};
 V.albumFiche.after=()=>majPhotos();
 function majPhotos(){const c=$('#photos');if(!c)return;const P=cur.photos;
  c.innerHTML=P.length?P.map((p,i)=>`<div class="carte relative"><div class="aspect-[4/3] bg-cover bg-center bg-brand-light" style="background-image:url('${esc(src(p))}')"></div>${i===0?'<span class="puce bg-leaf text-white absolute top-1.5 left-1.5">Couverture</span>':''}${cur.ro?'':`<div class="flex divide-x divide-trait border-t border-trait"><button type="button" data-a="photoMove" data-i="${i}" data-d="-1" class="flex-1 h-10 flex items-center justify-center text-slate-600 disabled:opacity-30" ${i===0?'disabled':''} aria-label="Avancer">${ic('gauche','w-4 h-4')}</button><button type="button" data-a="photoMove" data-i="${i}" data-d="1" class="flex-1 h-10 flex items-center justify-center text-slate-600 disabled:opacity-30" ${i===P.length-1?'disabled':''} aria-label="Reculer">${ic('droite','w-4 h-4')}</button><button type="button" data-a="photoDel" data-i="${i}" class="flex-1 h-10 flex items-center justify-center text-red-600" aria-label="Retirer la photo">${ic('trash','w-4 h-4')}</button></div>`}</div>`).join(''):'<p class="col-span-full text-sm text-slate-500 py-6 text-center">Aucune photo. Ajoutez-en au moins une pour publier l’album.</p>';
@@ -406,7 +408,7 @@ V.articleFiche=id=>{const neuf=id==='nouveau',a=neuf?{titre:'',slug:'',categorie
  <form id="form" class="space-y-4 lg:space-y-5" novalidate><section class="carte p-5">${grille(F_ART,a,cur.ro)}</section>
  <section class="carte p-5"><h3 class="ft font-bold text-brand-dark mb-1">Contenu de l’article</h3><p class="text-xs text-slate-500 mb-4">Composez l’article bloc par bloc : paragraphes, intertitres et citations.</p><div id="blocs" class="space-y-3"></div>
  ${cur.ro?'':`<div class="grid grid-cols-3 gap-2 mt-4"><button type="button" data-a="blocAdd" data-v="paragraphe" class="btn btn-o !px-2 !text-[13px]">${ic('plus','w-4 h-4')}Paragraphe</button><button type="button" data-a="blocAdd" data-v="intertitre" class="btn btn-o !px-2 !text-[13px]">${ic('plus','w-4 h-4')}Intertitre</button><button type="button" data-a="blocAdd" data-v="citation" class="btn btn-o !px-2 !text-[13px]">${ic('plus','w-4 h-4')}Citation</button></div>`}</section>
- ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div>${neuf?'':`<button type="button" data-a="supprimerObjet" data-t="articles" class="btn btn-d w-full sm:w-auto">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’article</button></div>`}</form></div>`};
+ ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div>${neuf||!peutSupprimer()?'':`<button type="button" data-a="supprimerObjet" data-t="articles" class="btn btn-d w-full sm:w-auto">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’article</button></div>`}</form></div>`};
 V.articleFiche.after=()=>majBlocs();
 function majBlocs(){const c=$('#blocs');if(!c)return;const B=cur.blocs;const T={paragraphe:'Paragraphe',intertitre:'Intertitre',citation:'Citation'};
  c.innerHTML=B.map((b,i)=>`<div class="border border-trait ${b.type==='intertitre'?'border-l-4 border-l-brand':b.type==='citation'?'border-l-4 border-l-leaf bg-leaf-light/40':''} p-3"><div class="flex items-center justify-between mb-2"><span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">${T[b.type]}</span>${cur.ro?'':`<span class="flex"><button type="button" data-a="blocMove" data-i="${i}" data-d="-1" class="w-9 h-9 flex items-center justify-center text-slate-500 disabled:opacity-30" ${i===0?'disabled':''} aria-label="Monter">${ic('haut','w-4 h-4')}</button><button type="button" data-a="blocMove" data-i="${i}" data-d="1" class="w-9 h-9 flex items-center justify-center text-slate-500 disabled:opacity-30" ${i===B.length-1?'disabled':''} aria-label="Descendre">${ic('bas','w-4 h-4')}</button><button type="button" data-a="blocDel" data-i="${i}" class="w-9 h-9 flex items-center justify-center text-red-600" aria-label="Supprimer">${ic('trash','w-4 h-4')}</button></span>`}</div><textarea data-bloc="${i}" class="champ ${b.type==='intertitre'?'!min-h-[56px] font-semibold':''}" ${cur.ro?'disabled':''} style="min-height:${b.type==='paragraphe'?110:70}px">${esc(b.texte)}</textarea></div>`).join('')}
@@ -419,7 +421,7 @@ const F_OFFRE=[{k:'titre',l:'Intitulé du poste',req:1,span:2,slug:1},{k:'slug',
 V.offreFiche=id=>{const neuf=id==='nouveau',o=neuf?{titre:'',slug:'',type_contrat:'CDI',lieu:'',date_limite:'',resume:'',missions:'',profil_recherche:'',publie:0}:D.offres.find(x=>x.id==id);if(!o)return introuvable();
  if(neuf&&!peutEditer())return refuse();cur={vue:'offreFiche',obj:o,neuf,ro:!peutEditer()};
  return `<div class="vue">${retour('/emplois','Offres d’emploi')}${entete(neuf?'Nouvelle offre':esc(o.titre))}${roBanniere()}<form id="form" class="space-y-4 lg:space-y-5" novalidate><section class="carte p-5">${grille(F_OFFRE,o,cur.ro)}</section>
- ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div>${neuf?'':`<button type="button" data-a="supprimerObjet" data-t="offres" class="btn btn-d w-full sm:w-auto">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’offre</button></div>`}</form></div>`};
+ ${cur.ro?'':`<div class="flex flex-col-reverse sm:flex-row sm:justify-between gap-3 sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0"><div>${neuf||!peutSupprimer()?'':`<button type="button" data-a="supprimerObjet" data-t="offres" class="btn btn-d w-full sm:w-auto">${ic('trash','w-4 h-4')}Supprimer</button>`}</div><button class="btn btn-v sm:min-w-[220px]">${ic('check','w-4 h-4')}Enregistrer l’offre</button></div>`}</form></div>`};
 
 /* ----- Pages du site (contenus génériques) ----- */
 const CT={
@@ -443,7 +445,7 @@ V.param=()=>{cur={vue:'param',ro:!peutEditer()};const nb=D.parametres.flatMap(g=
  <div class="sticky bottom-[72px] lg:bottom-0 bg-fond/95 backdrop-blur py-3 -mx-4 px-4 lg:mx-0 lg:px-0 flex justify-end"><button class="btn btn-v w-full sm:w-auto sm:min-w-[240px]">${ic('check','w-4 h-4')}Enregistrer les paramètres</button></div></form></div>`};
 
 /* ----- Utilisateurs ----- */
-const DROITS=[['Tableau de bord, consultation des contenus',1,1,1],['Traiter devis et candidatures (statut, notes)',1,1,1],['Créer / modifier albums, articles, offres, pages',0,1,1],['Supprimer devis et candidatures',0,1,1],['Modifier les paramètres du site',0,1,1],['Créer et gérer les comptes « Utilisateur »',0,1,1],['Créer et gérer les comptes « Administrateur »',0,0,1],['Consulter le journal d’activité',0,0,1],['Attribuer le rôle Super administrateur',0,0,1]];
+const DROITS=[['Tableau de bord, consultation des contenus',1,1,1],['Traiter devis et candidatures (statut, notes)',1,1,1],['Créer, modifier et publier albums, articles, offres, pages',1,1,1],['Téléverser des photos et images',1,1,1],['Supprimer définitivement contenus, devis et candidatures',0,1,1],['Modifier les paramètres du site',0,1,1],['Créer et gérer les comptes « Utilisateur »',0,1,1],['Créer et gérer les comptes « Administrateur »',0,0,1],['Consulter le journal d’activité',0,0,1],['Attribuer le rôle Super administrateur',0,0,1]];
 V.users=()=>{cur={vue:'users'};const sup=S.role==='superadmin';
  return `<div class="vue">${entete('Utilisateurs',D.utilisateurs.length+' comptes',`<button data-a="userNouveau" class="btn btn-p shrink-0">${ic('plus','w-4 h-4')}<span class="hidden sm:inline">Nouveau compte</span></button>`)}
  <div class="carte divide-y divide-trait mb-5">${D.utilisateurs.map(u=>{const r=ROLES[u.role],gerable=sup||u.role==='utilisateur';return `<div class="flex items-center gap-3 p-3.5"><span class="w-11 h-11 ${u.actif?'bg-brand text-white':'bg-slate-200 text-slate-500'} flex items-center justify-center text-xs font-bold shrink-0">${initiales(u.nom_complet)}</span><div class="min-w-0 flex-1"><p class="text-sm font-semibold text-brand-dark truncate">${esc(u.nom_complet)}${u.actif?'':' <span class="text-xs font-normal text-slate-400">(désactivé)</span>'}</p><p class="text-xs text-slate-500 truncate">${esc(u.email)}</p><p class="text-[11px] text-slate-400 mt-0.5">${u.derniere_connexion?'Dernière connexion : '+dFr(u.derniere_connexion):'Jamais connecté'}</p></div><div class="flex flex-col items-end gap-2 shrink-0"><span class="puce ${r[1]}">${r[0]}</span>${gerable?`<button data-a="userEdit" data-id="${u.id}" class="text-xs font-semibold text-brand flex items-center gap-1 min-h-[28px]">${ic('edit','w-3.5 h-3.5')}Modifier</button>`:`<span class="text-[11px] text-slate-400 flex items-center gap-1">${ic('cadenas','w-3 h-3')}Protégé</span>`}</div></div>`}).join('')}</div>
@@ -544,6 +546,20 @@ window.addEventListener('hashchange',()=>{if(S.connecte)rendre()});
 
 /* ---------- Actions (délégation) ---------- */
 function majListeVue(){const l=$('#liste');if(l&&cur.liste)l.innerHTML=cur.liste()}
+/* ---------- Téléversement d'images (aperçu immédiat, redimensionnement côté navigateur) ---------- */
+const TYPES_IMG=['image/jpeg','image/png','image/webp'],MAX_OCTETS=8*1024*1024,COTE_MAX=1600;
+function lireImage(file){return new Promise((ok,ko)=>{
+ if(!TYPES_IMG.includes(file.type))return ko('« '+file.name+' » : format non accepté (JPG, PNG ou WebP).');
+ if(file.size>MAX_OCTETS)return ko('« '+file.name+' » dépasse 8 Mo.');
+ const fr=new FileReader();fr.onerror=()=>ko('Lecture impossible.');
+ fr.onload=()=>{const im=new Image();im.onerror=()=>ko('« '+file.name+' » n’est pas une image valide.');
+  im.onload=()=>{const k=Math.min(1,COTE_MAX/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+   c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.85))};im.src=fr.result};fr.readAsDataURL(file)})}
+function majApercu(id){const v=$('#'+id).value,a=$(`[data-apercu="${id}"]`);if(!a)return;
+ a.style.backgroundImage=v?`url('${src(v)}')`:'';a.style.borderStyle=v?'solid':'dashed';a.innerHTML=v?'':ic('image','w-8 h-8');
+ const l=$(`[data-lib="${id}"]`);if(l)l.textContent=v?'Remplacer l’image':'Choisir une image';const r=$(`[data-retirer="${id}"]`);if(r)r.classList.toggle('hidden',!v)}
+async function ajouterAlbum(files){let n=0;for(const f of files){try{cur.photos.push(await lireImage(f));n++}catch(m){toast(m,'err')}}if(n){majPhotos();toast(n+' photo'+(n>1?'s ajoutées':' ajoutée')+'.')}}
+
 const A={
  fermer:()=>fermerFeuille(),
  sortir:()=>{fermerFeuille();S.connecte=false;sauve();history.replaceState(null,'',location.pathname);vueConnexion();toast('Vous êtes déconnecté.')},
@@ -559,8 +575,9 @@ const A={
  supprimer:el=>{const t=el.dataset.t,L=t==='devis'?D.devis:D.candidatures,o=L.find(x=>x.id==el.dataset.id);
   confirmer('Supprimer définitivement ?','Cette action est irréversible. '+(t==='devis'?'La demande de <b>'+esc(o.nom_complet)+'</b>':'La candidature de <b>'+esc(o.nom_complet)+'</b> et son CV')+' seront supprimés.','Supprimer',()=>{L.splice(L.indexOf(o),1);journalise('Suppression',(t==='devis'?'Devis':'Candidature')+' n° '+o.id);toast('Élément supprimé.');location.hash=t==='devis'?'#/devis':'#/candidatures'})},
  supprimerObjet:el=>{const t=el.dataset.t,o=cur.obj;confirmer('Supprimer définitivement ?','« <b>'+esc(o.titre)+'</b> » sera supprimé du site. Cette action est irréversible.','Supprimer',()=>{D[t].splice(D[t].indexOf(o),1);journalise('Suppression','« '+o.titre+' »');toast('Élément supprimé.');location.hash={albums:'#/portfolio',articles:'#/actualites',offres:'#/emplois'}[t]})},
- ajoutPhoto:()=>{const i=$('#nouvPhoto'),v=i.value.trim();if(!v)return toast('Saisissez une URL ou un identifiant.','err');cur.photos.push(v);i.value='';majPhotos()},
- televerser:()=>toast('Téléversement (fonction serveur à venir).'),
+ choisir:el=>{const i=$('[data-file="'+el.dataset.id+'"]');if(i)i.click()},
+ choisirAlbum:()=>$('#fichiersAlbum').click(),
+ retirerImg:el=>{const id=el.dataset.id;$('#'+id).value='';majApercu(id)},
  photoDel:el=>{cur.photos.splice(+el.dataset.i,1);majPhotos()},
  photoMove:el=>{const i=+el.dataset.i,j=i+ +el.dataset.d,P=cur.photos;[P[i],P[j]]=[P[j],P[i]];majPhotos()},
  blocAdd:el=>{cur.blocs.push({type:el.dataset.v,texte:''});majBlocs()},
@@ -573,18 +590,22 @@ const A={
 };
 function formElem(id){const C=CT[cur.onglet],L=D.contenu[cur.onglet],o=id?L.find(x=>x.id==id):{actif:1};
  ouvrirFeuille(id?'Modifier l’élément':'Nouvel élément',`<form id="fe" class="space-y-4" novalidate>${C.fs.map(f=>champ(f,o[f.k],!peutEditer())).join('')}</form>`,
- `<div class="flex gap-3">${id?`<button id="eDel" class="btn btn-d">${ic('trash','w-4 h-4')}</button>`:''}<button data-a="fermer" class="btn btn-o flex-1">Annuler</button><button id="eOk" class="btn btn-v flex-1">${ic('check','w-4 h-4')}Enregistrer</button></div>`);
+ `<div class="flex gap-3">${id&&peutSupprimer()?`<button id="eDel" class="btn btn-d">${ic('trash','w-4 h-4')}</button>`:''}<button data-a="fermer" class="btn btn-o flex-1">Annuler</button><button id="eOk" class="btn btn-v flex-1">${ic('check','w-4 h-4')}Enregistrer</button></div>`);
  $('#eOk').onclick=()=>{const v=lireForm($('#fe'),C.fs);const m=C.fs.find(f=>f.req&&!v[f.k]);if(m)return toast('Le champ « '+m.l+' » est obligatoire.','err');
   if(id)Object.assign(o,v);else L.push({id:prochain(L),...v});journalise('Modification','Contenu « '+C.l+' »');fermerFeuille();toast('Élément enregistré.');rendre()};
  const d=$('#eDel');if(d)d.onclick=()=>confirmer('Supprimer cet élément ?','Il sera retiré de la page du site.','Supprimer',()=>{L.splice(L.indexOf(o),1);toast('Élément supprimé.');rendre()})}
-document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.tagName==='INPUT')return;const f=A[el.dataset.a];if(f){if(el.tagName==='A'&&el.dataset.a==='fermer')return fermerFeuille();e.preventDefault();f(el,e)}});
-document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.a==='elemActif'){const o=D.contenu[cur.onglet].find(x=>x.id==el.dataset.id);o.actif=el.checked?1:0;toast(el.checked?'Élément affiché.':'Élément masqué.');rendre()}});
+document.addEventListener('click',e=>{if(e.target.id==='fond'){fermerFeuille();return}
+ const el=e.target.closest('[data-a]');if(!el||el.tagName==='INPUT')return;const f=A[el.dataset.a];if(f){if(el.tagName==='A'&&el.dataset.a==='fermer')return fermerFeuille();e.preventDefault();f(el,e)}});
+document.addEventListener('change',async e=>{const el=e.target;
+ if(el.dataset&&el.dataset.file){const f=el.files[0];el.value='';if(!f)return;try{$('#'+el.dataset.file).value=await lireImage(f);majApercu(el.dataset.file);toast('Image chargée.')}catch(m){toast(m,'err')}return}
+ if(el.id==='fichiersAlbum'){const fs=[...el.files];el.value='';ajouterAlbum(fs);return}if(el.dataset&&el.dataset.a==='elemActif'){const o=D.contenu[cur.onglet].find(x=>x.id==el.dataset.id);o.actif=el.checked?1:0;toast(el.checked?'Élément affiché.':'Élément masqué.');rendre()}});
 document.addEventListener('input',e=>{const el=e.target;
  if(el.dataset.filtre==='q'){cur.q=el.value.trim().toLowerCase();majListeVue()}
  else if(el.dataset.bloc!==undefined)cur.blocs[+el.dataset.bloc].texte=el.value;
- else if(el.hasAttribute('data-img')){const p=$(`[data-apercu="${el.id}"]`);if(p)p.style.backgroundImage=el.value?`url('${src(el.value)}')`:''}
  else if(el.hasAttribute('data-slug')&&cur.neuf!==false){const s=$('#f_slug');if(s&&(!s.dataset.manuel))s.value=slugify(el.value)}
  else if(el.id==='f_slug')el.dataset.manuel=1});
+document.addEventListener('dragover',e=>{if(e.target.closest&&e.target.closest('#zoneDrop'))e.preventDefault()});
+document.addEventListener('drop',e=>{const z=e.target.closest&&e.target.closest('#zoneDrop');if(!z)return;e.preventDefault();ajouterAlbum([...e.dataTransfer.files])});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')fermerFeuille()});
 document.addEventListener('submit',e=>{const f=e.target;if(f.id!=='form')return;e.preventDefault();
  const v=cur.vue;
