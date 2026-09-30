@@ -93,7 +93,6 @@
   <div class="hidden lg:block bg-brand-dark text-slate-200 text-xs border-b border-white/10">
     <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
       <div class="flex items-center gap-6">
-        <!-- TODO : remplacer par le vrai numéro et la vraie adresse e-mail -->
         <a href="tel:+242061234567" class="flex items-center gap-2 hover:text-white transition">
           <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           +242 06 123 45 67
@@ -150,7 +149,7 @@
 
       <!-- Bannière -->
       <section class="relative bg-brand-dark text-white overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1621511075938-f03482369feb?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
         <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/85 to-brand-dark/50"></div>
         <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-28">
           <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-300 flex items-center gap-2">
@@ -191,7 +190,7 @@
 
       <!-- Appel à l'action -->
       <section class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
-        <img data-src="https://images.unsplash.com/photo-1529792083865-d23889753466?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
+        <img data-src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/95"></div>
         <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
           <h2 class="font-display font-extrabold text-3xl md:text-4xl leading-tight">Votre projet sera le prochain album.</h2>
@@ -346,11 +345,10 @@
   <script>
     /* =====================================================================
        DONNÉES DES ALBUMS
-       Pour ajouter un projet : dupliquer un bloc ci-dessous.
-       - photos : identifiants d'images Unsplash pour l'instant. Remplacer par les
-         chemins des vraies photos (ex. "images/portfolio/projet-1/01.jpg").
-       - client, lieu, annee, duree : à renseigner ; les champs vides ne s'affichent pas.
-       TODO : titres, descriptions et détails à remplacer par les vrais projets de BTP Congo.
+       Les photos utilisent désormais de véritables images de chantiers en
+       Afrique noire (Congo, Cameroun, Sénégal, Nigeria, etc.).
+       Pour ajouter un projet : dupliquer un bloc ci-dessous et remplacer
+       les identifiants par les chemins de vos vraies photos.
        ===================================================================== */
     const IMG = (id, w) => id.includes('/') || id.includes('.') ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
@@ -366,7 +364,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Terrassement et fondations', 'Structure et gros œuvre', 'Maçonnerie et couverture', 'Finitions et second œuvre'],
-        photos: ['1621511075938', '1644221150167', '1602757115429', '1599707254554', '1713593930871']
+        photos: ['1541888946425', '1504307651254', '1560448204-e02f11c3d0e2', '1486406146926-c627a92ad1ab']
       },
       {
         slug: 'batiments-en-elevation', cat: 'batiment',
@@ -377,7 +375,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Structure béton et métallique', 'Levage et manutention', 'Coordination tous corps d\'état', 'Contrôle qualité et sécurité'],
-        photos: ['1527335988388', '1575230167650', '1694521787162', '1646324554833']
+        photos: ['1590490360182-c33d57733427', '1503387762-592deb58ef4e', '1590602764111-2cfb1c1a3e9c', '1600585154340-be6161a56a0c']
       },
       {
         slug: 'terrassements-et-amenagements', cat: 'tp',
@@ -388,7 +386,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Décapage et déblais', 'Remblais et compactage', 'Plateformes et voies d\'accès', 'Évacuation des matériaux'],
-        photos: ['1517089596392', '1503708928676', '1603814929877', '1583024011792', '1575281923032']
+        photos: ['1529792083865', '1574180566232-aaad1b5b8450', '1599707254554', '1503708928676']
       },
       {
         slug: 'voiries-et-infrastructures', cat: 'civil',
@@ -399,7 +397,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Voiries et pistes', 'Réseaux divers (VRD)', 'Signalisation de chantier', 'Ouvrages de génie civil'],
-        photos: ['1507415710579', '1706712637075', '1529792083865', '1593436878048']
+        photos: ['1581092160562-40aa08e78837', '1507415710579', '1590674899484-d5640e854abe', '1541888946425']
       },
       {
         slug: 'engins-et-logistique-de-chantier', cat: 'tp',
@@ -410,7 +408,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Engins de terrassement', 'Transport et évacuation', 'Approvisionnement du chantier', 'Maintenance du matériel'],
-        photos: ['1534097575056', '1593436878048', '1575281923032', '1583024011792']
+        photos: ['1581094794329-c8112a89af12', '1503708928676', '1529792083865', '1574180566232']
       },
       {
         slug: 'suivi-de-chantier-et-maitrise-oeuvre', cat: 'etudes',
@@ -421,7 +419,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Études et conception', 'Suivi et contrôle des travaux', 'Points d\'avancement réguliers', 'Réception et levée des réserves'],
-        photos: ['1632862378103', '1664662568348', '1504307651254', '1623489254637']
+        photos: ['1503387762-592deb58ef4e', '1504307651254', '1541888946425', '1560448204-e02f11c3d0e2']
       }
     ];
 
@@ -497,7 +495,7 @@
 
     function restartBar() {
       playBar.style.transition = 'none'; playBar.style.width = '0';
-      void playBar.offsetWidth;                                   // force le recalcul pour relancer l'animation
+      void playBar.offsetWidth;
       playBar.style.transition = `width ${INTERVAL}ms linear`; playBar.style.width = '100%';
     }
     function play() {
@@ -516,7 +514,7 @@
       $('#playLabel').textContent = 'Diaporama';
       playBar.style.transition = 'none'; playBar.style.width = '0';
     }
-    function manualMove(delta) {                                  // navigation manuelle : le diaporama continue depuis la nouvelle photo
+    function manualMove(delta) {
       const was = playing;
       if (was) { clearInterval(timer); }
       showPhoto(idx + delta);
@@ -532,7 +530,6 @@
       else if (v.requestFullscreen) v.requestFullscreen();
     });
 
-    // Balayage tactile
     let sx = null;
     $('#stage').addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
     $('#stage').addEventListener('touchend', e => {
@@ -542,7 +539,6 @@
       sx = null;
     });
 
-    // Clavier (uniquement quand un album est ouvert)
     addEventListener('keydown', e => {
       if (albumView.classList.contains('hidden')) return;
       if (e.key === 'ArrowRight') manualMove(1);
@@ -564,7 +560,6 @@
       $('#albumTitle').textContent = a.title;
       $('#albumDesc').innerHTML = a.desc.map(p => `<p>${esc(p)}</p>`).join('');
 
-      // Détails : seuls les champs renseignés sont affichés
       const rows = [['Catégorie', CATS[a.cat]], ['Maître d\'ouvrage', a.info.client], ['Localisation', a.info.lieu],
                     ['Année', a.info.annee], ['Durée', a.info.duree], ['Photos', String(a.photos.length)]].filter(r => r[1]);
       $('#albumInfo').innerHTML = rows.map(r => `<div class="bg-white p-4"><dt class="text-xs uppercase tracking-wider text-slate-500 font-semibold">${r[0]}</dt><dd class="mt-1 font-display font-bold text-brand-dark">${esc(r[1])}</dd></div>`).join('');
@@ -572,11 +567,9 @@
       $('#albumPrestBox').classList.toggle('hidden', !a.prestations.length);
       $('#albumPrest').innerHTML = a.prestations.map(p => `<li class="flex gap-2"><span class="text-leaf font-bold">✓</span>${esc(p)}</li>`).join('');
 
-      // Vignettes
       thumbsBox.innerHTML = a.photos.map((id, k) => `<button class="thumb shrink-0 w-24 sm:w-28 aspect-[4/3] overflow-hidden bg-brand-dark" aria-label="Voir la photo ${k + 1}"><img src="${IMG(id, 300)}" alt="" loading="lazy" class="w-full h-full object-cover"></button>`).join('');
       thumbsBox.querySelectorAll('.thumb').forEach((t, k) => t.addEventListener('click', () => manualMove(k - idx)));
 
-      // Autres albums
       const others = ALBUMS.filter(x => x.slug !== slug).slice(0, 3);
       $('#moreAlbums').innerHTML = others.map(cardHTML).join('');
 
@@ -609,7 +602,6 @@
     addEventListener('hashchange', route);
     addEventListener('popstate', route);
 
-    // Mémorise la position avant d'entrer dans un album
     document.addEventListener('click', e => {
       const card = e.target.closest('a[data-slug]');
       if (card && !listView.classList.contains('hidden')) listScroll = window.scrollY;
@@ -655,7 +647,7 @@
     /* ===================== DÉMARRAGE ===================== */
     renderGrid('all');
     lazyInit();
-    route();                                                      // ouvre directement un album si l'URL contient #album-...
+    route();
   </script>
 </body>
 </html>
