@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Portfolio | BTP Congo">
   <meta property="og:description" content="Albums photos de nos réalisations en bâtiment, génie civil et travaux publics.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1621511075938-f03482369feb?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1709714398528-eb8b8df26732?auto=format&fit=crop&w=1200&q=80">
   <meta property="og:locale" content="fr_FR">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -57,21 +57,28 @@
     /* Cartes d'album */
     .album-card { animation: cardIn .6s ease both; }
     @keyframes cardIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    .stack::before, .stack::after { content: ''; position: absolute; inset: 0; border: 2px solid rgba(255,255,255,.35); pointer-events: none; transition: transform .4s ease; }
+    .album-card:hover .stack::before { transform: translate(6px, 6px); }
 
-    /* Visionneuse : fondu enchaîné entre deux calques */
-    .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; }
+    /* Visionneuse : fondu enchaîné + léger zoom pendant le diaporama */
+    .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
     .layer.on { opacity: 1; }
+    #stage.playing .layer.on { animation: drift var(--dur, 4500ms) linear forwards; }
+    @keyframes drift { from { transform: scale(1); } to { transform: scale(1.07); } }
     #playBar { width: 0; height: 100%; background: #3AA845; }
     .thumb { opacity: .55; transition: opacity .3s, outline-color .3s; outline: 3px solid transparent; outline-offset: -3px; }
     .thumb:hover { opacity: 1; }
     .thumb.active { opacity: 1; outline-color: #3AA845; }
     #thumbs { scrollbar-width: thin; scrollbar-color: #3AA845 #e2e8f0; }
     #viewer:fullscreen { background: #000; display: flex; align-items: center; }
-    #viewer:fullscreen #stage { aspect-ratio: auto; height: 100vh; }
+    #viewer:fullscreen #stage { aspect-ratio: auto; height: 100vh; width: 100%; }
     #viewer:fullscreen .layer { object-fit: contain; }
+    .mode-btn.active { background: #1D5BA5; color: #fff; }
 
     #albumView { animation: viewIn .5s ease both; }
     @keyframes viewIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+    #toast { transition: opacity .3s, transform .3s; }
 
     #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
     #mobileMenu.open { max-height: 560px; }
@@ -81,6 +88,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .reveal, .lazy-section, .layer, .album-card, #albumView { transition: none !important; animation: none !important; }
+      #stage.playing .layer.on { animation: none; }
     }
   </style>
 </head>
@@ -93,6 +101,7 @@
   <div class="hidden lg:block bg-brand-dark text-slate-200 text-xs border-b border-white/10">
     <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
       <div class="flex items-center gap-6">
+        <!-- TODO : remplacer par le vrai numéro et la vraie adresse e-mail -->
         <a href="tel:+242061234567" class="flex items-center gap-2 hover:text-white transition">
           <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           +242 06 123 45 67
@@ -149,7 +158,7 @@
 
       <!-- Bannière -->
       <section class="relative bg-brand-dark text-white overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+        <img src="https://images.unsplash.com/photo-1709715987498-1e5f745b2c72?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
         <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/85 to-brand-dark/50"></div>
         <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-28">
           <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-300 flex items-center gap-2">
@@ -161,36 +170,60 @@
             Notre <span class="text-leaf">portfolio</span>
           </h1>
           <p class="mt-6 max-w-2xl text-base sm:text-lg text-slate-200">
-            Chaque projet a son album. Ouvrez-en un pour découvrir les photos du chantier, en diaporama automatique ou en défilement manuel, ainsi que les détails de la réalisation.
+            Chaque projet a son album. Ouvrez-en un pour découvrir les photos du chantier en diaporama automatique, en défilement manuel ou en mosaïque, ainsi que les détails de la réalisation.
           </p>
+          <div class="mt-8 flex flex-wrap gap-6 text-sm font-semibold text-slate-200">
+            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-leaf"></span><span id="heroAlbums">6</span> albums</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-leaf"></span><span id="heroPhotos">0</span> photos</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-leaf"></span>Bâtiment · Travaux publics · Génie civil</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- À la une -->
+      <section id="featured" class="lazy-section pt-16 sm:pt-24">
+        <div class="max-w-7xl mx-auto px-6">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs reveal">À la une</p>
+          <div id="featuredBox" class="mt-4 reveal"></div>
         </div>
       </section>
 
       <!-- Albums -->
       <section id="albums" class="lazy-section py-16 sm:py-24">
         <div class="max-w-7xl mx-auto px-6">
-          <div class="flex flex-wrap items-end justify-between gap-6 reveal">
-            <div class="max-w-2xl">
-              <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Albums de projets</p>
-              <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Des chantiers menés avec rigueur</h2>
-              <p id="countLabel" class="mt-3 text-sm font-semibold text-slate-500" style="text-align:left"></p>
+          <div class="reveal">
+            <div class="flex flex-wrap items-end justify-between gap-6">
+              <div class="max-w-2xl">
+                <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Tous les albums</p>
+                <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Des chantiers menés avec rigueur</h2>
+              </div>
+              <label class="relative block w-full sm:w-72">
+                <span class="sr-only">Rechercher un projet</span>
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.300-4.300"/></svg>
+                <input id="search" type="search" placeholder="Rechercher un projet…" class="w-full border border-slate-300 focus:border-leaf focus:outline-none pl-10 pr-4 py-3 text-sm">
+              </label>
             </div>
-            <div id="filters" class="flex flex-wrap gap-2 font-display font-semibold text-sm" role="tablist" aria-label="Filtrer les albums">
-              <button data-filter="all" class="filter-btn active px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Tous</button>
-              <button data-filter="batiment" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Bâtiment</button>
-              <button data-filter="tp" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Travaux publics</button>
-              <button data-filter="civil" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Génie civil</button>
-              <button data-filter="etudes" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Études &amp; suivi</button>
+
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+              <div id="filters" class="flex flex-wrap gap-2 font-display font-semibold text-sm" role="tablist" aria-label="Filtrer les albums">
+                <button data-filter="all" class="filter-btn active px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Tous</button>
+                <button data-filter="batiment" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Bâtiment</button>
+                <button data-filter="tp" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Travaux publics</button>
+                <button data-filter="civil" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Génie civil</button>
+                <button data-filter="etudes" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Études &amp; suivi</button>
+              </div>
+              <p id="countLabel" class="text-sm font-semibold text-slate-500" style="text-align:right" aria-live="polite"></p>
             </div>
           </div>
 
-          <div id="albumGrid" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+          <div id="albumGrid" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+          <p id="emptyMsg" class="hidden mt-10 text-center text-slate-500" style="text-align:center">Aucun album ne correspond à votre recherche.</p>
         </div>
       </section>
 
       <!-- Appel à l'action -->
       <section class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
-        <img data-src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
+        <img data-src="https://images.unsplash.com/photo-1765378025221-3ed7eadc6def?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/95"></div>
         <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
           <h2 class="font-display font-extrabold text-3xl md:text-4xl leading-tight">Votre projet sera le prochain album.</h2>
@@ -219,41 +252,73 @@
       <section class="py-10 sm:py-14">
         <div class="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
 
-          <!-- Visionneuse -->
+          <!-- Colonne visionneuse -->
           <div class="lg:col-span-2 min-w-0">
-            <div id="viewer" class="bg-black">
-              <div id="stage" class="relative aspect-[4/3] sm:aspect-[16/10] overflow-hidden bg-brand-dark select-none">
-                <img class="layer on" id="layerA" alt="">
-                <img class="layer" id="layerB" alt="">
 
-                <div class="absolute top-0 inset-x-0 h-1 bg-white/20"><div id="playBar"></div></div>
-
-                <button id="prevBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/50 hover:bg-leaf text-white grid place-items-center transition" aria-label="Photo précédente">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+            <!-- Barre d'outils -->
+            <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <div class="inline-flex font-display font-semibold text-sm border border-slate-300" role="group" aria-label="Mode d'affichage">
+                <button id="modeSlide" class="mode-btn active inline-flex items-center gap-2 px-4 py-2 transition" aria-pressed="true">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M8 21h8"/></svg>Diaporama
                 </button>
-                <button id="nextBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/50 hover:bg-leaf text-white grid place-items-center transition" aria-label="Photo suivante">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                <button id="modeGrid" class="mode-btn inline-flex items-center gap-2 px-4 py-2 border-l border-slate-300 transition" aria-pressed="false">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Mosaïque
                 </button>
-
-                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 to-transparent p-4 flex items-center justify-between gap-3 text-white">
-                  <div class="flex items-center gap-3">
-                    <button id="playBtn" class="inline-flex items-center gap-2 bg-leaf hover:bg-leaf-dark px-4 py-2.5 font-display font-bold text-sm transition" aria-pressed="false">
-                      <svg id="iconPlay" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      <svg id="iconPause" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-                      <span id="playLabel">Diaporama</span>
-                    </button>
-                    <span id="counter" class="text-sm font-semibold tabular-nums" aria-live="polite">1 / 1</span>
-                  </div>
-                  <button id="fsBtn" class="w-10 h-10 bg-white/15 hover:bg-white/30 grid place-items-center transition" aria-label="Plein écran">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-                  </button>
-                </div>
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <label for="speed" class="text-slate-500 font-semibold hidden sm:inline">Vitesse</label>
+                <select id="speed" class="border border-slate-300 px-3 py-2 bg-white text-brand-dark font-semibold">
+                  <option value="7500">Lente</option>
+                  <option value="4500" selected>Normale</option>
+                  <option value="2500">Rapide</option>
+                </select>
+                <button id="shareBtn" class="inline-flex items-center gap-2 border border-slate-300 hover:border-leaf hover:text-leaf px-4 py-2 font-semibold transition" aria-label="Copier le lien de l'album">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.600 13.500l6.800 4M15.400 6.500l-6.800 4"/></svg>
+                  <span class="hidden sm:inline">Partager</span>
+                </button>
               </div>
             </div>
 
-            <!-- Vignettes -->
-            <div id="thumbs" class="mt-3 flex gap-2 overflow-x-auto pb-2"></div>
-            <p class="mt-2 text-xs text-slate-500" style="text-align:left">Astuce : utilisez les flèches du clavier pour naviguer, la barre d'espace pour lancer ou arrêter le diaporama.</p>
+            <!-- Mode diaporama -->
+            <div id="slideMode">
+              <div id="viewer" class="bg-black">
+                <div id="stage" class="relative aspect-[4/3] sm:aspect-[16/10] overflow-hidden bg-brand-dark select-none">
+                  <img class="layer on" id="layerA" alt="">
+                  <img class="layer" id="layerB" alt="">
+
+                  <div class="absolute top-0 inset-x-0 h-1 bg-white/20 z-10"><div id="playBar"></div></div>
+
+                  <button id="prevBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/50 hover:bg-leaf text-white grid place-items-center transition z-10" aria-label="Photo précédente">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <button id="nextBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/50 hover:bg-leaf text-white grid place-items-center transition z-10" aria-label="Photo suivante">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                  </button>
+
+                  <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 to-transparent p-4 flex items-center justify-between gap-3 text-white z-10">
+                    <div class="flex items-center gap-3">
+                      <button id="playBtn" class="inline-flex items-center gap-2 bg-leaf hover:bg-leaf-dark px-4 py-2.5 font-display font-bold text-sm transition" aria-pressed="false">
+                        <svg id="iconPlay" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="iconPause" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                        <span id="playLabel">Lecture</span>
+                      </button>
+                      <span id="counter" class="text-sm font-semibold tabular-nums" aria-live="polite">1 / 1</span>
+                    </div>
+                    <button id="fsBtn" class="w-10 h-10 bg-white/15 hover:bg-white/30 grid place-items-center transition" aria-label="Plein écran">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="thumbs" class="mt-3 flex gap-2 overflow-x-auto pb-2"></div>
+              <p class="mt-2 text-xs text-slate-500" style="text-align:left">Astuce : flèches du clavier pour naviguer, barre d'espace pour lancer ou arrêter le diaporama.</p>
+            </div>
+
+            <!-- Mode mosaïque -->
+            <div id="gridMode" class="hidden">
+              <div id="mosaic" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            </div>
           </div>
 
           <!-- Détails du projet -->
@@ -277,13 +342,27 @@
         </div>
       </section>
 
+      <!-- Album précédent / suivant -->
+      <section class="pb-10">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
+          <div class="border-t border-slate-200 pt-8 grid sm:grid-cols-2 gap-4">
+            <a id="prevAlbum" href="#" class="group flex items-center gap-4 border border-slate-200 hover:border-leaf p-4 transition">
+              <span class="w-11 h-11 bg-brand-light text-brand group-hover:bg-leaf group-hover:text-white grid place-items-center transition shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></span>
+              <span class="min-w-0"><span class="block text-xs uppercase tracking-widest text-slate-500 font-semibold">Album précédent</span><span id="prevAlbumTitle" class="block font-display font-bold text-brand-dark truncate"></span></span>
+            </a>
+            <a id="nextAlbum" href="#" class="group flex items-center justify-end gap-4 border border-slate-200 hover:border-leaf p-4 transition text-right">
+              <span class="min-w-0"><span class="block text-xs uppercase tracking-widest text-slate-500 font-semibold">Album suivant</span><span id="nextAlbumTitle" class="block font-display font-bold text-brand-dark truncate"></span></span>
+              <span class="w-11 h-11 bg-brand-light text-brand group-hover:bg-leaf group-hover:text-white grid place-items-center transition shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <!-- Autres albums -->
       <section class="pb-16 sm:pb-24">
         <div class="max-w-7xl mx-auto px-5 sm:px-6">
-          <div class="border-t border-slate-200 pt-12">
-            <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-brand-dark">Découvrir d'autres albums</h2>
-            <div id="moreAlbums" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-          </div>
+          <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-brand-dark">Découvrir d'autres albums</h2>
+          <div id="moreAlbums" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </div>
       </section>
     </div>
@@ -338,6 +417,8 @@
     </div>
   </footer>
 
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-brand-dark text-white text-sm font-semibold px-5 py-3 shadow-xl opacity-0 translate-y-4 pointer-events-none" role="status">Lien copié dans le presse-papiers</div>
+
   <button id="toTop" aria-label="Retour en haut" class="fixed bottom-5 right-5 z-40 w-12 h-12 bg-leaf hover:bg-leaf-dark text-white shadow-xl grid place-items-center translate-y-20 opacity-0 transition-all duration-300">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
   </button>
@@ -345,10 +426,12 @@
   <script>
     /* =====================================================================
        DONNÉES DES ALBUMS
-       Les photos utilisent désormais de véritables images de chantiers en
-       Afrique noire (Congo, Cameroun, Sénégal, Nigeria, etc.).
-       Pour ajouter un projet : dupliquer un bloc ci-dessous et remplacer
-       les identifiants par les chemins de vos vraies photos.
+       Pour ajouter un projet : dupliquer un bloc ci-dessous.
+       - photos : identifiants d'images Unsplash pour l'instant (photos de chantiers en Afrique
+         issues des recherches « construction Africa »). Remplacer par les chemins des vraies photos
+         du client (ex. "images/portfolio/projet-1/01.jpg").
+       - client, lieu, annee, duree : à renseigner ; les champs vides ne s'affichent pas.
+       TODO : titres, descriptions et détails à remplacer par les vrais projets de BTP Congo.
        ===================================================================== */
     const IMG = (id, w) => id.includes('/') || id.includes('.') ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
@@ -364,7 +447,7 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Terrassement et fondations', 'Structure et gros œuvre', 'Maçonnerie et couverture', 'Finitions et second œuvre'],
-        photos: ['1541888946425', '1504307651254', '1560448204-e02f11c3d0e2', '1486406146926-c627a92ad1ab']
+        photos: ['1709714398528-eb8b8df26732', '1709715987498-1e5f745b2c72', '1709715987453-a88239e4d69d', '1621355254187-22a61da5ec52']
       },
       {
         slug: 'batiments-en-elevation', cat: 'batiment',
@@ -374,8 +457,8 @@
           "Grâce à un pilotage centralisé, les interventions s'enchaînent sans temps mort et les points de contrôle garantissent la qualité de l'ouvrage à chaque niveau."
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
-        prestations: ['Structure béton et métallique', 'Levage et manutention', 'Coordination tous corps d\'état', 'Contrôle qualité et sécurité'],
-        photos: ['1590490360182-c33d57733427', '1503387762-592deb58ef4e', '1590602764111-2cfb1c1a3e9c', '1600585154340-be6161a56a0c']
+        prestations: ['Structure béton et métallique', 'Échafaudages et levage', "Coordination tous corps d'état", 'Contrôle qualité et sécurité'],
+        photos: ['1700469919563-ef267d459da5', '1709714398523-b79ced153a13', '1691147421207-d4274cfb482d']
       },
       {
         slug: 'terrassements-et-amenagements', cat: 'tp',
@@ -385,8 +468,8 @@
           "Chaque chantier fait l'objet d'un plan d'organisation précis (circulation des engins, évacuation des matériaux, sécurité) pour travailler efficacement et en toute sécurité."
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
-        prestations: ['Décapage et déblais', 'Remblais et compactage', 'Plateformes et voies d\'accès', 'Évacuation des matériaux'],
-        photos: ['1529792083865', '1574180566232-aaad1b5b8450', '1599707254554', '1503708928676']
+        prestations: ['Décapage et déblais', 'Remblais et compactage', "Plateformes et voies d'accès", 'Évacuation des matériaux'],
+        photos: ['1621355254227-14b1001a91c9', '1766330301961-6366c58297d0', '1766330301270-e4c652b1c538']
       },
       {
         slug: 'voiries-et-infrastructures', cat: 'civil',
@@ -397,18 +480,18 @@
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
         prestations: ['Voiries et pistes', 'Réseaux divers (VRD)', 'Signalisation de chantier', 'Ouvrages de génie civil'],
-        photos: ['1581092160562-40aa08e78837', '1507415710579', '1590674899484-d5640e854abe', '1541888946425']
+        photos: ['1766330301961-6366c58297d0', '1542545610-eb10cb0e8591', '1548790630-2d0b42f5c956', '1527436446415-a2db1025f089']
       },
       {
-        slug: 'engins-et-logistique-de-chantier', cat: 'tp',
-        title: 'Engins et logistique de chantier',
+        slug: 'maconnerie-et-materiaux', cat: 'batiment',
+        title: 'Maçonnerie et matériaux',
         desc: [
-          "Un parc d'engins adapté et une logistique maîtrisée sont la clé de chantiers efficaces. Cet album met en lumière le matériel et les équipes qui font avancer nos projets au quotidien.",
-          "Transport, chargement, terrassement : chaque opération est planifiée pour limiter les temps d'arrêt et respecter les délais."
+          "Derrière chaque ouvrage, des hommes et des matériaux : briques, agglos, béton. Cet album met en lumière le travail de nos maçons et de nos équipes de chantier au quotidien.",
+          "Le choix des matériaux, leur approvisionnement et leur mise en œuvre sont contrôlés pour garantir la durabilité des constructions."
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
-        prestations: ['Engins de terrassement', 'Transport et évacuation', 'Approvisionnement du chantier', 'Maintenance du matériel'],
-        photos: ['1581094794329-c8112a89af12', '1503708928676', '1529792083865', '1574180566232']
+        prestations: ['Maçonnerie et élévation de murs', 'Approvisionnement en matériaux', 'Coffrage et ferraillage', 'Contrôle des mises en œuvre'],
+        photos: ['1668609268461-4f6a15269ff1', '1740825961434-e9287638592b', '1765378025221-3ed7eadc6def']
       },
       {
         slug: 'suivi-de-chantier-et-maitrise-oeuvre', cat: 'etudes',
@@ -418,23 +501,30 @@
           "Visites régulières, points d'avancement et contrôles jalonnent chaque projet pour anticiper les difficultés et assurer un résultat conforme."
         ],
         info: { client: '', lieu: '', annee: '', duree: '' },
-        prestations: ['Études et conception', 'Suivi et contrôle des travaux', 'Points d\'avancement réguliers', 'Réception et levée des réserves'],
-        photos: ['1503387762-592deb58ef4e', '1504307651254', '1541888946425', '1560448204-e02f11c3d0e2']
+        prestations: ['Études et conception', 'Suivi et contrôle des travaux', "Points d'avancement réguliers", 'Réception et levée des réserves'],
+        photos: ['1691147421207-d4274cfb482d', '1765378025221-3ed7eadc6def', '1740825961434-e9287638592b', '1700469919563-ef267d459da5']
       }
     ];
+    const FEATURED = 'immeubles-et-ouvrages';
 
     /* ===================== OUTILS ===================== */
     const $ = s => document.querySelector(s);
     const listView = $('#listView'), albumView = $('#albumView');
-    let listScroll = 0;
+    let listScroll = 0, currentFilter = 'all', currentQuery = '';
 
     function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function toast(msg) {
+      const t = $('#toast'); t.textContent = msg;
+      t.classList.remove('opacity-0', 'translate-y-4');
+      clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.add('opacity-0', 'translate-y-4'), 2200);
+    }
 
     function cardHTML(a, i) {
       return `
       <a href="#album-${a.slug}" data-slug="${a.slug}" class="album-card zoom group relative overflow-hidden block aspect-[4/3] bg-brand-dark" style="animation-delay:${i * 70}ms" aria-label="Ouvrir l'album : ${esc(a.title)}">
         <img src="${IMG(a.photos[0], 900)}" alt="${esc(a.title)}" loading="lazy" class="fade-img absolute inset-0 w-full h-full object-cover" onload="this.classList.add('ready')">
         <span class="absolute inset-0 bg-gradient-to-t from-brand-dark/95 via-brand-dark/25 to-transparent"></span>
+        <span class="stack absolute inset-3"></span>
         <span class="absolute top-4 left-4 bg-black/50 text-white text-xs font-semibold px-3 py-1.5 inline-flex items-center gap-2">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.500" cy="8.500" r="1.500"/><path d="M21 15l-5-5L5 21"/></svg>
           ${a.photos.length} photos
@@ -450,23 +540,54 @@
       </a>`;
     }
 
-    /* ===================== LISTE + FILTRES ===================== */
-    const grid = $('#albumGrid'), countLabel = $('#countLabel');
-    function renderGrid(filter = 'all') {
-      const items = ALBUMS.filter(a => filter === 'all' || a.cat === filter);
+    /* ===================== ACCUEIL DU PORTFOLIO ===================== */
+    $('#heroAlbums').textContent = ALBUMS.length;
+    $('#heroPhotos').textContent = ALBUMS.reduce((n, a) => n + a.photos.length, 0);
+
+    function renderFeatured() {
+      const a = ALBUMS.find(x => x.slug === FEATURED) || ALBUMS[0];
+      $('#featuredBox').innerHTML = `
+      <a href="#album-${a.slug}" data-slug="${a.slug}" class="group grid lg:grid-cols-5 bg-brand-dark text-white overflow-hidden shadow-2xl">
+        <span class="zoom lg:col-span-3 relative block overflow-hidden aspect-[16/10] lg:aspect-auto lg:min-h-[420px]">
+          <img src="${IMG(a.photos[0], 1400)}" alt="${esc(a.title)}" loading="lazy" class="fade-img absolute inset-0 w-full h-full object-cover" onload="this.classList.add('ready')">
+          <span class="absolute top-4 left-4 bg-leaf text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5">Projet phare</span>
+        </span>
+        <span class="lg:col-span-2 p-7 sm:p-10 flex flex-col justify-center">
+          <span class="text-xs font-bold uppercase tracking-widest text-leaf">${CATS[a.cat]}</span>
+          <span class="block mt-3 font-display font-extrabold text-2xl sm:text-3xl leading-tight group-hover:text-leaf transition">${esc(a.title)}</span>
+          <span class="block mt-4 text-slate-300 leading-relaxed text-sm" style="text-align:justify">${esc(a.desc[0])}</span>
+          <span class="mt-6 inline-flex items-center gap-3 text-sm font-semibold text-slate-200">
+            <span class="inline-flex items-center gap-2"><svg class="w-4 h-4 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8.500" cy="8.500" r="1.500"/><path d="M21 15l-5-5L5 21"/></svg>${a.photos.length} photos</span>
+          </span>
+          <span class="mt-7 inline-flex items-center gap-2 self-start bg-leaf group-hover:bg-leaf-dark px-7 py-3.5 font-display font-bold text-sm transition">Ouvrir l'album
+            <svg class="w-4 h-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>`;
+    }
+
+    /* ===================== LISTE + FILTRES + RECHERCHE ===================== */
+    const grid = $('#albumGrid'), countLabel = $('#countLabel'), emptyMsg = $('#emptyMsg');
+    function renderGrid() {
+      const q = currentQuery.trim().toLowerCase();
+      let items = ALBUMS.filter(a =>
+        (currentFilter === 'all' || a.cat === currentFilter) &&
+        (!q || (a.title + ' ' + CATS[a.cat]).toLowerCase().includes(q)));
       grid.innerHTML = items.map(cardHTML).join('');
       countLabel.textContent = `${items.length} album${items.length > 1 ? 's' : ''}`;
+      emptyMsg.classList.toggle('hidden', items.length > 0);
     }
     document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-      renderGrid(btn.dataset.filter);
+      currentFilter = btn.dataset.filter; renderGrid();
     }));
+    $('#search').addEventListener('input', e => { currentQuery = e.target.value; renderGrid(); });
 
     /* ===================== VISIONNEUSE D'ALBUM ===================== */
     const layers = [$('#layerA'), $('#layerB')];
-    const thumbsBox = $('#thumbs'), counter = $('#counter');
+    const thumbsBox = $('#thumbs'), counter = $('#counter'), stage = $('#stage');
     const playBtn = $('#playBtn'), playBar = $('#playBar');
-    const INTERVAL = 4500;
+    let INTERVAL = 4500;
     let album = null, idx = 0, active = 0, playing = false, timer = null;
 
     function preload(i) {
@@ -475,7 +596,7 @@
       const img = new Image(); img.src = IMG(album.photos[(i + n) % n], 1400);
     }
 
-    function showPhoto(i, instant) {
+    function showPhoto(i) {
       const n = album.photos.length;
       idx = (i + n) % n;
       const url = IMG(album.photos[idx], 1400);
@@ -497,10 +618,11 @@
       playBar.style.transition = 'none'; playBar.style.width = '0';
       void playBar.offsetWidth;
       playBar.style.transition = `width ${INTERVAL}ms linear`; playBar.style.width = '100%';
+      stage.style.setProperty('--dur', INTERVAL + 'ms');
     }
     function play() {
       if (playing) return;
-      playing = true;
+      playing = true; stage.classList.add('playing');
       playBtn.setAttribute('aria-pressed', 'true');
       $('#iconPlay').classList.add('hidden'); $('#iconPause').classList.remove('hidden');
       $('#playLabel').textContent = 'Pause';
@@ -508,15 +630,15 @@
       timer = setInterval(() => showPhoto(idx + 1), INTERVAL);
     }
     function pause() {
-      playing = false; clearInterval(timer); timer = null;
+      playing = false; clearInterval(timer); timer = null; stage.classList.remove('playing');
       playBtn.setAttribute('aria-pressed', 'false');
       $('#iconPlay').classList.remove('hidden'); $('#iconPause').classList.add('hidden');
-      $('#playLabel').textContent = 'Diaporama';
+      $('#playLabel').textContent = 'Lecture';
       playBar.style.transition = 'none'; playBar.style.width = '0';
     }
     function manualMove(delta) {
       const was = playing;
-      if (was) { clearInterval(timer); }
+      if (was) clearInterval(timer);
       showPhoto(idx + delta);
       if (was) timer = setInterval(() => showPhoto(idx + 1), INTERVAL);
     }
@@ -529,30 +651,63 @@
       if (document.fullscreenElement) document.exitFullscreen();
       else if (v.requestFullscreen) v.requestFullscreen();
     });
+    $('#speed').addEventListener('change', e => {
+      INTERVAL = +e.target.value;
+      if (playing) { clearInterval(timer); restartBar(); timer = setInterval(() => showPhoto(idx + 1), INTERVAL); }
+    });
 
+    // Modes d'affichage : diaporama / mosaïque
+    function setMode(mode) {
+      const grid = mode === 'grid';
+      $('#slideMode').classList.toggle('hidden', grid);
+      $('#gridMode').classList.toggle('hidden', !grid);
+      $('#modeSlide').classList.toggle('active', !grid); $('#modeSlide').setAttribute('aria-pressed', !grid);
+      $('#modeGrid').classList.toggle('active', grid); $('#modeGrid').setAttribute('aria-pressed', grid);
+      if (grid) pause();
+    }
+    $('#modeSlide').addEventListener('click', () => setMode('slide'));
+    $('#modeGrid').addEventListener('click', () => setMode('grid'));
+
+    // Partage : copie du lien direct vers l'album
+    $('#shareBtn').addEventListener('click', async () => {
+      const url = location.href;
+      try {
+        if (navigator.share && matchMedia('(pointer:coarse)').matches) { await navigator.share({ title: album.title, url }); return; }
+        await navigator.clipboard.writeText(url); toast('Lien copié dans le presse-papiers');
+      } catch (e) {
+        const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); toast('Lien copié dans le presse-papiers'); } catch (_) { toast(url); }
+        ta.remove();
+      }
+    });
+
+    // Balayage tactile
     let sx = null;
-    $('#stage').addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-    $('#stage').addEventListener('touchend', e => {
+    stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', e => {
       if (sx === null) return;
       const dx = e.changedTouches[0].clientX - sx;
       if (Math.abs(dx) > 50) manualMove(dx < 0 ? 1 : -1);
       sx = null;
     });
 
+    // Clavier (uniquement quand un album est ouvert)
     addEventListener('keydown', e => {
       if (albumView.classList.contains('hidden')) return;
-      if (e.key === 'ArrowRight') manualMove(1);
-      else if (e.key === 'ArrowLeft') manualMove(-1);
-      else if (e.key === ' ' && !/^(BUTTON|A|INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) { e.preventDefault(); playing ? pause() : play(); }
+      const inGrid = !$('#gridMode').classList.contains('hidden');
+      if (e.key === 'ArrowRight' && !inGrid) manualMove(1);
+      else if (e.key === 'ArrowLeft' && !inGrid) manualMove(-1);
+      else if (e.key === ' ' && !inGrid && !/^(BUTTON|A|INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { e.preventDefault(); playing ? pause() : play(); }
       else if (e.key === 'Escape' && !document.fullscreenElement) goBack();
     });
 
     /* ===================== OUVERTURE / FERMETURE D'UN ALBUM ===================== */
     function openAlbum(slug) {
-      const a = ALBUMS.find(x => x.slug === slug);
-      if (!a) return showList();
-      if (listView.classList.contains('hidden') === false) listScroll = window.scrollY;
-      album = a; pause();
+      const pos = ALBUMS.findIndex(x => x.slug === slug);
+      if (pos < 0) return showList();
+      const a = ALBUMS[pos];
+      if (!listView.classList.contains('hidden')) listScroll = window.scrollY;
+      album = a; pause(); setMode('slide');
 
       document.title = `${a.title} | Portfolio BTP Congo`;
       $('#crumbTitle').textContent = a.title;
@@ -560,24 +715,32 @@
       $('#albumTitle').textContent = a.title;
       $('#albumDesc').innerHTML = a.desc.map(p => `<p>${esc(p)}</p>`).join('');
 
-      const rows = [['Catégorie', CATS[a.cat]], ['Maître d\'ouvrage', a.info.client], ['Localisation', a.info.lieu],
+      const rows = [['Catégorie', CATS[a.cat]], ["Maître d'ouvrage", a.info.client], ['Localisation', a.info.lieu],
                     ['Année', a.info.annee], ['Durée', a.info.duree], ['Photos', String(a.photos.length)]].filter(r => r[1]);
       $('#albumInfo').innerHTML = rows.map(r => `<div class="bg-white p-4"><dt class="text-xs uppercase tracking-wider text-slate-500 font-semibold">${r[0]}</dt><dd class="mt-1 font-display font-bold text-brand-dark">${esc(r[1])}</dd></div>`).join('');
 
       $('#albumPrestBox').classList.toggle('hidden', !a.prestations.length);
       $('#albumPrest').innerHTML = a.prestations.map(p => `<li class="flex gap-2"><span class="text-leaf font-bold">✓</span>${esc(p)}</li>`).join('');
 
+      // Vignettes + mosaïque
       thumbsBox.innerHTML = a.photos.map((id, k) => `<button class="thumb shrink-0 w-24 sm:w-28 aspect-[4/3] overflow-hidden bg-brand-dark" aria-label="Voir la photo ${k + 1}"><img src="${IMG(id, 300)}" alt="" loading="lazy" class="w-full h-full object-cover"></button>`).join('');
       thumbsBox.querySelectorAll('.thumb').forEach((t, k) => t.addEventListener('click', () => manualMove(k - idx)));
+      $('#mosaic').innerHTML = a.photos.map((id, k) => `<button class="zoom relative overflow-hidden aspect-[4/3] bg-brand-dark group" data-k="${k}" aria-label="Agrandir la photo ${k + 1}"><img src="${IMG(id, 700)}" alt="${esc(a.title)} – photo ${k + 1}" loading="lazy" class="fade-img w-full h-full object-cover" onload="this.classList.add('ready')"><span class="absolute inset-0 bg-brand-dark/0 group-hover:bg-brand-dark/30 transition"></span></button>`).join('');
+      $('#mosaic').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { setMode('slide'); showPhoto(+b.dataset.k); }));
 
-      const others = ALBUMS.filter(x => x.slug !== slug).slice(0, 3);
-      $('#moreAlbums').innerHTML = others.map(cardHTML).join('');
+      // Album précédent / suivant
+      const prev = ALBUMS[(pos - 1 + ALBUMS.length) % ALBUMS.length], next = ALBUMS[(pos + 1) % ALBUMS.length];
+      $('#prevAlbum').href = '#album-' + prev.slug; $('#prevAlbumTitle').textContent = prev.title;
+      $('#nextAlbum').href = '#album-' + next.slug; $('#nextAlbumTitle').textContent = next.title;
+
+      // Autres albums
+      $('#moreAlbums').innerHTML = ALBUMS.filter(x => x.slug !== slug).slice(0, 3).map(cardHTML).join('');
 
       listView.classList.add('hidden'); albumView.classList.remove('hidden');
       layers.forEach(l => { l.classList.remove('on'); l.removeAttribute('src'); });
       layers[0].classList.add('on'); active = 0;
       showPhoto(0);
-      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
     function showList() {
@@ -645,9 +808,10 @@
     $('#year').textContent = new Date().getFullYear();
 
     /* ===================== DÉMARRAGE ===================== */
-    renderGrid('all');
+    renderFeatured();
+    renderGrid();
     lazyInit();
-    route();
+    route();                                                      // ouvre directement un album si l'URL contient #album-...
   </script>
 </body>
 </html>
