@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actualités | BTP Congo – Chantiers, conseils et expertise en construction</title>
+  <meta name="description" content="Actualités de BTP Congo : vie des chantiers, conseils pour votre projet de construction, expertise technique et sécurité sur les chantiers.">
+  <meta name="theme-color" content="#0C2747">
+  <link rel="icon" href="https://www.btp-congo.com/images/logo-btp-congo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Actualités | BTP Congo">
+  <meta property="og:description" content="Vie des chantiers, conseils et expertise en construction, bâtiment et travaux publics.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1700469919563-ef267d459da5?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:locale" content="fr_FR">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    // Charte graphique BTP Congo : bleu (brand) + vert (leaf)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#1D5BA5', dark: '#0C2747', light: '#EAF1FA' },
+            leaf:  { DEFAULT: '#3AA845', dark: '#2B8434', light: '#EAF6EB' }
+          },
+          fontFamily: { display: ['Montserrat', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    p { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+    :focus-visible { outline: 3px solid #3AA845; outline-offset: 2px; }
+    [id^="s-"] { scroll-margin-top: 110px; }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.show { opacity: 1; transform: none; }
+    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+    .lazy-section.in { opacity: 1; transform: none; }
+    .fade-img { opacity: 0; transition: opacity .8s ease; }
+    .fade-img.ready { opacity: 1; }
+    .zoom img { transition: transform .9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .zoom:hover img { transform: scale(1.07); }
+    .underline-hover { position: relative; }
+    .underline-hover::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #3AA845; transition: width .3s ease; }
+    .underline-hover:hover::after { width: 100%; }
+
+    .filter-btn.active { background: #1D5BA5; color: #fff; }
+    .news-card { animation: cardIn .6s ease both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+    #articleView { animation: viewIn .5s ease both; }
+    @keyframes viewIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+    /* Corps d'article */
+    .prose-btp h2 { font-family: Montserrat, sans-serif; font-weight: 800; font-size: 1.5rem; line-height: 1.25; color: #0C2747; margin: 2.2rem 0 .9rem; padding-left: .9rem; border-left: 4px solid #3AA845; }
+    .prose-btp p { margin: 0 0 1.1rem; line-height: 1.85; color: #475569; font-size: 1.05rem; }
+    .prose-btp ul { margin: 0 0 1.3rem; padding: 0; list-style: none; }
+    .prose-btp li { position: relative; padding-left: 1.7rem; margin-bottom: .6rem; color: #475569; line-height: 1.7; }
+    .prose-btp li::before { content: '✓'; position: absolute; left: 0; top: 0; color: #3AA845; font-weight: 800; }
+    .prose-btp blockquote { margin: 1.8rem 0; padding: 1.4rem 1.6rem; background: #EAF1FA; border-left: 4px solid #1D5BA5; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1.15rem; color: #0C2747; line-height: 1.6; }
+    .toc a.active { color: #3AA845; border-color: #3AA845; font-weight: 700; }
+
+    #toast { transition: opacity .3s, transform .3s; }
+
+    #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobileMenu.open { max-height: 560px; }
+
+    * { border-radius: 0 !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal, .lazy-section, .news-card, #articleView { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-slate-700 antialiased bg-white">
+
+  <div id="progress" class="fixed top-0 left-0 h-1 bg-leaf z-[60] w-0"></div>
+
+  <!-- Barre supérieure -->
+  <div class="hidden lg:block bg-brand-dark text-slate-200 text-xs border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <!-- TODO : remplacer par le vrai numéro et la vraie adresse e-mail -->
+        <a href="tel:+242061234567" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +242 06 123 45 67
+        </a>
+        <a href="mailto:contact@btp-congo.com" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+          contact@btp-congo.com
+        </a>
+      </div>
+      <a href="contact.html" class="font-semibold text-leaf hover:text-white transition">Devis gratuit sous 48h →</a>
+    </div>
+  </div>
+
+  <!-- En-tête -->
+  <header id="header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <a href="index.html" aria-label="BTP Congo - Accueil">
+        <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-12 w-auto">
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8 font-display font-semibold text-sm text-brand-dark" aria-label="Navigation principale">
+        <a href="index.html" class="underline-hover hover:text-brand transition">Accueil</a>
+        <a href="entreprise.html" class="underline-hover hover:text-brand transition">L'entreprise</a>
+        <a href="expertises.html" class="underline-hover hover:text-brand transition">Expertises</a>
+        <a href="portfolio.html" class="underline-hover hover:text-brand transition">Portfolio</a>
+        <a href="actualites.html" class="text-brand border-b-2 border-leaf py-1" aria-current="page">Actualités</a>
+        <a href="contact.html" class="underline-hover hover:text-brand transition">Contact</a>
+        <a href="carriere.html" class="underline-hover hover:text-brand transition">Carrière</a>
+        <a href="contact.html" class="ml-2 bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 transition text-sm font-bold">Devis</a>
+      </nav>
+
+      <button id="burger" class="lg:hidden p-2 -mr-2" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="w-7 h-7 text-brand-dark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="lg:hidden border-t border-slate-100 bg-white">
+      <nav class="px-6 py-3 flex flex-col font-display font-semibold text-brand-dark divide-y divide-slate-100" aria-label="Navigation mobile">
+        <a href="index.html" class="py-3">Accueil</a>
+        <a href="entreprise.html" class="py-3">L'entreprise</a>
+        <a href="expertises.html" class="py-3">Expertises</a>
+        <a href="portfolio.html" class="py-3">Portfolio</a>
+        <a href="actualites.html" class="py-3 text-brand">Actualités</a>
+        <a href="contact.html" class="py-3">Contact</a>
+        <a href="carriere.html" class="py-3">Carrière</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================== VUE 1 : LISTE DES ARTICLES ===================== -->
+    <div id="listView">
+
+      <!-- Bannière -->
+      <section class="relative bg-brand-dark text-white overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1700469919563-ef267d459da5?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/85 to-brand-dark/50"></div>
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-28">
+          <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-300 flex items-center gap-2">
+            <a href="index.html" class="hover:text-leaf transition">Accueil</a>
+            <span class="text-leaf">/</span>
+            <span class="text-white">Actualités</span>
+          </nav>
+          <h1 class="mt-5 font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.1]">
+            <span class="text-leaf">Actualités</span> &amp; conseils
+          </h1>
+          <p class="mt-6 max-w-2xl text-base sm:text-lg text-slate-200">
+            La vie de nos chantiers, nos conseils pour réussir votre projet de construction et le regard de nos équipes sur les métiers du bâtiment et des travaux publics.
+          </p>
+        </div>
+      </section>
+
+      <!-- À la une -->
+      <section id="featured" class="lazy-section pt-16 sm:pt-24">
+        <div class="max-w-7xl mx-auto px-6">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs reveal">À la une</p>
+          <div id="featuredBox" class="mt-4 reveal"></div>
+        </div>
+      </section>
+
+      <!-- Tous les articles -->
+      <section id="articles" class="lazy-section py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="reveal">
+            <div class="flex flex-wrap items-end justify-between gap-6">
+              <div class="max-w-2xl">
+                <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Tous les articles</p>
+                <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">La vie de nos chantiers</h2>
+              </div>
+              <label class="relative block w-full sm:w-72">
+                <span class="sr-only">Rechercher un article</span>
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.300-4.300"/></svg>
+                <input id="search" type="search" placeholder="Rechercher un article…" class="w-full border border-slate-300 focus:border-leaf focus:outline-none pl-10 pr-4 py-3 text-sm">
+              </label>
+            </div>
+
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+              <div id="filters" class="flex flex-wrap gap-2 font-display font-semibold text-sm" role="tablist" aria-label="Filtrer par catégorie">
+                <button data-filter="all" class="filter-btn active px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Tous</button>
+                <button data-filter="chantiers" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Chantiers</button>
+                <button data-filter="conseils" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Conseils</button>
+                <button data-filter="expertise" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Expertise</button>
+                <button data-filter="securite" class="filter-btn px-5 py-2 bg-slate-100 text-brand-dark hover:bg-brand-light transition">Sécurité</button>
+              </div>
+              <p id="countLabel" class="text-sm font-semibold text-slate-500" style="text-align:right" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <div id="newsGrid" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+          <p id="emptyMsg" class="hidden mt-10 text-center text-slate-500" style="text-align:center">Aucun article ne correspond à votre recherche.</p>
+          <div class="mt-12 text-center">
+            <button id="moreBtn" class="hidden border-2 border-brand text-brand hover:bg-brand hover:text-white px-10 py-3.5 font-display font-bold text-sm transition">Voir plus d'articles</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Appel à l'action -->
+      <section class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
+        <img data-src="https://images.unsplash.com/photo-1709714398528-eb8b8df26732?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/95"></div>
+        <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
+          <h2 class="font-display font-extrabold text-3xl md:text-4xl leading-tight">Une question sur votre projet ?</h2>
+          <p class="mt-4 text-slate-200 max-w-2xl mx-auto text-lg">Nos équipes techniques vous répondent et vous conseillent dès les premières étapes de votre projet de construction.</p>
+          <a href="contact.html" class="inline-block mt-8 bg-leaf hover:bg-leaf-dark hover:scale-105 px-10 py-4 font-display font-bold transition">Contacter nos équipes</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===================== VUE 2 : ARTICLE OUVERT ===================== -->
+    <div id="articleView" class="hidden">
+      <div class="bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+          <button data-back class="group inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-6 py-3 font-display font-bold text-sm transition">
+            <svg class="w-4 h-4 transition group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+            Retour aux actualités
+          </button>
+          <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-500 flex items-center gap-2 flex-wrap">
+            <a href="index.html" class="hover:text-leaf transition">Accueil</a><span class="text-leaf">/</span>
+            <button data-back class="hover:text-leaf transition uppercase tracking-widest">Actualités</button><span class="text-leaf">/</span>
+            <span id="crumbTitle" class="text-brand-dark truncate max-w-[200px] sm:max-w-xs"></span>
+          </nav>
+        </div>
+      </div>
+
+      <article class="py-10 sm:py-14">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-3 gap-10 lg:gap-14 items-start">
+
+          <div class="lg:col-span-2 min-w-0">
+            <div class="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-widest">
+              <span id="artCat" class="bg-leaf-light text-leaf-dark px-3 py-1.5"></span>
+              <span id="artMeta" class="text-slate-500 normal-case tracking-normal font-semibold text-sm"></span>
+            </div>
+            <h1 id="artTitle" class="mt-5 font-display font-extrabold text-3xl sm:text-4xl text-brand-dark leading-tight"></h1>
+            <p id="artLead" class="mt-4 text-lg text-slate-600 leading-relaxed"></p>
+
+            <div class="mt-8 overflow-hidden bg-brand-dark">
+              <img id="artImg" src="" alt="" class="w-full aspect-[16/9] object-cover">
+            </div>
+
+            <div id="artBody" class="prose-btp mt-10"></div>
+
+            <!-- Partage -->
+            <div class="mt-10 pt-6 border-t border-slate-200 flex flex-wrap items-center gap-3">
+              <span class="font-display font-bold text-brand-dark text-sm">Partager cet article</span>
+              <button id="copyBtn" class="inline-flex items-center gap-2 border border-slate-300 hover:border-leaf hover:text-leaf px-4 py-2 text-sm font-semibold transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copier le lien
+              </button>
+              <a id="shWa" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-slate-300 hover:border-leaf hover:text-leaf px-4 py-2 text-sm font-semibold transition">WhatsApp</a>
+              <a id="shLi" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-slate-300 hover:border-leaf hover:text-leaf px-4 py-2 text-sm font-semibold transition">LinkedIn</a>
+              <a id="shFb" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-slate-300 hover:border-leaf hover:text-leaf px-4 py-2 text-sm font-semibold transition">Facebook</a>
+            </div>
+
+            <!-- Précédent / suivant -->
+            <div class="mt-10 grid sm:grid-cols-2 gap-4">
+              <a id="prevArt" href="#" class="group flex items-center gap-4 border border-slate-200 hover:border-leaf p-4 transition">
+                <span class="w-11 h-11 bg-brand-light text-brand group-hover:bg-leaf group-hover:text-white grid place-items-center transition shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></span>
+                <span class="min-w-0"><span class="block text-xs uppercase tracking-widest text-slate-500 font-semibold">Article précédent</span><span id="prevArtTitle" class="block font-display font-bold text-brand-dark text-sm leading-snug"></span></span>
+              </a>
+              <a id="nextArt" href="#" class="group flex items-center justify-end gap-4 border border-slate-200 hover:border-leaf p-4 transition text-right">
+                <span class="min-w-0"><span class="block text-xs uppercase tracking-widest text-slate-500 font-semibold">Article suivant</span><span id="nextArtTitle" class="block font-display font-bold text-brand-dark text-sm leading-snug"></span></span>
+                <span class="w-11 h-11 bg-brand-light text-brand group-hover:bg-leaf group-hover:text-white grid place-items-center transition shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Colonne latérale -->
+          <aside class="lg:sticky lg:top-28 space-y-8">
+            <div id="tocBox" class="bg-slate-50 border border-slate-200 p-6">
+              <h2 class="font-display font-bold text-brand-dark">Sommaire</h2>
+              <ul id="toc" class="toc mt-4 space-y-2 text-sm"></ul>
+            </div>
+
+            <div>
+              <h2 class="font-display font-bold text-brand-dark">Articles récents</h2>
+              <ul id="recent" class="mt-4 space-y-4"></ul>
+            </div>
+
+            <div class="bg-brand text-white p-7 border-b-4 border-leaf">
+              <h2 class="font-display font-bold text-xl leading-snug">Un projet de construction ?</h2>
+              <p class="mt-3 text-sm text-slate-200">Parlez-en à nos équipes : nous étudions votre demande et revenons vers vous rapidement.</p>
+              <a href="contact.html" class="mt-5 inline-block bg-leaf hover:bg-leaf-dark px-6 py-3 font-display font-bold text-sm transition">Demander un devis</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <!-- Articles similaires -->
+      <section class="pb-16 sm:pb-24">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
+          <div class="border-t border-slate-200 pt-12">
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-brand-dark">À lire aussi</h2>
+            <div id="moreArticles" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+      <div class="sm:col-span-2">
+        <span class="inline-block py-3">
+          <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto bg-white p-2">
+        </span>
+        <p class="mt-5 max-w-sm leading-relaxed text-slate-400">
+          Entreprise de construction, bâtiment et génie civil, spécialisée dans la conception, les études techniques et la réalisation de projets au Congo.
+        </p>
+        <div class="mt-6 flex gap-4">
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Navigation</p>
+        <ul class="space-y-2.5">
+          <li><a href="entreprise.html" class="hover:text-leaf transition">L'entreprise</a></li>
+          <li><a href="expertises.html" class="hover:text-leaf transition">Expertises</a></li>
+          <li><a href="portfolio.html" class="hover:text-leaf transition">Portfolio</a></li>
+          <li><a href="actualites.html" class="hover:text-leaf transition">Actualités</a></li>
+          <li><a href="contact.html" class="hover:text-leaf transition">Contact</a></li>
+          <li><a href="carriere.html" class="hover:text-leaf transition">Carrière</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Nos expertises</p>
+        <ul class="space-y-2.5">
+          <li><a href="expertises.html#batiment" class="hover:text-leaf transition">Bâtiment &amp; gros œuvre</a></li>
+          <li><a href="expertises.html#genie-civil" class="hover:text-leaf transition">Génie civil &amp; TP</a></li>
+          <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Entreprise générale</a></li>
+          <li><a href="expertises.html#maitrise-oeuvre" class="hover:text-leaf transition">Maîtrise d'œuvre &amp; études</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-xs text-slate-400">
+      © <span id="year"></span> BTP Congo. Tous droits réservés. · Site conçu par <a href="#" class="hover:text-leaf transition">WEDE</a>
+    </div>
+  </footer>
+
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-brand-dark text-white text-sm font-semibold px-5 py-3 shadow-xl opacity-0 translate-y-4 pointer-events-none" role="status">Lien copié dans le presse-papiers</div>
+
+  <button id="toTop" aria-label="Retour en haut" class="fixed bottom-5 right-5 z-40 w-12 h-12 bg-leaf hover:bg-leaf-dark text-white shadow-xl grid place-items-center translate-y-20 opacity-0 transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+
+  <script>
+    /* =====================================================================
+       ARTICLES
+       Pour ajouter une actualité : dupliquer un bloc ci-dessous.
+       - date : au format "AAAA-MM-JJ" (laisser vide pour ne pas afficher de date).
+       - image : identifiant Unsplash pour l'instant, à remplacer par la photo du client
+         (ex. "images/actualites/visite-chantier.jpg").
+       - body : suite de blocs { h: "titre" }, { p: "paragraphe" }, { ul: ["a", "b"] }, { q: "citation" }.
+       TODO : la première actualité est à compléter avec le texte d'origine du site actuel ;
+       les autres sont des articles de conseil génériques à valider par BTP Congo.
+       ===================================================================== */
+    const IMG = (id, w) => id.includes('/') || id.includes('.') ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+    const CATS = { chantiers: 'Chantiers', conseils: 'Conseils', expertise: 'Expertise', securite: 'Sécurité' };
+
+    const ARTICLES = [
+      {
+        slug: 'bien-preparer-son-projet-de-construction', cat: 'conseils', date: '',
+        title: 'Bien préparer son projet de construction : les points essentiels',
+        excerpt: "Besoin, budget, terrain, plans : quatre étapes de préparation qui font toute la différence avant le premier coup de pelle.",
+        image: '1709715987453-a88239e4d69d',
+        body: [
+          { p: "Un projet de construction réussi se joue largement avant l'ouverture du chantier. Plus la préparation est sérieuse, moins les imprévus coûtent cher, en temps comme en argent. Voici les points sur lesquels nous conseillons à nos clients de s'arrêter." },
+          { h: 'Définir précisément votre besoin' },
+          { p: "À quoi doit servir l'ouvrage ? Combien de personnes l'utiliseront ? Comment évoluera-t-il dans dix ans ? Répondre à ces questions permet de dimensionner le projet, d'éviter les surcoûts de modification en cours de chantier et de choisir les bonnes solutions techniques." },
+          { h: 'Fixer un budget réaliste' },
+          { p: "Le budget doit couvrir l'ensemble du projet : études, travaux, finitions et une marge pour les aléas. Un chiffrage détaillé, établi à partir de plans précis, vaut mieux qu'une estimation au mètre carré faite trop tôt." },
+          { h: 'Vérifier le terrain et les documents' },
+          { ul: ["S'assurer que les documents du terrain sont en règle et que les limites sont clairement définies.", 'Faire réaliser une étude de sol lorsque l\'ouvrage le justifie.', "Identifier l'accès au chantier, l'eau, l'électricité et l'évacuation des eaux."] },
+          { h: 'Choisir le bon partenaire' },
+          { q: "Une entreprise fiable ne se choisit pas seulement sur le prix : elle se juge à la qualité de son écoute, de ses études et de son suivi." },
+          { p: "Demandez à visiter des réalisations, comparez des devis détaillés et privilégiez une entreprise capable de vous accompagner de l'étude à la réception des travaux." }
+        ]
+      },
+      {
+        slug: 'visite-de-chantier-11-septembre-2023', cat: 'chantiers', date: '2023-09-11',
+        title: 'Visite de chantier du 11 septembre 2023',
+        excerpt: "Le lundi 11 septembre 2023, l'encadrement technique de BTP Congo s'est rendu sur chantier pour faire le point sur l'avancement des travaux.",
+        image: '1700469919563-ef267d459da5',
+        body: [
+          { p: "Le lundi 11 septembre 2023, l'encadrement technique de BTP Congo a effectué une visite de chantier pour faire le point sur l'avancement des travaux." },
+          { h: 'Pourquoi ces visites sont essentielles' },
+          { p: "La visite de chantier est un rendez-vous clé de la conduite de travaux. Elle réunit les responsables techniques sur le terrain pour vérifier ce qui a été réalisé, anticiper la suite et traiter rapidement les difficultés éventuelles." },
+          { ul: ["Contrôler l'avancement par rapport au planning.", "Vérifier la qualité d'exécution et la conformité aux plans.", 'S\'assurer du respect des règles de sécurité.', 'Préparer les prochaines étapes et l\'approvisionnement.'] },
+          { p: "Ces visites régulières font partie de notre méthode de travail : elles garantissent à nos clients un suivi transparent et un ouvrage conforme à leurs attentes." }
+        ]
+      },
+      {
+        slug: 'les-etapes-d-un-chantier-de-batiment', cat: 'conseils', date: '',
+        title: "Les grandes étapes d'un chantier de bâtiment",
+        excerpt: "De l'installation de chantier à la réception : comprendre le déroulement d'un chantier pour mieux suivre votre projet.",
+        image: '1709714398523-b79ced153a13',
+        body: [
+          { p: "Un chantier de bâtiment suit un enchaînement logique d'étapes. Les connaître aide le maître d'ouvrage à mieux comprendre les délais et à dialoguer avec les équipes." },
+          { h: '1. Installation de chantier et terrassement' },
+          { p: "Clôture, accès, stockage des matériaux, puis préparation du terrain : décapage, implantation et fouilles selon les plans." },
+          { h: '2. Fondations et gros œuvre' },
+          { p: "Réalisation des fondations, du soubassement puis de l'élévation : poteaux, poutres, dalles et murs. C'est la phase qui donne sa solidité à l'ouvrage." },
+          { h: '3. Couverture et clos-couvert' },
+          { p: "Charpente, toiture, menuiseries extérieures : le bâtiment est mis hors d'eau et protégé des intempéries." },
+          { h: '4. Second œuvre et finitions' },
+          { ul: ['Électricité et plomberie', 'Cloisons, enduits et revêtements', 'Menuiseries intérieures et peinture'] },
+          { h: '5. Réception des travaux' },
+          { p: "La réception marque la fin du chantier : visite de contrôle, liste des réserves éventuelles et levée de celles-ci avant la remise de l'ouvrage." }
+        ]
+      },
+      {
+        slug: 'entreprise-generale-un-interlocuteur-unique', cat: 'expertise', date: '',
+        title: "Entreprise générale : les avantages d'un interlocuteur unique",
+        excerpt: "Confier son projet à une entreprise générale, c'est simplifier la coordination et sécuriser les délais et le budget.",
+        image: '1709714398528-eb8b8df26732',
+        body: [
+          { p: "Sur un chantier, plusieurs corps d'état interviennent : maçonnerie, électricité, plomberie, menuiserie, peinture… Les coordonner demande du temps et de l'expérience. Le statut d'entreprise générale répond à ce besoin." },
+          { h: 'Un seul responsable, une seule relation' },
+          { p: "L'entreprise générale prend la responsabilité globale de la construction. Le client n'a qu'un contact pour tout le projet, ce qui fluidifie les échanges et évite les zones de flou entre intervenants." },
+          { h: 'Ce que cela change concrètement' },
+          { ul: ['Un planning unique, coordonné entre tous les corps d\'état.', 'Un budget suivi de bout en bout.', 'Une qualité contrôlée à chaque étape.', 'Une réponse claire en cas de difficulté.'] },
+          { q: "Un chantier bien coordonné, c'est moins d'attente, moins de reprises et un ouvrage livré dans de meilleures conditions." }
+        ]
+      },
+      {
+        slug: 'securite-sur-les-chantiers', cat: 'securite', date: '',
+        title: 'Sécurité sur les chantiers : les bons réflexes',
+        excerpt: "Équipements de protection, balisage, formation : la sécurité est l'affaire de tous, du dirigeant à l'ouvrier.",
+        image: '1765378025221-3ed7eadc6def',
+        body: [
+          { p: "Un chantier est un environnement à risques : travail en hauteur, engins en mouvement, manutention de charges lourdes. La prévention n'est pas une contrainte, c'est une condition de réussite du projet." },
+          { h: 'Les fondamentaux' },
+          { ul: ['Port systématique des équipements de protection individuelle (casque, chaussures de sécurité, gilet, gants).', 'Balisage des zones dangereuses et des accès au chantier.', 'Vérification régulière des échafaudages, engins et outils.', 'Rangement et propreté du chantier pour éviter les chutes.'] },
+          { h: 'Former et sensibiliser' },
+          { p: "Chaque intervenant doit connaître les règles du chantier avant de démarrer. Des rappels réguliers, avant les phases sensibles, maintiennent la vigilance de toute l'équipe." },
+          { h: 'Le rôle de l\'encadrement' },
+          { p: "Les responsables de chantier donnent l'exemple, contrôlent l'application des consignes et corrigent immédiatement toute situation à risque." }
+        ]
+      },
+      {
+        slug: 'choisir-les-bons-materiaux', cat: 'conseils', date: '',
+        title: 'Choisir les bons matériaux pour un ouvrage durable',
+        excerpt: "Béton, agglomérés, acier : la qualité des matériaux et leur mise en œuvre conditionnent la durée de vie de votre construction.",
+        image: '1668609268461-4f6a15269ff1',
+        body: [
+          { p: "La durabilité d'un ouvrage dépend autant de la qualité des matériaux que de la façon dont ils sont mis en œuvre. Une économie mal placée sur un matériau peut coûter beaucoup plus cher en réparations." },
+          { h: 'Le béton et l\'acier' },
+          { p: "La composition du béton, son dosage et sa mise en place, ainsi que la qualité et le positionnement des armatures, déterminent la résistance de la structure." },
+          { h: 'Les éléments de maçonnerie' },
+          { p: "Briques et agglomérés doivent être choisis selon leur usage (murs porteurs ou cloisons), leur résistance et leurs conditions de stockage." },
+          { h: 'Contrôler à chaque étape' },
+          { ul: ['Vérifier la conformité des matériaux à la livraison.', 'Stocker correctement pour éviter humidité et dégradations.', 'Suivre les dosages et les temps de séchage.'] }
+        ]
+      },
+      {
+        slug: 'etudes-techniques-pourquoi-elles-comptent', cat: 'expertise', date: '',
+        title: 'Études techniques : pourquoi elles comptent avant de construire',
+        excerpt: "Étude de sol, dimensionnement, chiffrage : des études rigoureuses évitent les mauvaises surprises et sécurisent l'ouvrage.",
+        image: '1691147421207-d4274cfb482d',
+        body: [
+          { p: "Construire sans étude, c'est prendre le risque de dépasser le budget, de perdre du temps ou de compromettre la solidité de l'ouvrage. Les études techniques sont l'investissement le plus rentable d'un projet." },
+          { h: 'Ce que couvrent les études' },
+          { ul: ["La connaissance du terrain et de la nature du sol.", 'Le dimensionnement des fondations et de la structure.', 'Les plans détaillés utilisables sur le chantier.', 'Le chiffrage précis des quantités et des coûts.'] },
+          { h: 'Un gain pour toutes les parties' },
+          { p: "Des plans clairs et un chiffrage fiable permettent de comparer les offres, de lancer les travaux sereinement et de limiter les modifications en cours de route." },
+          { q: "Une bonne étude, c'est un chantier qui se déroule comme prévu." }
+        ]
+      },
+      {
+        slug: 'entretenir-et-rehabiliter-son-batiment', cat: 'conseils', date: '',
+        title: 'Entretenir et réhabiliter son bâtiment : les signes à surveiller',
+        excerpt: "Fissures, humidité, corrosion : repérer tôt les désordres permet d'intervenir avant qu'ils ne coûtent cher.",
+        image: '1621355254187-22a61da5ec52',
+        body: [
+          { p: "Un bâtiment vieillit, et certains signes doivent alerter avant que les dégradations ne s'aggravent. Une intervention précoce est presque toujours plus simple et moins coûteuse." },
+          { h: 'Les signes à ne pas ignorer' },
+          { ul: ['Fissures qui s\'élargissent ou apparaissent rapidement.', 'Traces d\'humidité, infiltrations et moisissures.', "Corrosion visible des armatures ou des éléments métalliques.", "Toiture ou étanchéité dégradée."] },
+          { h: 'Réagir au bon moment' },
+          { p: "Faites réaliser un diagnostic par des professionnels : il permet d'identifier l'origine des désordres et de choisir la réparation adaptée, du simple traitement à la réhabilitation lourde." },
+          { h: 'Réhabiliter plutôt que reconstruire' },
+          { p: "Dans de nombreux cas, une réhabilitation bien conduite redonne à l'ouvrage toute sa solidité et son confort, pour un coût inférieur à celui d'une reconstruction." }
+        ]
+      }
+    ];
+    const FEATURED = 'bien-preparer-son-projet-de-construction';
+    const PAGE = 6;
+
+    /* ===================== OUTILS ===================== */
+    const $ = s => document.querySelector(s);
+    const listView = $('#listView'), articleView = $('#articleView');
+    let listScroll = 0, currentFilter = 'all', currentQuery = '', shown = PAGE;
+
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const words = a => a.body.map(b => b.p || b.q || b.h || (b.ul ? b.ul.join(' ') : '')).join(' ').split(/\s+/).length;
+    const readTime = a => Math.max(1, Math.round(words(a) / 200)) + ' min de lecture';
+    const fmtDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    const metaLine = a => [fmtDate(a.date), readTime(a)].filter(Boolean).join(' · ');
+    const toast = msg => {
+      const t = $('#toast'); t.textContent = msg; t.classList.remove('opacity-0', 'translate-y-4');
+      clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.add('opacity-0', 'translate-y-4'), 2200);
+    };
+
+    function cardHTML(a, i) {
+      return `
+      <a href="#article-${a.slug}" data-slug="${a.slug}" class="news-card zoom group block bg-white" style="animation-delay:${(i % PAGE) * 70}ms">
+        <span class="block relative overflow-hidden aspect-[16/10] bg-brand-dark">
+          <img src="${IMG(a.image, 800)}" alt="${esc(a.title)}" loading="lazy" class="fade-img w-full h-full object-cover" onload="this.classList.add('ready')">
+          <span class="absolute top-4 left-4 bg-leaf text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5">${CATS[a.cat]}</span>
+        </span>
+        <span class="block pt-5">
+          <span class="block text-xs font-semibold text-slate-500">${metaLine(a)}</span>
+          <span class="block mt-2 font-display font-bold text-lg text-brand-dark leading-snug group-hover:text-brand transition">${esc(a.title)}</span>
+          <span class="block mt-2 text-sm text-slate-600 leading-relaxed" style="text-align:justify">${esc(a.excerpt)}</span>
+          <span class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-leaf group-hover:gap-3 transition-all">Lire l'article
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>`;
+    }
+
+    /* ===================== LISTE ===================== */
+    function renderFeatured() {
+      const a = ARTICLES.find(x => x.slug === FEATURED) || ARTICLES[0];
+      $('#featuredBox').innerHTML = `
+      <a href="#article-${a.slug}" data-slug="${a.slug}" class="group grid lg:grid-cols-5 bg-brand-dark text-white overflow-hidden shadow-2xl">
+        <span class="zoom lg:col-span-3 relative block overflow-hidden aspect-[16/10] lg:aspect-auto lg:min-h-[400px]">
+          <img src="${IMG(a.image, 1400)}" alt="${esc(a.title)}" loading="lazy" class="fade-img absolute inset-0 w-full h-full object-cover" onload="this.classList.add('ready')">
+          <span class="absolute top-4 left-4 bg-leaf text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5">${CATS[a.cat]}</span>
+        </span>
+        <span class="lg:col-span-2 p-7 sm:p-10 flex flex-col justify-center">
+          <span class="text-xs font-semibold text-slate-300">${metaLine(a)}</span>
+          <span class="block mt-3 font-display font-extrabold text-2xl sm:text-3xl leading-tight group-hover:text-leaf transition">${esc(a.title)}</span>
+          <span class="block mt-4 text-slate-300 leading-relaxed text-sm" style="text-align:justify">${esc(a.excerpt)}</span>
+          <span class="mt-7 inline-flex items-center gap-2 self-start bg-leaf group-hover:bg-leaf-dark px-7 py-3.5 font-display font-bold text-sm transition">Lire l'article
+            <svg class="w-4 h-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>`;
+    }
+
+    const grid = $('#newsGrid'), moreBtn = $('#moreBtn'), emptyMsg = $('#emptyMsg'), countLabel = $('#countLabel');
+    function filtered() {
+      const q = currentQuery.trim().toLowerCase();
+      return ARTICLES.filter(a => (currentFilter === 'all' || a.cat === currentFilter) &&
+        (!q || (a.title + ' ' + a.excerpt + ' ' + CATS[a.cat]).toLowerCase().includes(q)));
+    }
+    function renderGrid() {
+      const items = filtered();
+      grid.innerHTML = items.slice(0, shown).map(cardHTML).join('');
+      countLabel.textContent = `${items.length} article${items.length > 1 ? 's' : ''}`;
+      emptyMsg.classList.toggle('hidden', items.length > 0);
+      moreBtn.classList.toggle('hidden', items.length <= shown);
+    }
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      currentFilter = btn.dataset.filter; shown = PAGE; renderGrid();
+    }));
+    $('#search').addEventListener('input', e => { currentQuery = e.target.value; shown = PAGE; renderGrid(); });
+    moreBtn.addEventListener('click', () => { shown += PAGE; renderGrid(); });
+
+    /* ===================== ARTICLE ===================== */
+    let tocObserver = null;
+    function openArticle(slug) {
+      const pos = ARTICLES.findIndex(x => x.slug === slug);
+      if (pos < 0) return showList();
+      const a = ARTICLES[pos];
+      if (!listView.classList.contains('hidden')) listScroll = window.scrollY;
+
+      document.title = `${a.title} | Actualités BTP Congo`;
+      $('#crumbTitle').textContent = a.title;
+      $('#artCat').textContent = CATS[a.cat];
+      $('#artMeta').textContent = metaLine(a);
+      $('#artTitle').textContent = a.title;
+      $('#artLead').textContent = a.excerpt;
+      const img = $('#artImg'); img.src = IMG(a.image, 1400); img.alt = a.title;
+
+      // Corps + sommaire
+      let n = 0; const heads = [];
+      $('#artBody').innerHTML = a.body.map(b => {
+        if (b.h) { const id = 's-' + (++n); heads.push([id, b.h]); return `<h2 id="${id}">${esc(b.h)}</h2>`; }
+        if (b.p) return `<p>${esc(b.p)}</p>`;
+        if (b.q) return `<blockquote>${esc(b.q)}</blockquote>`;
+        if (b.ul) return `<ul>${b.ul.map(li => `<li>${esc(li)}</li>`).join('')}</ul>`;
+        return '';
+      }).join('');
+      $('#tocBox').classList.toggle('hidden', heads.length < 2);
+      $('#toc').innerHTML = heads.map(([id, t]) => `<li><a href="#${id}" class="block border-l-2 border-slate-200 pl-3 py-1 text-slate-600 hover:text-leaf transition">${esc(t)}</a></li>`).join('');
+      $('#toc').querySelectorAll('a').forEach(l => l.addEventListener('click', e => {
+        e.preventDefault(); document.getElementById(l.getAttribute('href').slice(1)).scrollIntoView({ behavior: 'smooth' });
+      }));
+      if (tocObserver) tocObserver.disconnect();
+      if ('IntersectionObserver' in window) {
+        tocObserver = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) $('#toc').querySelectorAll('a').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+          });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+        $('#artBody').querySelectorAll('h2').forEach(h => tocObserver.observe(h));
+      }
+
+      // Partage
+      const url = encodeURIComponent(location.origin + location.pathname + '#article-' + slug);
+      $('#shWa').href = `https://wa.me/?text=${encodeURIComponent(a.title)}%20${url}`;
+      $('#shLi').href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+      $('#shFb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+
+      // Précédent / suivant, récents, à lire aussi
+      const prev = ARTICLES[(pos - 1 + ARTICLES.length) % ARTICLES.length], next = ARTICLES[(pos + 1) % ARTICLES.length];
+      $('#prevArt').href = '#article-' + prev.slug; $('#prevArtTitle').textContent = prev.title;
+      $('#nextArt').href = '#article-' + next.slug; $('#nextArtTitle').textContent = next.title;
+      $('#recent').innerHTML = ARTICLES.filter(x => x.slug !== slug).slice(0, 4).map(x => `
+        <li><a href="#article-${x.slug}" class="group flex gap-3 items-start">
+          <img src="${IMG(x.image, 200)}" alt="" loading="lazy" class="w-20 h-16 object-cover shrink-0 bg-brand-dark">
+          <span class="text-sm font-display font-bold text-brand-dark leading-snug group-hover:text-leaf transition">${esc(x.title)}</span>
+        </a></li>`).join('');
+      const same = ARTICLES.filter(x => x.slug !== slug && x.cat === a.cat);
+      const others = ARTICLES.filter(x => x.slug !== slug && x.cat !== a.cat);
+      $('#moreArticles').innerHTML = [...same, ...others].slice(0, 3).map(cardHTML).join('');
+
+      listView.classList.add('hidden'); articleView.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    function showList() {
+      document.title = 'Actualités | BTP Congo – Chantiers, conseils et expertise en construction';
+      articleView.classList.add('hidden'); listView.classList.remove('hidden');
+      window.scrollTo({ top: listScroll, behavior: 'auto' });
+      lazyInit();
+    }
+    function goBack() {
+      history.pushState('', document.title, location.pathname + location.search);
+      route();
+    }
+    document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', goBack));
+
+    $('#copyBtn').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(location.href); toast('Lien copié dans le presse-papiers'); }
+      catch (e) {
+        const ta = document.createElement('textarea'); ta.value = location.href; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); toast('Lien copié dans le presse-papiers'); } catch (_) { toast(location.href); }
+        ta.remove();
+      }
+    });
+
+    function route() {
+      const m = location.hash.match(/^#article-(.+)$/);
+      m ? openArticle(decodeURIComponent(m[1])) : showList();
+    }
+    addEventListener('hashchange', route);
+    addEventListener('popstate', route);
+    document.addEventListener('click', e => {
+      const card = e.target.closest('a[data-slug]');
+      if (card && !listView.classList.contains('hidden')) listScroll = window.scrollY;
+    });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !articleView.classList.contains('hidden')) goBack(); });
+
+    /* ===================== CHARGEMENT DIFFÉRÉ, MENU, DÉFILEMENT ===================== */
+    function loadImages(scope) {
+      scope.querySelectorAll('img[data-src]').forEach(img => {
+        img.onload = () => img.classList.add('ready');
+        img.src = img.dataset.src; img.removeAttribute('data-src');
+      });
+    }
+    const sectionObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        loadImages(e.target); e.target.classList.add('in'); sectionObserver.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px 300px 0px', threshold: 0.02 }) : null;
+    const revealObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); revealObserver.unobserve(e.target); } });
+    }, { threshold: .1 }) : null;
+    function lazyInit() {
+      document.querySelectorAll('.lazy-section:not(.in)').forEach(s => sectionObserver ? sectionObserver.observe(s) : (loadImages(s), s.classList.add('in')));
+      document.querySelectorAll('.reveal:not(.show)').forEach(el => revealObserver ? revealObserver.observe(el) : el.classList.add('show'));
+    }
+
+    const menu = $('#mobileMenu'), burger = $('#burger');
+    burger.addEventListener('click', () => { const o = menu.classList.toggle('open'); burger.setAttribute('aria-expanded', o); });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }));
+
+    const header = $('#header'), progress = $('#progress'), toTop = $('#toTop');
+    function onScroll() {
+      const y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+      header.classList.toggle('shadow-md', y > 40);
+      const v = y > 700; toTop.classList.toggle('opacity-0', !v); toTop.classList.toggle('translate-y-20', !v);
+    }
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
+    $('#year').textContent = new Date().getFullYear();
+
+    // Les liens "#" vides (réseaux sociaux, crédits) ne doivent pas ramener à la liste
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a');
+      if (a && a.getAttribute('href') === '#') e.preventDefault();
+    });
+
+    /* ===================== DÉMARRAGE ===================== */
+    renderFeatured();
+    renderGrid();
+    lazyInit();
+    route();                                                      // ouvre directement un article si l'URL contient #article-...
+  </script>
+</body>
+</html>
