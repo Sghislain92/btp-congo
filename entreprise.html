@@ -40,12 +40,20 @@
     p { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
     :focus-visible { outline: 3px solid #3AA845; outline-offset: 2px; }
 
+    /* ---- Apparition au défilement ----
+       Sur mobile/tablette, les blocs "gauche/droite" montent simplement (pas de décalage horizontal :
+       un élément décalé de 40 px hors écran crée un défilement horizontal). Le glissement latéral
+       n'est activé que sur grand écran. */
     .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
     .reveal.show { opacity: 1; transform: none; }
-    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .9s ease, transform .9s ease; }
-    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal-left, .reveal-right { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s ease; }
+    @media (min-width: 1024px) {
+      .reveal-left { transform: translateX(-40px); }
+      .reveal-right { transform: translateX(40px); }
+    }
     .reveal-left.show, .reveal-right.show { opacity: 1; transform: none; }
-    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+
+    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; overflow-x: clip; }
     .lazy-section.in { opacity: 1; transform: none; }
     img.lazy-img { opacity: 0; transition: opacity .9s ease; }
     img.lazy-img.ready { opacity: 1; }
@@ -61,8 +69,17 @@
     .tab-panel.active { display: block; animation: fadeUp .6s ease both; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-    /* Frise des étapes */
-    .step-line { background: linear-gradient(to bottom, #3AA845, #1D5BA5); }
+    /* ---- Frise « Notre méthode » ----
+       Chaque étape trace son propre trait, du centre de son pastille au centre de la suivante :
+       la ligne commence donc exactement sous le « 01 » et s'arrête au « 04 », quelle que soit
+       la longueur des textes, sur mobile comme sur ordinateur. */
+    .tl { --pl: 4rem; --m: 44px; --gap: 3rem; }
+    @media (min-width: 640px) { .tl { --pl: 6rem; --m: 60px; } }
+    .tl-item { position: relative; }
+    .tl-dot { position: absolute; left: calc(var(--pl) * -1); top: 0; width: var(--m); height: var(--m); display: grid; place-items: center; z-index: 2; color: #fff; font-family: Montserrat, sans-serif; font-weight: 800; font-size: .95rem; box-shadow: 0 10px 18px -8px rgba(12,39,71,.45); }
+    .tl-item:not(:last-child)::before { content: ''; position: absolute; z-index: 1; width: 2px; left: calc(var(--pl) * -1 + var(--m) / 2 - 1px); top: calc(var(--m) / 2); height: calc(100% + var(--gap)); }
+    .tl-item:nth-child(odd)::before  { background: linear-gradient(#1D5BA5, #3AA845); }
+    .tl-item:nth-child(even)::before { background: linear-gradient(#3AA845, #1D5BA5); }
 
     #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
     #mobileMenu.open { max-height: 560px; }
@@ -163,8 +180,8 @@
 
     <!-- QUI SOMMES-NOUS -->
     <section id="presentation" class="lazy-section py-16 sm:py-24">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
-        <div class="reveal-left relative flex flex-col gap-4 h-full">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
+        <div class="reveal-left relative flex flex-col gap-4 h-full min-w-0">
           <div class="zoom overflow-hidden flex-1 min-h-[260px]">
             <img data-src="https://images.unsplash.com/photo-1694521787162-5373b598945c?auto=format&fit=crop&w=1200&q=80" alt="Équipe BTP Congo sur un chantier" class="lazy-img w-full h-full object-cover">
           </div>
@@ -173,7 +190,7 @@
           </div>
         </div>
 
-        <div class="reveal-right flex flex-col justify-center">
+        <div class="reveal-right flex flex-col justify-center min-w-0">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Qui sommes-nous</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Le partenaire privilégié des professionnels, des collectivités et des particuliers</h2>
           <p class="mt-5 leading-relaxed">
@@ -207,8 +224,8 @@
           <button class="tab-btn px-7 py-3 bg-white text-brand-dark hover:bg-brand hover:text-white transition" role="tab" data-tab="valeurs-panel" aria-selected="false">Valeurs</button>
         </div>
 
-        <div class="mt-10 grid lg:grid-cols-5 gap-0 bg-white shadow-xl overflow-hidden reveal">
-          <div class="lg:col-span-3 p-8 sm:p-12">
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-5 gap-0 bg-white shadow-xl overflow-hidden reveal">
+          <div class="lg:col-span-3 p-6 sm:p-12 min-w-0">
             <div id="mission-panel" class="tab-panel active" role="tabpanel">
               <h3 class="font-display font-extrabold text-2xl text-brand-dark">Satisfaire et surpasser les attentes de nos clients</h3>
               <p class="mt-4 leading-relaxed">Notre mission est de répondre aux besoins de nos clients, et de les dépasser. Nous travaillons main dans la main avec le maître d'ouvrage, du premier échange jusqu'à la réception des travaux, pour garantir que chaque exigence est comprise, traduite techniquement et respectée sur le chantier.</p>
@@ -221,11 +238,11 @@
             </div>
             <div id="valeurs-panel" class="tab-panel" role="tabpanel">
               <h3 class="font-display font-extrabold text-2xl text-brand-dark">Quatre valeurs qui guident chacune de nos décisions</h3>
-              <ul class="mt-6 grid sm:grid-cols-2 gap-5">
-                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Intégrité</strong><br><span class="text-sm">Des engagements tenus et des relations honnêtes.</span></span></li>
-                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Transparence</strong><br><span class="text-sm">Une information claire sur les coûts, les délais et l'avancement.</span></span></li>
-                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Professionnalisme</strong><br><span class="text-sm">Le respect des règles de l'art et des normes.</span></span></li>
-                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span><strong class="text-brand-dark">Esprit d'équipe</strong><br><span class="text-sm">Des compétences réunies au service du projet.</span></span></li>
+              <ul class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span class="min-w-0"><strong class="text-brand-dark">Intégrité</strong><br><span class="text-sm">Des engagements tenus et des relations honnêtes.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span class="min-w-0"><strong class="text-brand-dark">Transparence</strong><br><span class="text-sm">Une information claire sur les coûts, les délais et l'avancement.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span class="min-w-0"><strong class="text-brand-dark">Professionnalisme</strong><br><span class="text-sm">Le respect des règles de l'art et des normes.</span></span></li>
+                <li class="flex gap-3"><span class="mt-1 w-6 h-6 bg-leaf text-white grid place-items-center text-xs font-bold shrink-0">✓</span><span class="min-w-0"><strong class="text-brand-dark">Esprit d'équipe</strong><br><span class="text-sm">Des compétences réunies au service du projet.</span></span></li>
               </ul>
             </div>
           </div>
@@ -238,28 +255,28 @@
     </section>
 
     <!-- MOT DU DIRECTEUR -->
-    <!-- TODO : ajouter le nom et la photo réels du Directeur, et valider le texte avec lui -->
+    <!-- TODO : remplacer la photo d'illustration par la vraie photo du Directeur, ajouter son nom réel et valider le texte avec lui -->
     <section id="directeur" class="lazy-section py-16 sm:py-24 bg-slate-50">
       <div class="max-w-6xl mx-auto px-6">
-        <div class="reveal grid lg:grid-cols-12 bg-white shadow-xl overflow-hidden">
+        <div class="reveal grid grid-cols-1 lg:grid-cols-12 bg-white shadow-xl overflow-hidden">
 
           <!-- Photo du directeur -->
-          <div class="lg:col-span-5 relative min-h-[320px]">
+          <div class="lg:col-span-5 relative min-h-[320px] min-w-0">
             <img data-src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80" alt="Directeur Général de BTP Congo" class="lazy-img absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-brand-dark/20 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-              <p class="text-leaf font-display font-bold uppercase tracking-widest text-[10px]">La Direction Générale</p>
-              <p class="mt-1 font-display font-extrabold text-xl">BTP Congo</p>
+              <p class="text-leaf font-display font-bold uppercase tracking-widest text-[10px]" style="text-align:left">La Direction Générale</p>
+              <p class="mt-1 font-display font-extrabold text-xl" style="text-align:left">BTP Congo</p>
               <!-- TODO : remplacer par le nom réel -->
             </div>
           </div>
 
           <!-- Contenu -->
-          <div class="lg:col-span-7 p-8 sm:p-12 relative">
-            <span class="absolute top-4 right-8 font-display font-black text-[10rem] leading-none text-brand-light select-none pointer-events-none" aria-hidden="true">”</span>
+          <div class="lg:col-span-7 p-6 sm:p-12 relative min-w-0 overflow-hidden">
+            <span class="absolute -top-2 right-3 sm:top-2 sm:right-8 font-display font-black text-[6.5rem] sm:text-[10rem] leading-none text-brand-light select-none pointer-events-none" aria-hidden="true">”</span>
 
             <p class="relative text-leaf font-display font-bold uppercase tracking-widest text-xs" style="text-align:left">Le mot du Directeur</p>
-            <h2 class="relative mt-3 font-display font-extrabold text-2xl sm:text-3xl text-brand-dark leading-tight">
+            <h2 class="relative mt-3 font-display font-extrabold text-2xl sm:text-3xl text-brand-dark leading-tight break-words">
               Chaque projet mérite une équipe engagée à ses côtés
             </h2>
 
@@ -269,13 +286,13 @@
               <p>À nos collaborateurs, je tiens à saluer le dévouement, la technicité et l'esprit d'équipe qui font notre force. Ensemble, nous repoussons les limites et bâtissons un avenir prometteur pour le Congo.</p>
             </div>
 
-            <div class="relative mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
-              <div>
+            <div class="relative mt-8 pt-6 border-t border-slate-200 flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div class="min-w-0">
                 <p class="font-display font-bold text-brand-dark text-lg" style="text-align:left">La Direction Générale</p>
                 <!-- TODO : remplacer par le nom réel du Directeur Général -->
                 <p class="text-sm text-slate-500" style="text-align:left">Directeur Général · BTP Congo</p>
               </div>
-              <div class="flex gap-2">
+              <div class="flex flex-wrap gap-2">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-leaf border border-leaf px-3 py-1">Intégrité</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest text-brand border border-brand px-3 py-1">Excellence</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest text-leaf border border-leaf px-3 py-1">Engagement</span>
@@ -304,7 +321,7 @@
           <div class="hidden md:block mx-auto h-px bg-slate-300 w-[75%]"></div>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:-mt-px">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:-mt-px">
           <div class="reveal bg-white p-7 border-t-4 border-brand shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300">
             <div class="w-12 h-12 bg-brand-light text-brand grid place-items-center">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4"/></svg>
@@ -340,8 +357,8 @@
     <!-- MOYENS -->
     <!-- TODO : détailler avec la liste réelle du matériel et des effectifs -->
     <section id="moyens" class="lazy-section py-16 sm:py-24">
-      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <div class="reveal-left order-2 lg:order-1">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal-left order-2 lg:order-1 min-w-0">
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Nos moyens</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Un matériel moderne et des équipes qualifiées</h2>
           <p class="mt-5 leading-relaxed">
@@ -352,23 +369,23 @@
               <div class="w-12 h-12 bg-leaf text-white grid place-items-center shrink-0">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M14 7h7v7"/></svg>
               </div>
-              <div><h3 class="font-display font-bold text-brand-dark">Matériel &amp; engins</h3><p class="mt-1 text-sm text-slate-600">Engins de terrassement, matériel de transport et équipements de chantier entretenus et adaptés à chaque intervention.</p></div>
+              <div class="min-w-0"><h3 class="font-display font-bold text-brand-dark">Matériel &amp; engins</h3><p class="mt-1 text-sm text-slate-600">Engins de terrassement, matériel de transport et équipements de chantier entretenus et adaptés à chaque intervention.</p></div>
             </div>
             <div class="flex gap-4">
               <div class="w-12 h-12 bg-brand text-white grid place-items-center shrink-0">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.900M9 20H2v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2h-7zM12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
               </div>
-              <div><h3 class="font-display font-bold text-brand-dark">Ressources humaines</h3><p class="mt-1 text-sm text-slate-600">Ingénieurs, techniciens, conducteurs de travaux et ouvriers qualifiés, réunis autour d'un même objectif.</p></div>
+              <div class="min-w-0"><h3 class="font-display font-bold text-brand-dark">Ressources humaines</h3><p class="mt-1 text-sm text-slate-600">Ingénieurs, techniciens, conducteurs de travaux et ouvriers qualifiés, réunis autour d'un même objectif.</p></div>
             </div>
             <div class="flex gap-4">
               <div class="w-12 h-12 bg-leaf text-white grid place-items-center shrink-0">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4"/></svg>
               </div>
-              <div><h3 class="font-display font-bold text-brand-dark">Compétences techniques</h3><p class="mt-1 text-sm text-slate-600">Un bureau d'études intégré pour concevoir, chiffrer et suivre vos projets de bout en bout.</p></div>
+              <div class="min-w-0"><h3 class="font-display font-bold text-brand-dark">Compétences techniques</h3><p class="mt-1 text-sm text-slate-600">Un bureau d'études intégré pour concevoir, chiffrer et suivre vos projets de bout en bout.</p></div>
             </div>
           </div>
         </div>
-        <div class="reveal-right order-1 lg:order-2 grid grid-cols-2 gap-4">
+        <div class="reveal-right order-1 lg:order-2 grid grid-cols-2 gap-4 min-w-0">
           <div class="zoom overflow-hidden col-span-2"><img data-src="https://images.unsplash.com/photo-1575281923032-f40d94ef6160?auto=format&fit=crop&w=1200&q=80" alt="Pelle mécanique chargeant un camion" class="lazy-img w-full aspect-[16/9] object-cover"></div>
           <div class="zoom overflow-hidden"><img data-src="https://images.unsplash.com/photo-1603814929877-d5d927322656?auto=format&fit=crop&w=600&q=80" alt="Pelle mécanique sur chantier" class="lazy-img w-full aspect-square object-cover"></div>
           <div class="zoom overflow-hidden"><img data-src="https://images.unsplash.com/photo-1593436878048-92622a77d315?auto=format&fit=crop&w=600&q=80" alt="Conducteur de travaux devant un engin" class="lazy-img w-full aspect-square object-cover"></div>
@@ -385,7 +402,7 @@
           <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Nos engagements</p>
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl leading-tight">Qualité, sécurité et responsabilité sur chaque chantier</h2>
         </div>
-        <div class="mt-12 grid md:grid-cols-3 gap-6">
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="reveal group bg-white/5 border border-white/15 p-8 hover:bg-white/10 hover:-translate-y-2 transition duration-300">
             <div class="w-12 h-12 bg-leaf grid place-items-center group-hover:scale-110 transition">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6l8-3z"/></svg>
@@ -431,28 +448,25 @@
           <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Comment nous menons vos projets</h2>
         </div>
 
-        <ol class="mt-14 relative pl-16 sm:pl-24 space-y-12">
-          <!-- Ligne verticale : s'arrête au niveau du 4e marqueur -->
-          <span class="hidden sm:block absolute left-[29px] top-6 bottom-6 w-0.5 step-line" aria-hidden="true"></span>
-          <span class="sm:hidden absolute left-[21px] top-5 bottom-5 w-0.5 step-line" aria-hidden="true"></span>
-
-          <li class="reveal relative">
-            <span class="absolute -left-16 sm:-left-24 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-brand text-white grid place-items-center font-display font-extrabold shadow-lg z-10">01</span>
+        <!-- Chaque étape trace son propre trait vers la suivante (voir .tl-item::before) -->
+        <ol class="tl mt-14 pl-16 sm:pl-24 space-y-12">
+          <li class="tl-item reveal">
+            <span class="tl-dot bg-brand">01</span>
             <h3 class="font-display font-bold text-xl text-brand-dark">Écoute &amp; études techniques</h3>
             <p class="mt-2 text-slate-600">Nous analysons votre besoin, le terrain et les contraintes du projet pour définir une solution technique et budgétaire réaliste.</p>
           </li>
-          <li class="reveal relative">
-            <span class="absolute -left-16 sm:-left-24 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-leaf text-white grid place-items-center font-display font-extrabold shadow-lg z-10">02</span>
+          <li class="tl-item reveal">
+            <span class="tl-dot bg-leaf">02</span>
             <h3 class="font-display font-bold text-xl text-brand-dark">Conception &amp; planification</h3>
             <p class="mt-2 text-slate-600">Plans, choix des matériaux, planning détaillé et organisation des équipes : tout est validé avec vous avant le démarrage.</p>
           </li>
-          <li class="reveal relative">
-            <span class="absolute -left-16 sm:-left-24 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-brand text-white grid place-items-center font-display font-extrabold shadow-lg z-10">03</span>
+          <li class="tl-item reveal">
+            <span class="tl-dot bg-brand">03</span>
             <h3 class="font-display font-bold text-xl text-brand-dark">Réalisation encadrée</h3>
             <p class="mt-2 text-slate-600">Exécution des travaux sous la conduite de responsables dédiés, avec des points d'avancement réguliers et un contrôle qualité continu.</p>
           </li>
-          <li class="reveal relative">
-            <span class="absolute -left-16 sm:-left-24 top-0 w-11 h-11 sm:w-[60px] sm:h-[60px] bg-leaf text-white grid place-items-center font-display font-extrabold shadow-lg z-10">04</span>
+          <li class="tl-item reveal">
+            <span class="tl-dot bg-leaf">04</span>
             <h3 class="font-display font-bold text-xl text-brand-dark">Réception &amp; suivi</h3>
             <p class="mt-2 text-slate-600">Livraison de l'ouvrage, levée des réserves et accompagnement après la réception pour assurer votre pleine satisfaction.</p>
           </li>
@@ -477,7 +491,7 @@
 
   <!-- PIED DE PAGE -->
   <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+    <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
       <div class="sm:col-span-2">
         <span class="inline-block py-3">
           <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto bg-white p-2">
@@ -514,7 +528,7 @@
           <li><a href="expertises.html#batiment" class="hover:text-leaf transition">Bâtiment &amp; gros œuvre</a></li>
           <li><a href="expertises.html#genie-civil" class="hover:text-leaf transition">Génie civil &amp; TP</a></li>
           <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Entreprise générale</a></li>
-          <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Maîtrise d'œuvre &amp; études</a></li>
+          <li><a href="expertises.html#maitrise-oeuvre" class="hover:text-leaf transition">Maîtrise d'œuvre &amp; études</a></li>
         </ul>
       </div>
     </div>
