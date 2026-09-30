@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact & devis | BTP Congo – Entreprise de construction, bâtiment et travaux publics</title>
+  <meta name="description" content="Contactez BTP Congo et demandez votre devis gratuit : construction, bâtiment, génie civil, travaux publics, études techniques et maîtrise d'œuvre au Congo.">
+  <meta name="theme-color" content="#0C2747">
+  <link rel="icon" href="https://www.btp-congo.com/images/logo-btp-congo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact & devis | BTP Congo">
+  <meta property="og:description" content="Décrivez votre projet : nos équipes techniques étudient votre demande et reviennent vers vous.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1709715987498-1e5f745b2c72?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:locale" content="fr_FR">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    // Charte graphique BTP Congo : bleu (brand) + vert (leaf)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#1D5BA5', dark: '#0C2747', light: '#EAF1FA' },
+            leaf:  { DEFAULT: '#3AA845', dark: '#2B8434', light: '#EAF6EB' }
+          },
+          fontFamily: { display: ['Montserrat', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    section[id] { scroll-margin-top: 90px; }
+    p { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+    :focus-visible { outline: 3px solid #3AA845; outline-offset: 2px; }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.show { opacity: 1; transform: none; }
+    .lazy-section { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+    .lazy-section.in { opacity: 1; transform: none; }
+    .fade-img { opacity: 0; transition: opacity .8s ease; }
+    .fade-img.ready { opacity: 1; }
+    .underline-hover { position: relative; }
+    .underline-hover::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #3AA845; transition: width .3s ease; }
+    .underline-hover:hover::after { width: 100%; }
+
+    /* Formulaire */
+    .field { width: 100%; border: 1px solid #cbd5e1; background: #fff; padding: .85rem 1rem; font-size: .95rem; color: #0f172a; transition: border-color .2s, box-shadow .2s; }
+    .field:focus { outline: none; border-color: #3AA845; box-shadow: 0 0 0 3px rgba(58,168,69,.18); }
+    .field[aria-invalid="true"] { border-color: #dc2626; background: #fef2f2; }
+    .err { color: #dc2626; font-size: .8rem; margin-top: .3rem; font-weight: 600; min-height: 1rem; }
+    .choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .choice span.box { display: flex; align-items: center; gap: .75rem; border: 2px solid #e2e8f0; padding: 1rem; cursor: pointer; transition: all .2s; height: 100%; }
+    .choice:hover span.box { border-color: #3AA845; }
+    .choice input:checked + span.box { border-color: #3AA845; background: #EAF6EB; box-shadow: 0 8px 20px -12px rgba(58,168,69,.6); }
+    .choice input:focus-visible + span.box { outline: 3px solid #3AA845; outline-offset: 2px; }
+    .step-panel { display: none; }
+    .step-panel.active { display: block; animation: stepIn .45s ease both; }
+    @keyframes stepIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    .dot.done .num { background: #3AA845; color: #fff; }
+    .dot.current .num { background: #1D5BA5; color: #fff; box-shadow: 0 0 0 4px rgba(29,91,165,.2); }
+    .dot.done .lbl, .dot.current .lbl { color: #0C2747; }
+
+    /* Accordéons */
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] > summary .chev { transform: rotate(180deg); }
+    details[open] { border-left-color: #3AA845; }
+    .chev { transition: transform .3s ease; }
+    details .answer { animation: fadeUp .45s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    #toast { transition: opacity .3s, transform .3s; }
+    #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobileMenu.open { max-height: 560px; }
+
+    * { border-radius: 0 !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal, .lazy-section, .step-panel.active, details .answer { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-slate-700 antialiased bg-white">
+
+  <div id="progress" class="fixed top-0 left-0 h-1 bg-leaf z-[60] w-0"></div>
+
+  <!-- Barre supérieure -->
+  <div class="hidden lg:block bg-brand-dark text-slate-200 text-xs border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <!-- TODO : remplacer par le vrai numéro et la vraie adresse e-mail -->
+        <a href="tel:+242061234567" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +242 06 123 45 67
+        </a>
+        <a href="mailto:contact@btp-congo.com" class="flex items-center gap-2 hover:text-white transition">
+          <svg class="w-3.5 h-3.5 text-leaf" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+          contact@btp-congo.com
+        </a>
+      </div>
+      <a href="#devis" class="font-semibold text-leaf hover:text-white transition">Devis gratuit sous 48h →</a>
+    </div>
+  </div>
+
+  <!-- En-tête -->
+  <header id="header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <a href="index.html" aria-label="BTP Congo - Accueil">
+        <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-12 w-auto">
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8 font-display font-semibold text-sm text-brand-dark" aria-label="Navigation principale">
+        <a href="index.html" class="underline-hover hover:text-brand transition">Accueil</a>
+        <a href="entreprise.html" class="underline-hover hover:text-brand transition">L'entreprise</a>
+        <a href="expertises.html" class="underline-hover hover:text-brand transition">Expertises</a>
+        <a href="portfolio.html" class="underline-hover hover:text-brand transition">Portfolio</a>
+        <a href="actualites.html" class="underline-hover hover:text-brand transition">Actualités</a>
+        <a href="contact.html" class="text-brand border-b-2 border-leaf py-1" aria-current="page">Contact</a>
+        <a href="carriere.html" class="underline-hover hover:text-brand transition">Carrière</a>
+        <a href="#devis" class="ml-2 bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 transition text-sm font-bold">Devis</a>
+      </nav>
+
+      <button id="burger" class="lg:hidden p-2 -mr-2" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="w-7 h-7 text-brand-dark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="lg:hidden border-t border-slate-100 bg-white">
+      <nav class="px-6 py-3 flex flex-col font-display font-semibold text-brand-dark divide-y divide-slate-100" aria-label="Navigation mobile">
+        <a href="index.html" class="py-3">Accueil</a>
+        <a href="entreprise.html" class="py-3">L'entreprise</a>
+        <a href="expertises.html" class="py-3">Expertises</a>
+        <a href="portfolio.html" class="py-3">Portfolio</a>
+        <a href="actualites.html" class="py-3">Actualités</a>
+        <a href="contact.html" class="py-3 text-brand">Contact</a>
+        <a href="carriere.html" class="py-3">Carrière</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- BANNIÈRE -->
+    <section class="relative bg-brand-dark text-white overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1709715987498-1e5f745b2c72?auto=format&fit=crop&w=1920&q=80" alt="" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/85 to-brand-dark/50"></div>
+      <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-28">
+        <nav aria-label="Fil d'Ariane" class="text-xs font-semibold uppercase tracking-widest text-slate-300 flex items-center gap-2">
+          <a href="index.html" class="hover:text-leaf transition">Accueil</a>
+          <span class="text-leaf">/</span>
+          <span class="text-white">Contact</span>
+        </nav>
+        <h1 class="mt-5 font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.1]">
+          Parlons de votre <span class="text-leaf">projet</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-base sm:text-lg text-slate-200">
+          Une question, une demande de devis, un projet à étudier ? Écrivez-nous ou appelez-nous : nos équipes techniques vous répondent et vous conseillent dès les premières étapes.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <a href="#devis" class="text-center bg-leaf hover:bg-leaf-dark px-8 py-4 font-display font-bold transition">Demander un devis</a>
+          <a href="tel:+242061234567" class="text-center border-2 border-white/50 hover:bg-white hover:text-brand-dark px-8 py-4 font-display font-bold transition">Appeler maintenant</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- COORDONNÉES RAPIDES -->
+    <section class="bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="-mt-12 relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 shadow-2xl">
+
+          <div class="bg-white p-7 group hover:bg-brand transition duration-300">
+            <div class="w-12 h-12 bg-leaf-light text-leaf group-hover:bg-leaf group-hover:text-white grid place-items-center transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-300" style="text-align:left">Téléphone</p>
+            <a href="tel:+242061234567" class="mt-1 block font-display font-bold text-lg text-brand-dark group-hover:text-white">+242 06 123 45 67</a>
+            <button data-copy="+242 06 123 45 67" class="mt-3 text-xs font-semibold text-brand group-hover:text-leaf">Copier le numéro</button>
+          </div>
+
+          <div class="bg-white p-7 group hover:bg-brand transition duration-300">
+            <div class="w-12 h-12 bg-leaf-light text-leaf group-hover:bg-leaf group-hover:text-white grid place-items-center transition">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.800-1.500A11 11 0 1 0 20.500 3.500Zm-8.500 17a9 9 0 0 1-4.600-1.300l-.3-.2-2.800.9.9-2.700-.2-.3A9 9 0 1 1 12 20.500Zm5-6.700c-.3-.1-1.600-.8-1.900-.9s-.4-.1-.6.1-.7.9-.9 1.100-.3.2-.6.1a7.300 7.300 0 0 1-3.600-3.100c-.3-.5.3-.5.8-1.500.1-.2 0-.3 0-.5l-.9-2c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.200 5.200 5.200 0 0 0 1.100 2.800 11.900 11.900 0 0 0 4.600 4.100c1.700.7 2.400.8 3.200.7a2.700 2.700 0 0 0 1.800-1.300 2.200 2.200 0 0 0 .2-1.300c-.1-.1-.3-.2-.6-.3Z"/></svg>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-300" style="text-align:left">WhatsApp</p>
+            <a id="waQuick" href="https://wa.me/242061234567" target="_blank" rel="noopener" class="mt-1 block font-display font-bold text-lg text-brand-dark group-hover:text-white">Écrire sur WhatsApp</a>
+            <p class="mt-3 text-xs text-slate-500 group-hover:text-slate-300" style="text-align:left">Réponse simple et rapide</p>
+          </div>
+
+          <div class="bg-white p-7 group hover:bg-brand transition duration-300">
+            <div class="w-12 h-12 bg-leaf-light text-leaf group-hover:bg-leaf group-hover:text-white grid place-items-center transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-300" style="text-align:left">E-mail</p>
+            <a href="mailto:contact@btp-congo.com" class="mt-1 block font-display font-bold text-lg text-brand-dark group-hover:text-white break-all">contact@btp-congo.com</a>
+            <button data-copy="contact@btp-congo.com" class="mt-3 text-xs font-semibold text-brand group-hover:text-leaf">Copier l'adresse</button>
+          </div>
+
+          <div class="bg-white p-7 group hover:bg-brand transition duration-300">
+            <div class="w-12 h-12 bg-leaf-light text-leaf group-hover:bg-leaf group-hover:text-white grid place-items-center transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22c4-4 7-7.500 7-12a7 7 0 0 0-14 0c0 4.500 3 8 7 12zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-300" style="text-align:left">Zone d'intervention</p>
+            <!-- TODO : ajouter l'adresse complète du siège -->
+            <p class="mt-1 font-display font-bold text-lg text-brand-dark group-hover:text-white" style="text-align:left">République du Congo</p>
+            <p class="mt-3 text-xs text-slate-500 group-hover:text-slate-300" style="text-align:left">Bâtiment et travaux publics</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVIS : formulaire en 3 étapes + colonne d'information -->
+    <section id="devis" class="lazy-section py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-5 sm:px-6">
+        <div class="max-w-2xl reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Demande de devis</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Décrivez-nous votre projet en 3 étapes</h2>
+          <p class="mt-4 text-slate-600">Plus votre demande est précise, plus notre réponse sera pertinente. Comptez environ deux minutes.</p>
+        </div>
+
+        <div class="mt-12 grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+
+          <!-- Formulaire -->
+          <div class="lg:col-span-2 reveal">
+            <div class="border border-slate-200 shadow-xl bg-white">
+
+              <!-- Indicateur d'étapes -->
+              <ol id="steps" class="grid grid-cols-3 border-b border-slate-200 bg-slate-50" aria-label="Étapes du formulaire">
+                <li class="dot current flex items-center justify-center gap-3 p-4"><span class="num w-8 h-8 bg-slate-200 text-slate-600 grid place-items-center font-display font-bold text-sm transition">1</span><span class="lbl hidden sm:block text-sm font-display font-bold text-slate-500">Vous</span></li>
+                <li class="dot flex items-center justify-center gap-3 p-4 border-x border-slate-200"><span class="num w-8 h-8 bg-slate-200 text-slate-600 grid place-items-center font-display font-bold text-sm transition">2</span><span class="lbl hidden sm:block text-sm font-display font-bold text-slate-500">Votre projet</span></li>
+                <li class="dot flex items-center justify-center gap-3 p-4"><span class="num w-8 h-8 bg-slate-200 text-slate-600 grid place-items-center font-display font-bold text-sm transition">3</span><span class="lbl hidden sm:block text-sm font-display font-bold text-slate-500">Envoi</span></li>
+              </ol>
+              <div class="h-1 bg-slate-100"><div id="formBar" class="h-full bg-leaf transition-all duration-500" style="width:33%"></div></div>
+
+              <form id="quoteForm" novalidate class="p-6 sm:p-9">
+                <!-- Anti-spam (champ piège invisible) -->
+                <div class="hidden" aria-hidden="true"><label>Ne pas remplir<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+                <!-- ÉTAPE 1 -->
+                <div class="step-panel active" data-step="1">
+                  <h3 class="font-display font-bold text-xl text-brand-dark">Qui êtes-vous ?</h3>
+                  <fieldset class="mt-5">
+                    <legend class="sr-only">Type de client</legend>
+                    <div class="grid sm:grid-cols-3 gap-3">
+                      <label class="choice relative block"><input type="radio" name="client" value="Particulier" checked><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg><span class="font-display font-bold text-sm text-brand-dark">Particulier</span></span></label>
+                      <label class="choice relative block"><input type="radio" name="client" value="Professionnel"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13"/><path d="M8 7V4h8v3"/></svg><span class="font-display font-bold text-sm text-brand-dark">Professionnel</span></span></label>
+                      <label class="choice relative block"><input type="radio" name="client" value="Collectivité / Institution"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M4 10h16M12 3l9 7H3zM6 10v11M10 10v11M14 10v11M18 10v11"/></svg><span class="font-display font-bold text-sm text-brand-dark">Collectivité</span></span></label>
+                    </div>
+                  </fieldset>
+
+                  <div class="mt-6 grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label for="nom" class="block text-sm font-semibold text-brand-dark mb-1.5">Nom complet *</label>
+                      <input id="nom" name="nom" class="field" autocomplete="name" placeholder="Votre nom et prénom" required>
+                      <p class="err" data-err="nom"></p>
+                    </div>
+                    <div>
+                      <label for="tel" class="block text-sm font-semibold text-brand-dark mb-1.5">Téléphone *</label>
+                      <input id="tel" name="tel" type="tel" class="field" autocomplete="tel" placeholder="+242 ..." required>
+                      <p class="err" data-err="tel"></p>
+                    </div>
+                    <div>
+                      <label for="email" class="block text-sm font-semibold text-brand-dark mb-1.5">E-mail</label>
+                      <input id="email" name="email" type="email" class="field" autocomplete="email" placeholder="vous@exemple.com">
+                      <p class="err" data-err="email"></p>
+                    </div>
+                    <div id="orgBox" class="hidden">
+                      <label for="org" class="block text-sm font-semibold text-brand-dark mb-1.5">Entreprise / organisation</label>
+                      <input id="org" name="org" class="field" autocomplete="organization" placeholder="Nom de la structure">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ÉTAPE 2 -->
+                <div class="step-panel" data-step="2">
+                  <h3 class="font-display font-bold text-xl text-brand-dark">Quel est votre projet ?</h3>
+                  <fieldset class="mt-5">
+                    <legend class="text-sm font-semibold text-brand-dark mb-2">Type de projet *</legend>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                      <label class="choice relative block"><input type="radio" name="projet" value="Bâtiment / gros œuvre"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg><span class="font-display font-bold text-sm text-brand-dark">Bâtiment &amp; gros œuvre</span></span></label>
+                      <label class="choice relative block"><input type="radio" name="projet" value="Génie civil / travaux publics"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20 10 4h4l6 16M12 8v2m0 4v2"/></svg><span class="font-display font-bold text-sm text-brand-dark">Génie civil &amp; travaux publics</span></span></label>
+                      <label class="choice relative block"><input type="radio" name="projet" value="Entreprise générale"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg><span class="font-display font-bold text-sm text-brand-dark">Entreprise générale</span></span></label>
+                      <label class="choice relative block"><input type="radio" name="projet" value="Maîtrise d'œuvre / études"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v12H4zM8 20h8M12 16v4"/></svg><span class="font-display font-bold text-sm text-brand-dark">Maîtrise d'œuvre &amp; études</span></span></label>
+                      <label class="choice relative block sm:col-span-2"><input type="radio" name="projet" value="Autre / je ne sais pas encore"><span class="box"><svg class="w-6 h-6 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.500 9a2.500 2.500 0 1 1 3.500 2.300c-.7.400-1 .9-1 1.700M12 17h.01"/></svg><span class="font-display font-bold text-sm text-brand-dark">Autre / je ne sais pas encore</span></span></label>
+                    </div>
+                    <p class="err" data-err="projet"></p>
+                  </fieldset>
+
+                  <div class="mt-4 grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label for="lieu" class="block text-sm font-semibold text-brand-dark mb-1.5">Localisation du projet *</label>
+                      <input id="lieu" name="lieu" class="field" placeholder="Ville, quartier…" required>
+                      <p class="err" data-err="lieu"></p>
+                    </div>
+                    <div>
+                      <label for="delai" class="block text-sm font-semibold text-brand-dark mb-1.5">Échéance souhaitée</label>
+                      <select id="delai" name="delai" class="field">
+                        <option>Dès que possible</option>
+                        <option>Dans 1 à 3 mois</option>
+                        <option>Dans 3 à 6 mois</option>
+                        <option>Plus tard</option>
+                        <option selected>Je ne sais pas encore</option>
+                      </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <label for="plans" class="block text-sm font-semibold text-brand-dark mb-1.5">Disposez-vous déjà de plans ou d'études ?</label>
+                      <select id="plans" name="plans" class="field">
+                        <option selected>Non, pas encore</option>
+                        <option>Oui, j'ai des plans</option>
+                        <option>En cours d'élaboration</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ÉTAPE 3 -->
+                <div class="step-panel" data-step="3">
+                  <h3 class="font-display font-bold text-xl text-brand-dark">Dites-nous en plus</h3>
+                  <div class="mt-5">
+                    <label for="message" class="block text-sm font-semibold text-brand-dark mb-1.5">Description de votre besoin *</label>
+                    <textarea id="message" name="message" rows="6" maxlength="1500" class="field" placeholder="Nature des travaux, surface approximative, contraintes particulières…" required></textarea>
+                    <div class="flex justify-between gap-4">
+                      <p class="err" data-err="message"></p>
+                      <p id="msgCount" class="text-xs text-slate-500 mt-1 shrink-0" style="text-align:right">0 / 1500</p>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 bg-slate-50 border border-slate-200 p-5">
+                    <h4 class="font-display font-bold text-brand-dark text-sm">Récapitulatif de votre demande</h4>
+                    <dl id="recap" class="mt-3 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm"></dl>
+                  </div>
+
+                  <label class="mt-5 flex items-start gap-3 cursor-pointer">
+                    <input id="consent" name="consent" type="checkbox" class="mt-1 w-5 h-5 accent-[#3AA845] shrink-0">
+                    <span class="text-sm text-slate-600">J'accepte que BTP Congo utilise ces informations pour traiter ma demande et me recontacter. *</span>
+                  </label>
+                  <p class="err" data-err="consent"></p>
+                </div>
+
+                <!-- Succès -->
+                <div id="doneBox" class="hidden text-center py-8">
+                  <div class="mx-auto w-20 h-20 bg-leaf text-white grid place-items-center"><svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                  <h3 class="mt-6 font-display font-extrabold text-2xl text-brand-dark">Merci, votre demande est prête !</h3>
+                  <p id="doneMsg" class="mt-3 text-slate-600 max-w-md mx-auto" style="text-align:center"></p>
+                  <button type="button" id="restartBtn" class="mt-6 border-2 border-brand text-brand hover:bg-brand hover:text-white px-8 py-3 font-display font-bold text-sm transition">Faire une nouvelle demande</button>
+                </div>
+
+                <!-- Navigation du formulaire -->
+                <div id="formNav" class="mt-8 flex flex-wrap items-center justify-between gap-3">
+                  <button type="button" id="prevStep" class="invisible inline-flex items-center gap-2 border border-slate-300 hover:border-brand text-brand-dark px-6 py-3.5 font-display font-bold text-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Précédent
+                  </button>
+                  <button type="button" id="nextStep" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-8 py-3.5 font-display font-bold text-sm transition">
+                    Continuer<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </button>
+                  <div id="sendBtns" class="hidden w-full sm:w-auto flex flex-col sm:flex-row gap-3">
+                    <button type="button" id="sendWa" class="inline-flex justify-center items-center gap-2 bg-leaf hover:bg-leaf-dark text-white px-6 py-3.5 font-display font-bold text-sm transition">Envoyer par WhatsApp</button>
+                    <button type="button" id="sendMail" class="inline-flex justify-center items-center gap-2 bg-brand hover:bg-brand-dark text-white px-6 py-3.5 font-display font-bold text-sm transition">Envoyer par e-mail</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Colonne d'information -->
+          <aside class="space-y-6 lg:sticky lg:top-28">
+            <div class="reveal bg-brand text-white p-8 border-b-4 border-leaf">
+              <h3 class="font-display font-bold text-xl">Après votre demande</h3>
+              <ol class="mt-6 space-y-5">
+                <li class="flex gap-4"><span class="w-9 h-9 bg-leaf grid place-items-center font-display font-bold shrink-0">1</span><div><p class="font-display font-bold" style="text-align:left">Étude de votre demande</p><p class="mt-1 text-sm text-slate-200">Nos équipes analysent votre besoin et la faisabilité du projet.</p></div></li>
+                <li class="flex gap-4"><span class="w-9 h-9 bg-leaf grid place-items-center font-display font-bold shrink-0">2</span><div><p class="font-display font-bold" style="text-align:left">Prise de contact</p><p class="mt-1 text-sm text-slate-200">Nous vous appelons pour préciser les détails et, si besoin, planifier une visite du site.</p></div></li>
+                <li class="flex gap-4"><span class="w-9 h-9 bg-leaf grid place-items-center font-display font-bold shrink-0">3</span><div><p class="font-display font-bold" style="text-align:left">Proposition chiffrée</p><p class="mt-1 text-sm text-slate-200">Vous recevez une proposition claire et détaillée, sans engagement.</p></div></li>
+              </ol>
+            </div>
+
+            <div class="reveal border border-slate-200 p-7">
+              <h3 class="font-display font-bold text-brand-dark">Pourquoi nous contacter ?</h3>
+              <ul class="mt-4 space-y-3 text-sm text-slate-600">
+                <li class="flex gap-3"><span class="text-leaf font-bold">✓</span>Un interlocuteur unique pour tout votre projet</li>
+                <li class="flex gap-3"><span class="text-leaf font-bold">✓</span>Des études techniques intégrées</li>
+                <li class="flex gap-3"><span class="text-leaf font-bold">✓</span>Un suivi de chantier transparent</li>
+                <li class="flex gap-3"><span class="text-leaf font-bold">✓</span>Devis gratuit et sans engagement</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARTE (s'affiche dès qu'une adresse est renseignée) -->
+    <!-- TODO : renseigner MAP_URL dans le script avec le lien d'intégration Google Maps ou OpenStreetMap -->
+    <section id="carte" class="hidden bg-slate-50">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-brand-dark">Nous trouver</h2>
+        <div class="mt-8 aspect-[16/7] min-h-[300px] border border-slate-200 bg-white">
+          <iframe id="mapFrame" title="Localisation de BTP Congo" class="w-full h-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUESTIONS FRÉQUENTES -->
+    <section id="faq" class="lazy-section py-16 sm:py-24 bg-slate-50">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center reveal">
+          <p class="text-leaf font-display font-bold uppercase tracking-widest text-xs">Questions fréquentes</p>
+          <h2 class="mt-3 font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight">Avant de nous écrire</h2>
+        </div>
+        <div class="mt-10 space-y-3 reveal">
+          <details class="bg-white border-l-4 border-transparent p-5 shadow-sm transition">
+            <summary class="flex items-center justify-between gap-4 font-display font-bold text-brand-dark">Le devis est-il gratuit ? <svg class="chev w-5 h-5 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <p class="answer mt-3 text-sm text-slate-600">Oui, l'étude de votre demande et la première proposition sont gratuites et sans engagement de votre part.</p>
+          </details>
+          <details class="bg-white border-l-4 border-transparent p-5 shadow-sm transition">
+            <summary class="flex items-center justify-between gap-4 font-display font-bold text-brand-dark">Quelles informations dois-je préparer ? <svg class="chev w-5 h-5 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <p class="answer mt-3 text-sm text-slate-600">Indiquez la nature des travaux, la localisation du terrain ou du bâtiment, l'échéance souhaitée et, si vous en avez, vos plans. Même une simple description suffit pour démarrer : nous vous aiderons à préciser le reste.</p>
+          </details>
+          <details class="bg-white border-l-4 border-transparent p-5 shadow-sm transition">
+            <summary class="flex items-center justify-between gap-4 font-display font-bold text-brand-dark">Pouvez-vous vous déplacer sur mon terrain ? <svg class="chev w-5 h-5 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <p class="answer mt-3 text-sm text-slate-600">Selon la nature du projet, une visite du site peut être organisée pour établir un devis précis. Nous en convenons avec vous lors de notre premier échange.</p>
+          </details>
+          <details class="bg-white border-l-4 border-transparent p-5 shadow-sm transition">
+            <summary class="flex items-center justify-between gap-4 font-display font-bold text-brand-dark">Je n'ai pas encore de plans, puis-je quand même vous contacter ? <svg class="chev w-5 h-5 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <p class="answer mt-3 text-sm text-slate-600">Bien sûr. Notre équipe d'études et de maîtrise d'œuvre peut concevoir le projet avec vous, de l'esquisse aux plans d'exécution.</p>
+          </details>
+          <details class="bg-white border-l-4 border-transparent p-5 shadow-sm transition">
+            <summary class="flex items-center justify-between gap-4 font-display font-bold text-brand-dark">Comment vous joindre le plus vite ? <svg class="chev w-5 h-5 text-leaf shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>
+            <p class="answer mt-3 text-sm text-slate-600">Par téléphone ou par WhatsApp pour un échange immédiat, ou via le formulaire ci-dessus pour une demande détaillée que nous pourrons traiter en profondeur.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPEL À L'ACTION -->
+    <section class="lazy-section relative py-16 sm:py-20 text-white overflow-hidden bg-brand-dark">
+      <img data-src="https://images.unsplash.com/photo-1709714398528-eb8b8df26732?auto=format&fit=crop&w=1920&q=80" alt="" class="fade-img absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-r from-brand/95 to-brand-dark/95"></div>
+      <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
+        <h2 class="font-display font-extrabold text-3xl md:text-4xl leading-tight">Découvrez aussi nos réalisations</h2>
+        <p class="mt-4 text-slate-200 max-w-2xl mx-auto text-lg">Parcourez les albums photos de nos chantiers pour voir concrètement notre savoir-faire.</p>
+        <a href="portfolio.html" class="inline-block mt-8 bg-leaf hover:bg-leaf-dark hover:scale-105 px-10 py-4 font-display font-bold transition">Voir le portfolio</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="bg-brand-dark text-slate-300 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+      <div class="sm:col-span-2">
+        <span class="inline-block py-3">
+          <img src="https://www.btp-congo.com/images/logo-btp-congo.png" alt="BTP Congo" class="h-10 w-auto bg-white p-2">
+        </span>
+        <p class="mt-5 max-w-sm leading-relaxed text-slate-400">
+          Entreprise de construction, bâtiment et génie civil, spécialisée dans la conception, les études techniques et la réalisation de projets au Congo.
+        </p>
+        <div class="mt-6 flex gap-4">
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube" class="w-9 h-9 bg-white/10 grid place-items-center hover:bg-leaf transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Navigation</p>
+        <ul class="space-y-2.5">
+          <li><a href="entreprise.html" class="hover:text-leaf transition">L'entreprise</a></li>
+          <li><a href="expertises.html" class="hover:text-leaf transition">Expertises</a></li>
+          <li><a href="portfolio.html" class="hover:text-leaf transition">Portfolio</a></li>
+          <li><a href="actualites.html" class="hover:text-leaf transition">Actualités</a></li>
+          <li><a href="contact.html" class="hover:text-leaf transition">Contact</a></li>
+          <li><a href="carriere.html" class="hover:text-leaf transition">Carrière</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-display font-bold text-white mb-4">Nos expertises</p>
+        <ul class="space-y-2.5">
+          <li><a href="expertises.html#batiment" class="hover:text-leaf transition">Bâtiment &amp; gros œuvre</a></li>
+          <li><a href="expertises.html#genie-civil" class="hover:text-leaf transition">Génie civil &amp; TP</a></li>
+          <li><a href="expertises.html#entreprise-generale" class="hover:text-leaf transition">Entreprise générale</a></li>
+          <li><a href="expertises.html#maitrise-oeuvre" class="hover:text-leaf transition">Maîtrise d'œuvre &amp; études</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-xs text-slate-400">
+      © <span id="year"></span> BTP Congo. Tous droits réservés. · Site conçu par <a href="#" class="hover:text-leaf transition">WEDE</a>
+    </div>
+  </footer>
+
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-brand-dark text-white text-sm font-semibold px-5 py-3 shadow-xl opacity-0 translate-y-4 pointer-events-none" role="status"></div>
+
+  <button id="toTop" aria-label="Retour en haut" class="fixed bottom-5 right-5 z-40 w-12 h-12 bg-leaf hover:bg-leaf-dark text-white shadow-xl grid place-items-center translate-y-20 opacity-0 transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+
+  <script>
+    /* =====================================================================
+       CONFIGURATION — à renseigner avant la mise en ligne
+       ===================================================================== */
+    const CONFIG = {
+      whatsapp: '242061234567',           // TODO : numéro WhatsApp au format international, sans + ni espaces
+      email: 'contact@btp-congo.com',     // TODO : adresse de réception des demandes
+      endpoint: '',                       // Optionnel : URL d'un script PHP/API qui reçoit la demande (POST JSON).
+                                          // Si renseignée, le bouton devient « Envoyer ma demande ».
+      mapUrl: ''                          // Optionnel : lien d'intégration (iframe) Google Maps / OpenStreetMap
+    };
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    const form = $('#quoteForm');
+    let step = 1;
+
+    function toast(msg) {
+      const t = $('#toast'); t.textContent = msg; t.classList.remove('opacity-0', 'translate-y-4');
+      clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.add('opacity-0', 'translate-y-4'), 2400);
+    }
+
+    /* ---------- Copier téléphone / e-mail ---------- */
+    $$('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy); toast('Copié : ' + b.dataset.copy); }
+      catch (e) { toast(b.dataset.copy); }
+    }));
+    $('#waQuick').href = 'https://wa.me/' + CONFIG.whatsapp;
+    if (CONFIG.mapUrl) { $('#mapFrame').src = CONFIG.mapUrl; $('#carte').classList.remove('hidden'); }
+
+    /* ---------- Assistant en 3 étapes ---------- */
+    const val = n => (form.elements[n] && form.elements[n].value || '').trim();
+    const setErr = (n, msg) => {
+      const p = document.querySelector(`[data-err="${n}"]`); if (p) p.textContent = msg || '';
+      const el = form.elements[n];
+      if (el && el.setAttribute && !(el instanceof RadioNodeList)) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    };
+
+    function validate(s) {
+      let ok = true, first = null;
+      const fail = (n, m) => { setErr(n, m); ok = false; if (!first) first = form.elements[n]; };
+      if (s === 1) {
+        if (val('nom').length < 2) fail('nom', 'Veuillez indiquer votre nom.'); else setErr('nom');
+        const tel = val('tel').replace(/[\s.\-()]/g, '');
+        if (!/^\+?\d{8,15}$/.test(tel)) fail('tel', 'Numéro invalide (8 à 15 chiffres).'); else setErr('tel');
+        if (val('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) fail('email', 'Adresse e-mail invalide.'); else setErr('email');
+      }
+      if (s === 2) {
+        if (!form.querySelector('input[name="projet"]:checked')) fail('projet', 'Choisissez un type de projet.'); else setErr('projet');
+        if (val('lieu').length < 2) fail('lieu', 'Indiquez la localisation du projet.'); else setErr('lieu');
+      }
+      if (s === 3) {
+        if (val('message').length < 20) fail('message', 'Décrivez votre besoin en quelques phrases (20 caractères minimum).'); else setErr('message');
+        if (!$('#consent').checked) fail('consent', 'Merci d\'accepter pour envoyer votre demande.'); else setErr('consent');
+      }
+      if (!ok && first && first.focus) first.focus();
+      return ok;
+    }
+
+    function recapData() {
+      return [
+        ['Type de client', val('client') || (form.querySelector('input[name="client"]:checked') || {}).value],
+        ['Nom', val('nom')], ['Téléphone', val('tel')], ['E-mail', val('email')], ['Organisation', val('org')],
+        ['Projet', (form.querySelector('input[name="projet"]:checked') || {}).value],
+        ['Localisation', val('lieu')], ['Échéance', val('delai')], ['Plans / études', val('plans')]
+      ].filter(r => r[1]);
+    }
+
+    function goStep(n) {
+      step = n;
+      $$('.step-panel').forEach(p => p.classList.toggle('active', +p.dataset.step === n));
+      $$('#steps .dot').forEach((d, i) => { d.classList.toggle('done', i + 1 < n); d.classList.toggle('current', i + 1 === n); });
+      $('#formBar').style.width = (n / 3 * 100) + '%';
+      $('#prevStep').classList.toggle('invisible', n === 1);
+      $('#nextStep').classList.toggle('hidden', n === 3);
+      $('#sendBtns').classList.toggle('hidden', n !== 3);
+      if (n === 3) {
+        $('#recap').innerHTML = recapData().map(r => `<div><dt class="text-xs uppercase tracking-wider text-slate-500 font-semibold">${r[0]}</dt><dd class="font-semibold text-brand-dark break-words">${r[1].replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))}</dd></div>`).join('');
+      }
+      const top = $('#quoteForm').getBoundingClientRect().top + scrollY - 140;
+      if (Math.abs(top - scrollY) > 300) scrollTo({ top, behavior: 'smooth' });
+    }
+    $('#nextStep').addEventListener('click', () => { if (validate(step)) goStep(step + 1); });
+    $('#prevStep').addEventListener('click', () => goStep(step - 1));
+    form.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); if (step < 3 && validate(step)) goStep(step + 1); }
+    });
+
+    // Champ « organisation » pour les professionnels et collectivités
+    $$('input[name="client"]').forEach(r => r.addEventListener('change', () => {
+      $('#orgBox').classList.toggle('hidden', r.value === 'Particulier' ? true : false);
+    }));
+    ['nom', 'tel', 'email', 'lieu', 'message'].forEach(n => form.elements[n].addEventListener('input', () => setErr(n)));
+    $$('input[name="projet"]').forEach(r => r.addEventListener('change', () => setErr('projet')));
+    $('#message').addEventListener('input', e => { $('#msgCount').textContent = e.target.value.length + ' / 1500'; });
+
+    // Pré-sélection du projet via l'URL : contact.html?projet=batiment
+    const params = new URLSearchParams(location.search);
+    const map = { batiment: 'Bâtiment / gros œuvre', 'genie-civil': 'Génie civil / travaux publics', 'entreprise-generale': 'Entreprise générale', 'maitrise-oeuvre': "Maîtrise d'œuvre / études" };
+    if (map[params.get('projet')]) {
+      const r = form.querySelector(`input[name="projet"][value="${map[params.get('projet')]}"]`); if (r) r.checked = true;
+    }
+
+    /* ---------- Envoi ---------- */
+    function messageText() {
+      const lines = recapData().map(r => `• ${r[0]} : ${r[1]}`);
+      return `Bonjour BTP Congo,\n\nJe souhaite recevoir un devis.\n\n${lines.join('\n')}\n\nDescription :\n${val('message')}\n`;
+    }
+    function finish(text) {
+      $$('.step-panel').forEach(p => p.classList.remove('active'));
+      $('#formNav').classList.add('hidden'); $('#doneBox').classList.remove('hidden');
+      $('#doneMsg').textContent = text;
+      $('#formBar').style.width = '100%';
+      $$('#steps .dot').forEach(d => { d.classList.add('done'); d.classList.remove('current'); });
+    }
+    function guard() {
+      if (form.elements['website'].value) return false;               // robot détecté
+      return validate(1) && validate(2) && validate(3);
+    }
+
+    async function sendEndpoint() {
+      const payload = Object.fromEntries(recapData().map(r => [r[0], r[1]]));
+      payload.Message = val('message');
+      const res = await fetch(CONFIG.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error('Erreur serveur');
+    }
+
+    if (CONFIG.endpoint) {
+      // Mode serveur : un seul bouton d'envoi
+      $('#sendMail').classList.add('hidden');
+      $('#sendWa').textContent = 'Envoyer ma demande';
+      $('#sendWa').addEventListener('click', async () => {
+        if (!guard()) return;
+        const b = $('#sendWa'); b.disabled = true; b.textContent = 'Envoi en cours…';
+        try { await sendEndpoint(); finish('Votre demande a bien été envoyée. Nos équipes vous recontacteront rapidement.'); }
+        catch (e) { toast('Envoi impossible. Réessayez ou contactez-nous par téléphone.'); b.disabled = false; b.textContent = 'Envoyer ma demande'; }
+      });
+    } else {
+      $('#sendWa').addEventListener('click', () => {
+        if (!guard()) return;
+        window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(messageText()), '_blank', 'noopener');
+        finish('Votre message est prêt dans WhatsApp : il ne reste qu\'à l\'envoyer. Nos équipes vous répondront rapidement.');
+      });
+      $('#sendMail').addEventListener('click', () => {
+        if (!guard()) return;
+        location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent('Demande de devis – ' + ((form.querySelector('input[name="projet"]:checked') || {}).value || 'projet'))}&body=${encodeURIComponent(messageText())}`;
+        finish('Votre application e-mail s\'est ouverte avec votre demande : il ne reste qu\'à l\'envoyer. Nos équipes vous répondront rapidement.');
+      });
+    }
+    $('#restartBtn').addEventListener('click', () => {
+      form.reset(); $('#orgBox').classList.add('hidden'); $('#msgCount').textContent = '0 / 1500';
+      $('#doneBox').classList.add('hidden'); $('#formNav').classList.remove('hidden'); goStep(1);
+    });
+
+    /* ---------- Chargement différé, menu, défilement ---------- */
+    function loadImages(scope) {
+      scope.querySelectorAll('img[data-src]').forEach(img => {
+        img.onload = () => img.classList.add('ready');
+        img.src = img.dataset.src; img.removeAttribute('data-src');
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      const so = new IntersectionObserver(es => es.forEach(e => {
+        if (!e.isIntersecting) return; loadImages(e.target); e.target.classList.add('in'); so.unobserve(e.target);
+      }), { rootMargin: '0px 0px 300px 0px', threshold: 0.02 });
+      $$('.lazy-section').forEach(s => so.observe(s));
+      const ro = new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('show'); ro.unobserve(e.target); }
+      }), { threshold: .1 });
+      $$('.reveal').forEach(el => ro.observe(el));
+    } else {
+      $$('.lazy-section').forEach(s => { loadImages(s); s.classList.add('in'); });
+      $$('.reveal').forEach(el => el.classList.add('show'));
+    }
+
+    const menu = $('#mobileMenu'), burger = $('#burger');
+    burger.addEventListener('click', () => { const o = menu.classList.toggle('open'); burger.setAttribute('aria-expanded', o); });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }));
+
+    const header = $('#header'), progress = $('#progress'), toTop = $('#toTop');
+    function onScroll() {
+      const y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+      header.classList.toggle('shadow-md', y > 40);
+      const v = y > 700; toTop.classList.toggle('opacity-0', !v); toTop.classList.toggle('translate-y-20', !v);
+    }
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
+    $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (!href || href.length < 2) { e.preventDefault(); return; }
+      const t = document.querySelector(href);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }));
+    // Arrivée depuis un autre lien avec ancre (contact.html#devis)
+    addEventListener('load', () => {
+      if (location.hash && document.querySelector(location.hash)) setTimeout(() => document.querySelector(location.hash).scrollIntoView({ behavior: 'smooth' }), 400);
+    });
+
+    $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
